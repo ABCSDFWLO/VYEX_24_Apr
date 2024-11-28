@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.eggs/
+*.sqlite3
+
+# Virtual Environments
+.venv/
+env/
+ENV/
+venv/
+ENV.bak/
+venv.bak/
+
+# Logs
+logs/
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dependencies
+*.lock
+pip-log.txt
+
+# Testing
+.tox/
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+*.coverage
+
+# FastAPI specific
+instance/
+app.db
+*.db
+
+# Static and media files
+staticfiles/
+mediafiles/
