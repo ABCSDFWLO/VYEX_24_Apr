@@ -56,3 +56,15 @@ engine = create_engine(sqlite_url, echo=True)
 @app.get("/")
 async def root() -> str:
     return "hello"
+
+@app.get("/user/{user_id}")
+async def get_user(user_id: int) -> User:
+    with engine.connect() as connection:
+        user = connection.get(User, user_id)
+        return user
+    
+@app.get("/user/{user_name}")
+async def get_user(user_name: str) -> User:
+    with engine.connect() as connection:
+        user = connection.get(User, user_name)
+        return user
