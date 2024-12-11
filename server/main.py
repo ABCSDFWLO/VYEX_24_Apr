@@ -28,8 +28,8 @@ class ActionType(Enum):
 
 class User(SQLModel, table=True):
     id: int = Field(primary_key=True)
-    name: str
-    email: str
+    name: str = Field(unique=True)
+    email: str = Field(unique=True)
     password: str
     registered_at: datetime
 class Game(SQLModel, table=True):
