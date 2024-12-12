@@ -1,5 +1,6 @@
-from fastapi import FastAPI
-from sqlmodel import SQLModel, Field, create_engine
+from fastapi import FastAPI, HTTPException
+from sqlmodel import SQLModel, Field, create_engine, Session
+from pydantic import BaseModel, EmailStr
 from enum import Enum
 from datetime import datetime
 
@@ -59,12 +60,17 @@ async def root() -> str:
 
 @app.get("/user/{user_id}")
 async def get_user(user_id: int) -> User:
-    with engine.connect() as connection:
-        user = connection.get(User, user_id)
+    with Session(engine) as session:
+        user = session.get(User, user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
         return user
     
 @app.get("/user/{user_name}")
 async def get_user(user_name: str) -> User:
-    with engine.connect() as connection:
-        user = connection.get(User, user_name)
+    with Session(engine) as session:
+        user = session.get(User, user_name)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        return user
         return user
