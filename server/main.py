@@ -3,6 +3,7 @@ from sqlmodel import SQLModel, Field, create_engine, Session
 from pydantic import BaseModel, EmailStr
 from enum import Enum
 from datetime import datetime
+from passlib.hash import bcrypt
 
 app = FastAPI()
 
@@ -73,4 +74,22 @@ async def get_user(user_name: str) -> User:
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         return user
+
+class UserCreate(BaseModel):
+    name: str
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=32)
+
+@app.post("/register")
+async def create_user(user: UserCreate) -> User:
+    user = User(
+        name=user.name,
+        email=user.email,
+        password_hash=bcrypt.hash(user.password),
+        registered_at=datetime.now()
+        )
+    with Session(engine) as session:
+        session.add(user)
+        session.commit()
+        session.refresh(user)
         return user
