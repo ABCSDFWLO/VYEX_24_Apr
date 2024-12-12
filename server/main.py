@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import FastAPI, HTTPException
 from sqlmodel import SQLModel, Field, create_engine, Session
 from pydantic import BaseModel, EmailStr
@@ -55,25 +56,20 @@ sqlite_filename = "database.db"
 sqlite_url = f"sqlite:///{sqlite_filename}"
 engine = create_engine(sqlite_url, echo=True)
 
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
 @app.get("/")
 async def root() -> str:
     return "hello"
 
 @app.get("/user/{user_id}")
 async def get_user(user_id: int) -> User:
-    with Session(engine) as session:
-        user = session.get(User, user_id)
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user
+    pass
     
 @app.get("/user/{user_name}")
 async def get_user(user_name: str) -> User:
-    with Session(engine) as session:
-        user = session.get(User, user_name)
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user
+    pass
 
 class UserCreate(BaseModel):
     name: str
@@ -81,15 +77,5 @@ class UserCreate(BaseModel):
     password: str = Field(min_length=8, max_length=32)
 
 @app.post("/register")
-async def create_user(user: UserCreate) -> User:
-    user = User(
-        name=user.name,
-        email=user.email,
-        password_hash=bcrypt.hash(user.password),
-        registered_at=datetime.now()
-        )
-    with Session(engine) as session:
-        session.add(user)
-        session.commit()
-        session.refresh(user)
-        return user
+async def create_user(user_create: UserCreate):
+    pass
