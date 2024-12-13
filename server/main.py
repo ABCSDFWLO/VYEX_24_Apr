@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from sqlmodel import Session, select
+from sqlalchemy.exc import IntegrityError
 
 from db import engine, create_db_and_tables, User, Game, Action, State, ActionType
 
@@ -58,10 +59,12 @@ async def create_user(user_create: UserCreate):
             password_hash=user_create.password,
             registered_at=datetime.now()
         )
-        print(user)
         session.add(user)
-        print(user)
-        session.commit()
-        session.refresh(user)
-        print(user)
-        return user.id
+        try:
+            session.commit()
+            session.refresh(user)
+        except IntegrityError:
+            session.rollback()
+            raise HTTPException(status_code=400, detail="Email or name already exists")
+        else:
+            return user.id
