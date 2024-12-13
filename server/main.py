@@ -7,17 +7,9 @@ from sqlalchemy.exc import IntegrityError
 from passlib.hash import bcrypt
 
 from db import engine, create_db_and_tables, User, Game, Action, State, ActionType
-from token_manager import get_token_manager
+from token_manager import get_token_manager, user_id_from_token
 
 app = FastAPI()
-
-def user_id_from_token(token: List[str] = Header(None), token_manager=Depends(get_token_manager)) -> int:
-    try:
-        user_id = token_manager.verify_token(token)
-    except ValueError:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    else:
-        return user_id
 
 @app.get("/", response_model=str)
 async def root():
