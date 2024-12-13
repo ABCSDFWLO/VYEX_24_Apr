@@ -3,6 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+from dotenv import load_dotenv
 from fastapi import Depends
 from pydantic import EmailStr
 
@@ -32,11 +33,11 @@ class VerificationMail:
         return cls._instance
     
     def __init__(self):
+        load_dotenv()
         if os.getenv("EMAIL") is not None:
             VerificationMail.sender_email = os.getenv("EMAIL")
         if os.getenv("EMAIL_PASSWORD") is not None:
             VerificationMail.password = os.getenv("EMAIL_PASSWORD")
-
     def send(self, verification_code : str, receiver_email : EmailStr):
         if VerificationMail.sender_email is None or VerificationMail.password is None:
             raise Exception("Email sender or password is not set")
@@ -183,3 +184,5 @@ def send_verification_mail(verification_code : str, receiver_email : EmailStr, v
         verification_mail (VerificationMail) : The verification mail singleton.
     """
     verification_mail.send(verification_code, receiver_email)
+
+get_verification_mail()
