@@ -1,5 +1,5 @@
-from typing import List, Union
-from fastapi import FastAPI, HTTPException
+from typing import Annotated, List, Union
+from fastapi import Depends, FastAPI, HTTPException, Header
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from sqlmodel import Session, select
@@ -7,8 +7,17 @@ from sqlalchemy.exc import IntegrityError
 from passlib.hash import bcrypt
 
 from db import engine, create_db_and_tables, User, Game, Action, State, ActionType
+from token_manager import get_token_manager
 
 app = FastAPI()
+
+def user_id_from_token(token: List[str] = Header(None), token_manager=Depends(get_token_manager)) -> int:
+    try:
+        user_id = token_manager.verify_token(token)
+    except ValueError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    else:
+        return user_id
 
 @app.get("/", response_model=str)
 async def root():
@@ -22,6 +31,10 @@ class UserOut(BaseModel):
 
 class UserCreate(BaseModel):
     name : str
+    email : EmailStr
+    password : str
+
+class UserLogin(BaseModel):
     email : EmailStr
     password : str
 
@@ -69,3 +82,18 @@ async def create_user(user_create: UserCreate):
             raise HTTPException(status_code=400, detail="Email or name already exists")
         else:
             return user.id
+        
+@app.post("/login", status_code=200, response_model=List[str])
+async def login_user(user_login: UserLogin, token_manager=Depends(get_token_manager)):
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.email == user_login.email)).first()
+        if user is None:
+            raise HTTPException(status_code=400, detail="Email not found")
+        elif not bcrypt.verify(user_login.password, user.password_hash):
+            raise HTTPException(status_code=400, detail="Invalid password")
+        else:
+            return token_manager.generate_token(user.id)
+        
+@app.post("/logout", status_code=200)
+async def logout_user(user_id: int = Depends(user_id_from_token), token_manager=Depends(get_token_manager)):
+    token_manager.block_token(user_id)
