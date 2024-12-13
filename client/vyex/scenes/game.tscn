@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyp6xektf10o4"]
+
+[ext_resource type="PackedScene" uid="uid://bct52a0fbe4k5" path="res://assets/piece1_1.blend" id="1_ebitj"]
+[ext_resource type="PackedScene" uid="uid://iyfgg85t3fv" path="res://assets/plane_white.blend" id="2_jxstd"]
+[ext_resource type="PackedScene" uid="uid://b21f567j56qx6" path="res://assets/piece2_1.blend" id="3_osaa7"]
+
+[sub_resource type="Environment" id="Environment_37m5b"]
+background_mode = 1
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.750683, 0.172801, -0.637664, 0.0117302, 0.96155, 0.27438, 0.660559, -0.213452, 0.719792, -10.389, 5.71696, 6.44903)
+environment = SubResource("Environment_37m5b")
+
+[node name="piece1_1" parent="." instance=ExtResource("1_ebitj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.157605, 1.47103, 2.78195)
+
+[node name="plane_white" parent="." instance=ExtResource("2_jxstd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.813079, 0, -7.96745)
+
+[node name="piece2_1" parent="." instance=ExtResource("3_osaa7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.31061, 1.28623, 0.575218)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+omni_range = 10.0
+omni_attenuation = 3.0
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(0.643172, 0.719554, -0.261862, 0.000405736, 0.34166, 0.939824, 0.765722, -0.604574, 0.219454, -10, 50, 10)
+light_color = Color(0.968627, 0.980392, 0.972549, 1)
+spot_range = 100.0
+spot_attenuation = 0.25
+spot_angle = 29.57
