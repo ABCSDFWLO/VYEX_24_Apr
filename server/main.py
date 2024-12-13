@@ -8,8 +8,8 @@ from db import engine, create_db_and_tables, User, Game, Action, State, ActionTy
 
 app = FastAPI()
 
-@app.get("/")
-async def root() -> str:
+@app.get("/", response_model=str)
+async def root():
     return "hello"
 
 class UserOut(BaseModel):
@@ -36,29 +36,18 @@ async def get_users():
             ) for user in users
         ]
 
-@app.get("/user/{user_id}", response_model=UserOut)
-async def get_user(user_id: Union[int, str]):
+@app.get("/user/{user_name}", response_model=UserOut)
+async def get_user(user_name: str):
     with Session(engine) as session:
-        if user_id is str:
-            result =  session.exec(select(User).where(User.name == user_id)).first()
-            if result is None:
-                raise HTTPException(status_code=404, detail="User not found")
-            return UserOut(
-                id=result.id,
-                name=result.name,
-                email=result.email,
-                registered_at=result.registered_at
-                )
-        else:
-            result = session.exec(select(User).where(User.id == user_id)).first()
-            if result is None: 
-                raise HTTPException(status_code=404, detail="User not found")
-            return UserOut(
-                id=result.id,
-                name=result.name,
-                email=result.email,
-                registered_at=result.registered_at
-                )
+        result =  session.exec(select(User).where(User.name == user_name)).first()
+        if result is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        return UserOut(
+            id=result.id,
+            name=result.name,
+            email=result.email,
+            registered_at=result.registered_at
+            )
 
 @app.post("/register", status_code=201, response_model=int)
 async def create_user(user_create: UserCreate):
