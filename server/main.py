@@ -4,6 +4,7 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from sqlmodel import Session, select
 from sqlalchemy.exc import IntegrityError
+from passlib.hash import bcrypt
 
 from db import engine, create_db_and_tables, User, Game, Action, State, ActionType
 
@@ -56,7 +57,7 @@ async def create_user(user_create: UserCreate):
         user = User(
             name=user_create.name,
             email=user_create.email,
-            password_hash=user_create.password,
+            password_hash=bcrypt.hash(user_create.password),
             registered_at=datetime.now()
         )
         session.add(user)
