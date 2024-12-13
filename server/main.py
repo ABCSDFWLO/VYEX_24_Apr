@@ -11,6 +11,7 @@ import string
 
 from db import engine, create_db_and_tables, User, Game, Action, State, ActionType
 from token_manager import get_token_manager, user_id_from_token
+from verification_mail import send_verification_mail
 
 app = FastAPI()
 
@@ -65,7 +66,7 @@ async def get_user(user_name: str):
             )
 
 @app.post("/register", status_code=200, response_model=UUID)
-async def create_user(user_create: UserCreate, code:str=Depends(generate_verification_code)):
+async def create_user(user_create: UserCreate, code:str=Depends(generate_verification_code), send_mail = Depends(send_verification_mail)):
     with Session(engine) as session:
         email=session.get(User, user_create.email)
         if email is not None:
