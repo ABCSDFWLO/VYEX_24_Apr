@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cyp6xektf10o4"]
+[gd_scene load_steps=19 format=3 uid="uid://cyp6xektf10o4"]
 
 [ext_resource type="PackedScene" uid="uid://bct52a0fbe4k5" path="res://assets/piece1_1.blend" id="1_ebitj"]
 [ext_resource type="PackedScene" uid="uid://b21f567j56qx6" path="res://assets/piece2_1.blend" id="3_osaa7"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bsx47hv4kjsb3" path="res://assets/piece3_1.blend" id="8_odmxn"]
 [ext_resource type="PackedScene" uid="uid://w5bps2satdd" path="res://assets/board1_1.blend" id="9_tymgs"]
 [ext_resource type="PackedScene" uid="uid://ccj65bth22io1" path="res://assets/board1_2.blend" id="10_185ht"]
+[ext_resource type="Shader" path="res://shaders/blur.gdshader" id="11_mrh7m"]
 
 [sub_resource type="Gradient" id="Gradient_mj0kf"]
 offsets = PackedFloat32Array(0, 0.432203, 0.830508, 1)
@@ -31,16 +32,19 @@ sky = SubResource("Sky_ngy25")
 
 [sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_2secx"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d0btq"]
+shader = ExtResource("11_mrh7m")
+shader_parameter/blur_sharp = 5.0
+shader_parameter/pixel = 5.0
+
 [node name="Node3D" type="Node3D"]
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.014812, 0.421613, -0.906655, -0.0156292, 0.906546, 0.421818, 0.999768, 0.0204183, -0.00683829, -9.74888, 10.6388, 7.18695)
+transform = Transform3D(-0.014812, 0.421613, -0.906655, -0.0156292, 0.906546, 0.421818, 0.999768, 0.0204183, -0.00683829, -7.02686, 10.6388, 7.18695)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ugmn1")
+camera_attributes = SubResource("CameraAttributesPhysical_2secx")
 
 [node name="piece1_1" parent="." instance=ExtResource("1_ebitj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 1.5, 2.75)
@@ -48,26 +52,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 1.5, 2.75)
 [node name="piece2_1" parent="." instance=ExtResource("3_osaa7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 5.5)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.40954, 3.31897, 0.780411)
-visible = false
-omni_range = 10.0
-omni_attenuation = 3.0
-
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(0.643172, 0.719554, -0.261862, 0.000405736, 0.34166, 0.939824, 0.765722, -0.604574, 0.219454, -10, 50, 10)
-visible = false
-light_color = Color(0.968627, 0.956863, 0.909804, 1)
-spot_range = 100.0
-spot_attenuation = 0.25
-spot_angle = 29.57
-
 [node name="piece2_2" parent="." instance=ExtResource("4_r5exs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 1.5, 13.75)
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_ugmn1")
-camera_attributes = SubResource("CameraAttributesPhysical_2secx")
 
 [node name="piece2_3" parent="." instance=ExtResource("3_osaa7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.5, 0)
@@ -246,3 +232,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 0, 16.5)
 
 [node name="boardH8" parent="Board" instance=ExtResource("9_tymgs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 0, 19.25)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_d0btq")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
