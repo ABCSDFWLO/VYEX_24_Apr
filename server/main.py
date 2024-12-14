@@ -152,3 +152,32 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
             ) for game in games
         ]
         return result
+
+@app.post("/enter_game/{game_id}", status_code=200)
+async def enter_game(game_id: int, password:Union[str,None] = Body(...), user_id: int = Depends(user_id_from_token)):
+    with Session(engine) as session:
+        game = session.get(Game, game_id)
+        if game is None:
+            raise HTTPException(status_code=404, detail="Game not found")
+        elif game.state != GameState.Running:
+            raise HTTPException(status_code=400, detail="Game Already Ended")
+        elif game.player1_id == None:
+            game.player1_id = user_id
+        elif game.player2_id == None:
+            if game.password_hash is not None and password is None:
+                raise HTTPException(status_code=400, detail="Password Required")
+            elif game.password_hash != password:
+                raise HTTPException(status_code=400, detail="Invalid Password")
+            game.player2_id = user_id
+        elif game.player1_id == user_id or game.player2_id == user_id:
+            pass
+        else:
+            raise HTTPException(status_code=400, detail="Game Full")
+        
+        session.add(game)
+        try:
+            session.commit()
+            session.refresh(game)
+        except IntegrityError:
+            session.rollback()
+            raise HTTPException(status_code=500, detail="Database error")
