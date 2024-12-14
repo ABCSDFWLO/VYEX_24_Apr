@@ -1,11 +1,35 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyp6xektf10o4"]
+[gd_scene load_steps=17 format=3 uid="uid://cyp6xektf10o4"]
 
 [ext_resource type="PackedScene" uid="uid://bct52a0fbe4k5" path="res://assets/piece1_1.blend" id="1_ebitj"]
-[ext_resource type="PackedScene" uid="uid://iyfgg85t3fv" path="res://assets/plane_white.blend" id="2_jxstd"]
 [ext_resource type="PackedScene" uid="uid://b21f567j56qx6" path="res://assets/piece2_1.blend" id="3_osaa7"]
+[ext_resource type="PackedScene" uid="uid://bg4nvfeldbkq7" path="res://assets/piece1_2.blend" id="4_mu8cw"]
+[ext_resource type="PackedScene" uid="uid://dul73jni1qtqx" path="res://assets/piece2_2.blend" id="4_r5exs"]
+[ext_resource type="PackedScene" uid="uid://b5flwhywpjwdx" path="res://assets/piece3_2.blend" id="5_dmkw3"]
+[ext_resource type="PackedScene" uid="uid://d3wthq2qif25y" path="res://assets/piece4_1.blend" id="6_8e4u0"]
+[ext_resource type="PackedScene" uid="uid://bqbvi1hvp0env" path="res://assets/piece4_2.blend" id="7_ysv83"]
+[ext_resource type="PackedScene" uid="uid://bsx47hv4kjsb3" path="res://assets/piece3_1.blend" id="8_odmxn"]
+[ext_resource type="PackedScene" uid="uid://w5bps2satdd" path="res://assets/board1_1.blend" id="9_tymgs"]
+[ext_resource type="PackedScene" uid="uid://ccj65bth22io1" path="res://assets/board1_2.blend" id="10_185ht"]
 
-[sub_resource type="Environment" id="Environment_37m5b"]
-background_mode = 1
+[sub_resource type="Gradient" id="Gradient_mj0kf"]
+offsets = PackedFloat32Array(0, 0.432203, 0.830508, 1)
+colors = PackedColorArray(0.490196, 0.431373, 0.513726, 1, 0.815686, 0.721569, 0.658824, 1, 0.87451, 0.827451, 0.764706, 1, 0.972549, 0.929412, 0.890196, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ocpk2"]
+gradient = SubResource("Gradient_mj0kf")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_podw6"]
+panorama = SubResource("GradientTexture2D_ocpk2")
+
+[sub_resource type="Sky" id="Sky_ngy25"]
+sky_material = SubResource("PanoramaSkyMaterial_podw6")
+
+[sub_resource type="Environment" id="Environment_ugmn1"]
+background_mode = 2
+sky = SubResource("Sky_ngy25")
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_2secx"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -16,25 +40,209 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.750683, 0.172801, -0.637664, 0.0117302, 0.96155, 0.27438, 0.660559, -0.213452, 0.719792, -10.389, 5.71696, 6.44903)
-environment = SubResource("Environment_37m5b")
+transform = Transform3D(-0.014812, 0.421613, -0.906655, -0.0156292, 0.906546, 0.421818, 0.999768, 0.0204183, -0.00683829, -9.74888, 10.6388, 7.18695)
 
 [node name="piece1_1" parent="." instance=ExtResource("1_ebitj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.157605, 1.47103, 2.78195)
-
-[node name="plane_white" parent="." instance=ExtResource("2_jxstd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.813079, 0, -7.96745)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 1.5, 2.75)
 
 [node name="piece2_1" parent="." instance=ExtResource("3_osaa7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.31061, 1.28623, 0.575218)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 5.5)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.40954, 3.31897, 0.780411)
+visible = false
 omni_range = 10.0
 omni_attenuation = 3.0
 
 [node name="SpotLight3D" type="SpotLight3D" parent="."]
 transform = Transform3D(0.643172, 0.719554, -0.261862, 0.000405736, 0.34166, 0.939824, 0.765722, -0.604574, 0.219454, -10, 50, 10)
-light_color = Color(0.968627, 0.980392, 0.972549, 1)
+visible = false
+light_color = Color(0.968627, 0.956863, 0.909804, 1)
 spot_range = 100.0
 spot_attenuation = 0.25
 spot_angle = 29.57
+
+[node name="piece2_2" parent="." instance=ExtResource("4_r5exs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 1.5, 13.75)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ugmn1")
+camera_attributes = SubResource("CameraAttributesPhysical_2secx")
+
+[node name="piece2_3" parent="." instance=ExtResource("3_osaa7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.5, 0)
+
+[node name="piece1_2" parent="." instance=ExtResource("4_mu8cw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 1.5, 16.5)
+
+[node name="piece2_4" parent="." instance=ExtResource("4_r5exs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 1.5, 19.25)
+
+[node name="piece3_2" parent="." instance=ExtResource("5_dmkw3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 1.5, 13.75)
+
+[node name="piece4_1" parent="." instance=ExtResource("6_8e4u0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="piece4_2" parent="." instance=ExtResource("7_ysv83")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 1.5, 19.25)
+
+[node name="piece3_1" parent="." instance=ExtResource("8_odmxn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.58, 5.5)
+
+[node name="Board" type="Node3D" parent="."]
+
+[node name="boardA1" parent="Board" instance=ExtResource("9_tymgs")]
+
+[node name="boardA2" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.75)
+
+[node name="boardB1" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, 0)
+
+[node name="boardA3" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.5)
+
+[node name="boardB2" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, 2.75)
+
+[node name="boardC1" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 0)
+
+[node name="boardA4" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.25)
+
+[node name="boardB3" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, 5.5)
+
+[node name="boardC2" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 2.75)
+
+[node name="boardD1" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.25, 0, 0)
+
+[node name="boardA5" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11)
+
+[node name="boardB4" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, 8.25)
+
+[node name="boardC3" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 5.5)
+
+[node name="boardD2" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.25, 0, 2.75)
+
+[node name="boardE1" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 0)
+
+[node name="boardB5" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, 11)
+
+[node name="boardC4" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 8.25)
+
+[node name="boardD3" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.25, 0, 5.5)
+
+[node name="boardE2" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 2.75)
+
+[node name="boardB6" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, 13.75)
+
+[node name="boardC5" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 11)
+
+[node name="boardD4" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.25, 0, 8.25)
+
+[node name="boardE3" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 5.5)
+
+[node name="boardF2" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 0, 2.75)
+
+[node name="boardC6" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 13.75)
+
+[node name="boardD5" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.25, 0, 11)
+
+[node name="boardE4" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 8.25)
+
+[node name="boardF3" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 0, 5.5)
+
+[node name="boardC7" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 16.5)
+
+[node name="boardD6" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.25, 0, 13.75)
+
+[node name="boardE5" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 11)
+
+[node name="boardF4" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 0, 8.25)
+
+[node name="boardG3" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0, 5.5)
+
+[node name="boardD7" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.25, 0, 16.5)
+
+[node name="boardE6" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 13.75)
+
+[node name="boardF5" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 0, 11)
+
+[node name="boardG4" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0, 8.25)
+
+[node name="boardD8" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.25, 0, 19.25)
+
+[node name="boardE7" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 16.5)
+
+[node name="boardF6" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 0, 13.75)
+
+[node name="boardG5" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0, 11)
+
+[node name="boardH4" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 0, 8.25)
+
+[node name="boardE8" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 19.25)
+
+[node name="boardF7" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 0, 16.5)
+
+[node name="boardG6" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0, 13.75)
+
+[node name="boardH5" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 0, 11)
+
+[node name="boardF8" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 0, 19.25)
+
+[node name="boardG7" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0, 16.5)
+
+[node name="boardH6" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 0, 13.75)
+
+[node name="boardG8" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0, 19.25)
+
+[node name="boardH7" parent="Board" instance=ExtResource("10_185ht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 0, 16.5)
+
+[node name="boardH8" parent="Board" instance=ExtResource("9_tymgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 0, 19.25)
