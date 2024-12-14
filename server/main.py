@@ -1,16 +1,16 @@
-from typing import Annotated, List, Union
+from typing import Annotated, List, Tuple, Union
 from uuid import uuid4, UUID
-from fastapi import Body, Depends, FastAPI, HTTPException, Header, Path
+from fastapi import Body, Depends, FastAPI, HTTPException, Header, Path, Query
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
-from sqlmodel import Session, select
+from sqlmodel import Session, col, select
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import bcrypt
 import random
 import string
 import asyncio
 
-from db import engine, create_db_and_tables, User, Game, Action, State, ActionType
+from db import engine, create_db_and_tables, User, Game, Action, GameState, ActionType
 from token_manager import get_token_manager, user_id_from_token
 from verification_mail import send_verification_mail
 
@@ -126,3 +126,27 @@ async def login_user(user_login: UserLogin, token_manager=Depends(get_token_mana
 @app.post("/logout", status_code=200)
 async def logout_user(user_id: int = Depends(user_id_from_token), token_manager=Depends(get_token_manager)):
     token_manager.block_token(user_id)
+
+class GameOut(BaseModel):
+    id : int
+    state : GameState
+    started_at : datetime
+    ended_at : datetime
+    player1_id : int
+    player2_id : int
+
+@app.get("/games", response_model=List[GameOut])
+async def get_games(state: Union[List[GameState],None] = Query(default=[GameState.Running], min_length=1, max_length=3)):
+    with Session(engine) as session:
+        games = session.exec(select(Game).where(col(Game.state).in_(state))).all()
+        result = [
+            GameOut(
+                id=game.id,
+                state=game.state,
+                started_at=game.started_at,
+                ended_at=game.ended_at,
+                player1_id=game.player1_id,
+                player2_id=game.player2_id
+            ) for game in games
+        ]
+        return result

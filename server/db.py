@@ -4,7 +4,7 @@ from datetime import datetime
 from enum import Enum
 
 
-class State(Enum):
+class GameState(Enum):
     Running = "Running"
     P1Win = "P1Win"
     P2Win = "P2Win"
@@ -33,7 +33,7 @@ class User(SQLModel, table=True):
     registered_at: datetime
 class Game(SQLModel, table=True):
     id: int = Field(primary_key=True)
-    state: State
+    state: GameState
     started_at: datetime
     ended_at: datetime
     player1_id: int = Field(foreign_key="user.id")
