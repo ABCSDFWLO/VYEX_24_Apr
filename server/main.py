@@ -134,6 +134,7 @@ class GameOut(BaseModel):
     ended_at : datetime
     player1_id : int
     player2_id : int
+    has_password : bool
 
 @app.get("/games", response_model=List[GameOut])
 async def get_games(state: Union[List[GameState],None] = Query(default=[GameState.Running], min_length=1, max_length=3)):
@@ -146,7 +147,8 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
                 started_at=game.started_at,
                 ended_at=game.ended_at,
                 player1_id=game.player1_id,
-                player2_id=game.player2_id
+                player2_id=game.player2_id,
+                has_password=game.password_hash is not None
             ) for game in games
         ]
         return result
