@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from passlib.hash import bcrypt
 import random
 import string
+import asyncio
 
 from db import engine, create_db_and_tables, User, Game, Action, State, ActionType
 from token_manager import get_token_manager, user_id_from_token
@@ -64,6 +65,10 @@ async def get_user(user_name: str):
             email=result.email,
             registered_at=result.registered_at
             )
+    
+async def expire_verification(uuid:UUID, delay:int=600):
+    await asyncio.sleep(delay)
+    del unverified_users[uuid]
 
 @app.post("/register", status_code=200, response_model=UUID)
 async def create_user(user_create: UserCreate, code:str=Depends(generate_verification_code), send_mail = Depends(send_verification_mail)):
