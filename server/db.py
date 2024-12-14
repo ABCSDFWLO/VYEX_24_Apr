@@ -1,3 +1,4 @@
+from typing import Union
 from sqlmodel import SQLModel, Field, create_engine
 from pydantic import EmailStr
 from datetime import datetime
@@ -38,7 +39,7 @@ class Game(SQLModel, table=True):
     ended_at: datetime
     player1_id: int = Field(foreign_key="user.id")
     player2_id: int = Field(foreign_key="user.id")
-    password: str
+    password_hash: Union[str,None]
 class Action(SQLModel, table=True):
     id: int = Field(primary_key=True)
     game_id: int = Field(foreign_key="game.id")
