@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dul73jni1qtqx"
-path="res://.godot/imported/piece2_2.blend-dd7fd50947f9b9537ec3fc48a9fcef4f.scn"
+uid="uid://iyfgg85t3fv"
+path="res://.godot/imported/plane_white.blend-b46af15cb1fd44f865c1c0b15b08a527.scn"
 
 [deps]
 
-source_file="res://assets/piece2_2.blend"
-dest_files=["res://.godot/imported/piece2_2.blend-dd7fd50947f9b9537ec3fc48a9fcef4f.scn"]
+source_file="res://assets/3d_models/plane_white.blend"
+dest_files=["res://.godot/imported/plane_white.blend-b46af15cb1fd44f865c1c0b15b08a527.scn"]
 
 [params]
 

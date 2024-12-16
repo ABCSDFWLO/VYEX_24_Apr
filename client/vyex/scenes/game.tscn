@@ -1,26 +1,16 @@
-[gd_scene load_steps=23 format=3 uid="uid://cyp6xektf10o4"]
+[gd_scene load_steps=18 format=3 uid="uid://cyp6xektf10o4"]
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_8ynu1"]
-[ext_resource type="PackedScene" uid="uid://bct52a0fbe4k5" path="res://assets/piece1_1.blend" id="1_ebitj"]
-[ext_resource type="Texture2D" uid="uid://bhx6fkweufgcq" path="res://assets/cursor.png" id="2_66jnn"]
-[ext_resource type="Script" path="res://scripts/camera_cursor.gd" id="3_3igga"]
-[ext_resource type="PackedScene" uid="uid://b21f567j56qx6" path="res://assets/piece2_1.blend" id="3_osaa7"]
-[ext_resource type="Shader" path="res://shaders/alpha.gdshader" id="4_00iq0"]
-[ext_resource type="PackedScene" uid="uid://bg4nvfeldbkq7" path="res://assets/piece1_2.blend" id="4_mu8cw"]
-[ext_resource type="PackedScene" uid="uid://dul73jni1qtqx" path="res://assets/piece2_2.blend" id="4_r5exs"]
-[ext_resource type="PackedScene" uid="uid://b5flwhywpjwdx" path="res://assets/piece3_2.blend" id="5_dmkw3"]
-[ext_resource type="Script" path="res://scripts/cursor_highlighter.gd" id="5_jbt8u"]
-[ext_resource type="PackedScene" uid="uid://d3wthq2qif25y" path="res://assets/piece4_1.blend" id="6_8e4u0"]
-[ext_resource type="PackedScene" uid="uid://bqbvi1hvp0env" path="res://assets/piece4_2.blend" id="7_ysv83"]
-[ext_resource type="PackedScene" uid="uid://bsx47hv4kjsb3" path="res://assets/piece3_1.blend" id="8_odmxn"]
+[ext_resource type="PackedScene" uid="uid://bct52a0fbe4k5" path="res://assets/3d_models/piece1_1.blend" id="1_ebitj"]
+[ext_resource type="Texture2D" uid="uid://bhx6fkweufgcq" path="res://assets/sprites/cursor.png" id="2_66jnn"]
+[ext_resource type="PackedScene" uid="uid://b21f567j56qx6" path="res://assets/3d_models/piece2_1.blend" id="3_osaa7"]
+[ext_resource type="PackedScene" uid="uid://bg4nvfeldbkq7" path="res://assets/3d_models/piece1_2.blend" id="4_mu8cw"]
+[ext_resource type="PackedScene" uid="uid://dul73jni1qtqx" path="res://assets/3d_models/piece2_2.blend" id="4_r5exs"]
+[ext_resource type="PackedScene" uid="uid://b5flwhywpjwdx" path="res://assets/3d_models/piece3_2.blend" id="5_dmkw3"]
+[ext_resource type="PackedScene" uid="uid://d3wthq2qif25y" path="res://assets/3d_models/piece4_1.blend" id="6_8e4u0"]
+[ext_resource type="PackedScene" uid="uid://bqbvi1hvp0env" path="res://assets/3d_models/piece4_2.blend" id="7_ysv83"]
+[ext_resource type="PackedScene" uid="uid://bsx47hv4kjsb3" path="res://assets/3d_models/piece3_1.blend" id="8_odmxn"]
 [ext_resource type="PackedScene" uid="uid://cnrdrklmd55ub" path="res://scenes/board.tscn" id="12_5j4b5"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7n38x"]
-render_priority = 0
-shader = ExtResource("4_00iq0")
-shader_parameter/alpha = 0.0
-
-[sub_resource type="SphereMesh" id="SphereMesh_6h52k"]
 
 [sub_resource type="Gradient" id="Gradient_mj0kf"]
 offsets = PackedFloat32Array(0, 0.432203, 0.830508, 1)
@@ -50,16 +40,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.625, 0, 9.625)
 [node name="Camera3D" type="Camera3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
 script = ExtResource("1_8ynu1")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
-material_override = SubResource("ShaderMaterial_7n38x")
-mesh = SubResource("SphereMesh_6h52k")
-script = ExtResource("5_jbt8u")
-
-[node name="Sprite3D" type="Sprite3D" parent="Node3D"]
-modulate = Color(0, 0, 0, 1)
-texture = ExtResource("2_66jnn")
-script = ExtResource("3_3igga")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ugmn1")
@@ -97,4 +77,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.58, 5.5)
 
 [node name="Board" parent="." instance=ExtResource("12_5j4b5")]
 
-[connection signal="cursor_highlight" from="Node3D/Sprite3D" to="Node3D/MeshInstance3D" method="_on_sprite_3d_cursor_highlight"]
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_66jnn")
+expand_mode = 1
