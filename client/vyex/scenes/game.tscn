@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cyp6xektf10o4"]
+[gd_scene load_steps=20 format=3 uid="uid://cyp6xektf10o4"]
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_8ynu1"]
 [ext_resource type="PackedScene" uid="uid://bct52a0fbe4k5" path="res://assets/3d_models/piece1_1.blend" id="1_ebitj"]
@@ -10,7 +10,9 @@
 [ext_resource type="PackedScene" uid="uid://d3wthq2qif25y" path="res://assets/3d_models/piece4_1.blend" id="6_8e4u0"]
 [ext_resource type="PackedScene" uid="uid://bqbvi1hvp0env" path="res://assets/3d_models/piece4_2.blend" id="7_ysv83"]
 [ext_resource type="PackedScene" uid="uid://bsx47hv4kjsb3" path="res://assets/3d_models/piece3_1.blend" id="8_odmxn"]
+[ext_resource type="Script" path="res://scenes/cursor.gd" id="11_imup5"]
 [ext_resource type="PackedScene" uid="uid://cnrdrklmd55ub" path="res://scenes/board.tscn" id="12_5j4b5"]
+[ext_resource type="Texture2D" uid="uid://xme1hrydjkrs" path="res://assets/sprites/cursor_out.png" id="12_iii3n"]
 
 [sub_resource type="Gradient" id="Gradient_mj0kf"]
 offsets = PackedFloat32Array(0, 0.432203, 0.830508, 1)
@@ -34,10 +36,11 @@ sky = SubResource("Sky_ngy25")
 
 [node name="Node3D" type="Node3D"]
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="CursorPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.625, 0, 9.625)
+metadata/_edit_group_ = true
 
-[node name="Camera3D" type="Camera3D" parent="Node3D"]
+[node name="Camera3D" type="Camera3D" parent="CursorPivot"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
 script = ExtResource("1_8ynu1")
 
@@ -45,34 +48,34 @@ script = ExtResource("1_8ynu1")
 environment = SubResource("Environment_ugmn1")
 camera_attributes = SubResource("CameraAttributesPhysical_2secx")
 
-[node name="piece1_1" parent="." instance=ExtResource("1_ebitj")]
+[node name="PieceWhiteKing" parent="." instance=ExtResource("1_ebitj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 1.5, 2.75)
 
-[node name="piece2_1" parent="." instance=ExtResource("3_osaa7")]
+[node name="PieceWhiteDriller1" parent="." instance=ExtResource("3_osaa7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 5.5)
 
-[node name="piece2_2" parent="." instance=ExtResource("4_r5exs")]
+[node name="PieceBlackDriller1" parent="." instance=ExtResource("4_r5exs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 1.5, 13.75)
 
-[node name="piece2_3" parent="." instance=ExtResource("3_osaa7")]
+[node name="PieceWhiteDriller2" parent="." instance=ExtResource("3_osaa7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.5, 0)
 
-[node name="piece1_2" parent="." instance=ExtResource("4_mu8cw")]
+[node name="PieceBlacKing" parent="." instance=ExtResource("4_mu8cw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 1.5, 16.5)
 
-[node name="piece2_4" parent="." instance=ExtResource("4_r5exs")]
+[node name="PieceBlackDriller2" parent="." instance=ExtResource("4_r5exs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 1.5, 19.25)
 
-[node name="piece3_2" parent="." instance=ExtResource("5_dmkw3")]
+[node name="PieceBlackWaller" parent="." instance=ExtResource("5_dmkw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 1.5, 13.75)
 
-[node name="piece4_1" parent="." instance=ExtResource("6_8e4u0")]
+[node name="PieceWhiteSlayer" parent="." instance=ExtResource("6_8e4u0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
-[node name="piece4_2" parent="." instance=ExtResource("7_ysv83")]
+[node name="PieceBlackSlayer" parent="." instance=ExtResource("7_ysv83")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 1.5, 19.25)
 
-[node name="piece3_1" parent="." instance=ExtResource("8_odmxn")]
+[node name="PieceWhiteWaller" parent="." instance=ExtResource("8_odmxn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.58, 5.5)
 
 [node name="Board" parent="." instance=ExtResource("12_5j4b5")]
@@ -85,7 +88,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="Control"]
+[node name="Cursor" type="Control" parent="Control"]
+anchors_preset = 0
+script = ExtResource("11_imup5")
+
+[node name="CursorIn" type="TextureRect" parent="Control/Cursor"]
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -100,3 +108,23 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_66jnn")
 expand_mode = 1
+
+[node name="CursorOut" type="TextureRect" parent="Control/Cursor"]
+visible = false
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_iii3n")
+expand_mode = 1
+
+[connection signal="cursor_viewport_pos_changed" from="CursorPivot/Camera3D" to="Control/Cursor" method="_on_camera_3d_cursor_viewport_pos_changed"]

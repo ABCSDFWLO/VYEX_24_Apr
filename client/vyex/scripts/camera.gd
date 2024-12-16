@@ -1,7 +1,6 @@
 extends Camera3D
 
-func _ready() -> void:
-	pass
+signal cursor_viewport_pos_changed(pos : Vector2)
 
 const MOVE_ACC = 1.0
 const ROT_ACC = 0.2
@@ -17,7 +16,17 @@ const ROT_DIR_MAX = 0.9
 var move_spd : Vector3 = Vector3(0,0,0)
 var rot_spd : Vector2 = Vector2(0,0)
 
+var cursor_pivot : Node3D
+var cursor_viewport_pos : Vector2
+
+func _ready() -> void:
+	cursor_pivot = get_parent()
+
 func _process(delta: float) -> void:
+	move_first(delta)
+	render_cursor()
+
+func move_first(delta : float) -> void:
 	if Input.is_action_pressed("move_left"):
 		if move_spd.x< -MOVE_SPD_MAX:
 			move_spd.x = -MOVE_SPD_MAX
@@ -113,9 +122,20 @@ func _process(delta: float) -> void:
 		rot_spd.y = 0
 	elif direction.y <= -ROT_DIR_MAX and rot_spd.y > 0:
 		rot_spd.y = 0
-
+		
 	self.rotate(Vector3.UP, rot_spd.x * delta)
 	self.rotate(self.transform.basis.x.normalized(), rot_spd.y * delta)
 	self.translate(Vector3.RIGHT * move_spd.x * delta)
 	self.translate(Vector3.UP * move_spd.y * delta)
 	self.translate(Vector3.BACK * move_spd.z * delta)
+	
+func move_third(delta : float):
+	pass
+
+func render_cursor():
+	var pos :Vector2 = unproject_position(cursor_pivot.global_position)
+	if pos.is_equal_approx(cursor_viewport_pos):
+		pass
+	else:
+		emit_signal("cursor_viewport_pos_changed", pos)
+		cursor_viewport_pos = pos
