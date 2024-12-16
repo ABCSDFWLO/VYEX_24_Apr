@@ -17,11 +17,6 @@ const ROT_DIR_MAX = 0.9
 var move_spd : Vector3 = Vector3(0,0,0)
 var rot_spd : Vector2 = Vector2(0,0)
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		print("rotation_degrees : " + str(self.transform.basis.z.normalized()))
-		
-
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("move_left"):
 		if move_spd.x< -MOVE_SPD_MAX:

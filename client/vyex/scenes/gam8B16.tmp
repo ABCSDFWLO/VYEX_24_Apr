@@ -18,7 +18,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7n38x"]
 render_priority = 0
 shader = ExtResource("4_00iq0")
-shader_parameter/alpha = 0.0
+shader_parameter/alpha = null
 
 [sub_resource type="SphereMesh" id="SphereMesh_6h52k"]
 
@@ -51,15 +51,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.625, 0, 9.625)
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
 script = ExtResource("1_8ynu1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
-material_override = SubResource("ShaderMaterial_7n38x")
-mesh = SubResource("SphereMesh_6h52k")
-script = ExtResource("5_jbt8u")
-
 [node name="Sprite3D" type="Sprite3D" parent="Node3D"]
-modulate = Color(0, 0, 0, 1)
 texture = ExtResource("2_66jnn")
 script = ExtResource("3_3igga")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Sprite3D"]
+material_override = SubResource("ShaderMaterial_7n38x")
+mesh = SubResource("SphereMesh_6h52k")
+skeleton = NodePath("../..")
+script = ExtResource("5_jbt8u")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ugmn1")
@@ -96,5 +96,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 1.5, 19.25)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.58, 5.5)
 
 [node name="Board" parent="." instance=ExtResource("12_5j4b5")]
-
-[connection signal="cursor_highlight" from="Node3D/Sprite3D" to="Node3D/MeshInstance3D" method="_on_sprite_3d_cursor_highlight"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cyp6xektf10o4"]
+[gd_scene load_steps=22 format=3 uid="uid://cyp6xektf10o4"]
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_8ynu1"]
 [ext_resource type="PackedScene" uid="uid://bct52a0fbe4k5" path="res://assets/piece1_1.blend" id="1_ebitj"]
@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://bg4nvfeldbkq7" path="res://assets/piece1_2.blend" id="4_mu8cw"]
 [ext_resource type="PackedScene" uid="uid://dul73jni1qtqx" path="res://assets/piece2_2.blend" id="4_r5exs"]
 [ext_resource type="PackedScene" uid="uid://b5flwhywpjwdx" path="res://assets/piece3_2.blend" id="5_dmkw3"]
-[ext_resource type="Script" path="res://scripts/cursor_highlighter.gd" id="5_jbt8u"]
 [ext_resource type="PackedScene" uid="uid://d3wthq2qif25y" path="res://assets/piece4_1.blend" id="6_8e4u0"]
 [ext_resource type="PackedScene" uid="uid://bqbvi1hvp0env" path="res://assets/piece4_2.blend" id="7_ysv83"]
 [ext_resource type="PackedScene" uid="uid://bsx47hv4kjsb3" path="res://assets/piece3_1.blend" id="8_odmxn"]
@@ -18,7 +17,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7n38x"]
 render_priority = 0
 shader = ExtResource("4_00iq0")
-shader_parameter/alpha = 0.0
+shader_parameter/alpha = null
 
 [sub_resource type="SphereMesh" id="SphereMesh_6h52k"]
 
@@ -51,15 +50,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.625, 0, 9.625)
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
 script = ExtResource("1_8ynu1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
-material_override = SubResource("ShaderMaterial_7n38x")
-mesh = SubResource("SphereMesh_6h52k")
-script = ExtResource("5_jbt8u")
-
 [node name="Sprite3D" type="Sprite3D" parent="Node3D"]
-modulate = Color(0, 0, 0, 1)
 texture = ExtResource("2_66jnn")
 script = ExtResource("3_3igga")
+
+[node name="cursor_highlighter" type="MeshInstance3D" parent="Node3D/Sprite3D"]
+material_override = SubResource("ShaderMaterial_7n38x")
+mesh = SubResource("SphereMesh_6h52k")
+skeleton = NodePath("../..")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ugmn1")
@@ -96,5 +94,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 1.5, 19.25)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.58, 5.5)
 
 [node name="Board" parent="." instance=ExtResource("12_5j4b5")]
-
-[connection signal="cursor_highlight" from="Node3D/Sprite3D" to="Node3D/MeshInstance3D" method="_on_sprite_3d_cursor_highlight"]
