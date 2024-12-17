@@ -21,8 +21,6 @@ func _on_camera_3d_cursor_viewport_pos_changed(pos: Vector2) -> void:
 	var right := get_viewport().get_visible_rect().size.x
 	var bottom := get_viewport().get_visible_rect().size.y
 	
-	print(bottom, right)
-	
 	var index := 4
 	
 	if pos.x<left:
