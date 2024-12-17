@@ -1,6 +1,7 @@
 extends Camera3D
 
 signal cursor_viewport_pos_changed(pos : Vector2)
+signal perspective_changed(is_first : bool)
 
 const MOVE_ACC = 1.0
 const ROT_ACC = 0.2
@@ -181,9 +182,9 @@ func move_first(delta : float) -> void:
 		
 	self.rotate(Vector3.UP, rot_spd.x * delta)
 	self.rotate(self.transform.basis.x.normalized(), rot_spd.y * delta)
-	self.translate(Vector3.RIGHT * move_spd.x * delta)
-	self.translate(Vector3.UP * move_spd.y * delta)
-	self.translate(Vector3.BACK * move_spd.z * delta)	
+	self.global_translate(Vector3(direction.z,0,-direction.x).normalized() * move_spd.x * delta)
+	self.global_translate(Vector3.UP * move_spd.y * delta)
+	self.global_translate(Vector3(direction.x,0,direction.z).normalized() * move_spd.z * delta)
 func move_third(delta : float):
 	if Input.is_action_pressed("move_left"):
 		if move_spd.x< -MOVE_SPD_MAX:
@@ -276,16 +277,20 @@ func move_third(delta : float):
 			rot_spd.y += ROT_ACC
 
 	var direction = self.transform.basis.z.normalized()
+	var distance = self.position.length()
 	if direction.y >= ROT_DIR_MAX and rot_spd.y < 0:
 		rot_spd.y = 0
 	elif direction.y <= -ROT_DIR_MAX and rot_spd.y > 0:
 		rot_spd.y = 0
 		
-	self.rotate(Vector3.UP, rot_spd.x * delta)
+	cursor_pivot.translate(Vector3(direction.z,0,-direction.x).normalized() * move_spd.x * delta)
+	cursor_pivot.translate(Vector3.UP * move_spd.y * delta)
+	cursor_pivot.translate(Vector3(direction.x,0,direction.z).normalized() * move_spd.z * delta)
+	self.rotate(Vector3.UP, -rot_spd.x * delta)
 	self.rotate(self.transform.basis.x.normalized(), rot_spd.y * delta)
-	self.translate(Vector3.RIGHT * move_spd.x * delta)
-	self.translate(Vector3.UP * move_spd.y * delta)
-	self.translate(Vector3.BACK * move_spd.z * delta)	
+	var rot = self.global_rotation
+	var pos = Vector3(sin(rot.y)*cos(rot.x)*distance,sin(-rot.x)*distance,cos(rot.y)*cos(rot.x)*distance)
+	self.position = pos
 
 func mouse_first(mouse_vector : Vector3):
 	if not mouse_vector.is_equal_approx(Vector3(0,0,0)):
