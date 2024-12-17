@@ -340,6 +340,7 @@ offset_right = -24.0
 offset_bottom = 8.0
 grow_horizontal = 0
 grow_vertical = 2
+tooltip_text = "Reset Cursor And Top View"
 toggle_mode = true
 texture_normal = ExtResource("14_5xit5")
 ignore_texture_size = true
@@ -358,15 +359,14 @@ offset_right = -56.0
 offset_bottom = 8.0
 grow_horizontal = 0
 grow_vertical = 2
+tooltip_text = "Camera Lock on Cursor (third perspective)"
 texture_normal = ExtResource("15_xvf62")
 ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("17_klxg5")
 
 [connection signal="cursor_viewport_pos_changed" from="CursorPivot/Camera3D" to="Control/Cursor" method="_on_camera_3d_cursor_viewport_pos_changed"]
-[connection signal="perspective_changed" from="CursorPivot/Camera3D" to="CursorPivot/Camera3D" method="_on_perspective_changed"]
-[connection signal="perspective_changed" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_perspective_changed"]
-[connection signal="top_view" from="CursorPivot/Camera3D" to="CursorPivot/Camera3D" method="_on_top_view"]
+[connection signal="perspective_changed" from="CursorPivot/Camera3D" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_camera_3d_perspective_changed"]
 [connection signal="top_view" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_top_view"]
 [connection signal="top_view_animation_ended" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_top_view_animation_ended"]
 [connection signal="button_down" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_button_down"]
@@ -379,3 +379,5 @@ script = ExtResource("17_klxg5")
 [connection signal="button_up" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_button_up"]
 [connection signal="mouse_entered" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/IconPanel/CameraLockOnCursorIconButton" to="CursorPivot/Camera3D" method="_on_camera_lock_on_cursor_icon_button_pressed"]
+[connection signal="pressed" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_pressed"]

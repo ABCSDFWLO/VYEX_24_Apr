@@ -34,15 +34,16 @@ var mouse_zoom_sensitivity := 0.05
 var mouse_vector_sum := Vector3(0,0,0)
 
 var top_view_animation_progress := 0.0
-const TOP_VIEW_ANIMATION_DURATION := 1.0
+const TOP_VIEW_ANIMATION_DURATION := 0.5
 const TOP_VIEW_CURSOR_PIVOT_POSITION := Vector3(9.625,0,9.625)
-const TOP_VIEW_CAMERA_EULER_ANGLE := Vector3(-PI*0.5,0,0)
-const TOP_VIEW_CAMERA_POSITION := Vector3.UP*15
+const TOP_VIEW_CAMERA_EULER_ANGLE := Vector3(-PI*0.499,0,0) #0.5 freezes the move
+const TOP_VIEW_CAMERA_POSITION := Vector3.UP*20
 
 
 func _ready() -> void:
 	cursor_pivot = get_parent()
 	perspective_first=false
+	top_view_animation_progress=TOP_VIEW_ANIMATION_DURATION
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("move_with_drag"):
@@ -75,14 +76,16 @@ func _input(event: InputEvent) -> void:
 		mouse_vector_sum = Vector3(sum_x,sum_y,0)
 		
 	if event.is_action_pressed("change_perspective"):
-		emit_signal("perspective_changed")
+		_on_camera_lock_on_cursor_icon_button_pressed()
+		emit_signal("perspective_changed",perspective_first)
 	if event.is_action_pressed("top_view"):
+		_on_top_view_icon_button_pressed()
 		emit_signal("top_view")
 		
 	if event.is_action_released("wheel_up"):
-		self.translate(Vector3(0,0,mouse_zoom_sensitivity*MOUSE_WHEEL_UNIT))
-	elif event.is_action_released("wheel_down"):
 		self.translate(Vector3(0,0,-mouse_zoom_sensitivity*MOUSE_WHEEL_UNIT))
+	elif event.is_action_released("wheel_down"):
+		self.translate(Vector3(0,0,+mouse_zoom_sensitivity*MOUSE_WHEEL_UNIT))
 
 func _process(delta: float) -> void:
 	var mouse_vector :Vector3 = mouse_vector_sum*MOUSE_MOVE_SPD
@@ -370,10 +373,7 @@ func top_view_animation(delta : float) -> void:
 		emit_signal("top_view_animation_ended")
 
 
-func _on_perspective_changed(is_first: bool) -> void:
-	perspective_first=not perspective_first
-
-func _on_top_view() -> void:
-	top_view_animation_progress=TOP_VIEW_ANIMATION_DURATION
 func _on_top_view_icon_button_pressed() -> void:
-	_on_top_view()
+	top_view_animation_progress=TOP_VIEW_ANIMATION_DURATION
+func _on_camera_lock_on_cursor_icon_button_pressed() -> void:
+	perspective_first=not perspective_first

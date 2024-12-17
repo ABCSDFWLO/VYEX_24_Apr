@@ -21,3 +21,11 @@ func _on_button_down() -> void:
 	self.modulate=clicked_color
 func _on_button_up() -> void:
 	self.modulate=hovered_color
+func _on_camera_3d_perspective_changed(is_first: bool) -> void:
+	toggle_flag=not is_first
+	if toggle_flag:
+		self.modulate=enabled_color
+	else:
+		self.modulate=disabled_color
+func _on_pressed() -> void:
+	_on_camera_3d_perspective_changed(toggle_flag)
