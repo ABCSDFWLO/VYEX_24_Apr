@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cyp6xektf10o4"]
+[gd_scene load_steps=24 format=3 uid="uid://cyp6xektf10o4"]
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_8ynu1"]
 [ext_resource type="PackedScene" uid="uid://bct52a0fbe4k5" path="res://assets/3d_models/piece1_1.blend" id="1_ebitj"]
@@ -14,8 +14,9 @@
 [ext_resource type="PackedScene" uid="uid://cnrdrklmd55ub" path="res://scenes/board.tscn" id="12_5j4b5"]
 [ext_resource type="Texture2D" uid="uid://xme1hrydjkrs" path="res://assets/sprites/cursor_out.png" id="12_iii3n"]
 [ext_resource type="Texture2D" uid="uid://c8qpmu0wqto4h" path="res://assets/sprites/top_view.png" id="14_5xit5"]
-[ext_resource type="Script" path="res://scenes/top_view_icon_button.gd" id="15_ql04k"]
+[ext_resource type="Script" path="res://scripts/top_view_icon_button.gd" id="15_ql04k"]
 [ext_resource type="Texture2D" uid="uid://v4inm0q6mega" path="res://assets/sprites/camera_lock_on_cursor.png" id="15_xvf62"]
+[ext_resource type="Script" path="res://scripts/camera_lock_on_cursor_icon_button.gd" id="17_klxg5"]
 
 [sub_resource type="Gradient" id="Gradient_mj0kf"]
 offsets = PackedFloat32Array(0, 0.432203, 0.830508, 1)
@@ -360,10 +361,21 @@ grow_vertical = 2
 texture_normal = ExtResource("15_xvf62")
 ignore_texture_size = true
 stretch_mode = 5
+script = ExtResource("17_klxg5")
 
 [connection signal="cursor_viewport_pos_changed" from="CursorPivot/Camera3D" to="Control/Cursor" method="_on_camera_3d_cursor_viewport_pos_changed"]
+[connection signal="perspective_changed" from="CursorPivot/Camera3D" to="CursorPivot/Camera3D" method="_on_perspective_changed"]
+[connection signal="perspective_changed" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_perspective_changed"]
+[connection signal="top_view" from="CursorPivot/Camera3D" to="CursorPivot/Camera3D" method="_on_top_view"]
+[connection signal="top_view" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_top_view"]
+[connection signal="top_view_animation_ended" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_top_view_animation_ended"]
 [connection signal="button_down" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_button_down"]
 [connection signal="button_up" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_button_up"]
 [connection signal="mouse_entered" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_mouse_exited"]
-[connection signal="toggled" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_toggled"]
+[connection signal="pressed" from="Control/IconPanel/TopViewIconButton" to="CursorPivot/Camera3D" method="_on_top_view_icon_button_pressed"]
+[connection signal="pressed" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_pressed"]
+[connection signal="button_down" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_button_down"]
+[connection signal="button_up" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_button_up"]
+[connection signal="mouse_entered" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_mouse_exited"]

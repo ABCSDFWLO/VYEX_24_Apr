@@ -2,6 +2,8 @@ extends Camera3D
 
 signal cursor_viewport_pos_changed(pos : Vector2)
 signal perspective_changed(is_first : bool)
+signal top_view()
+signal top_view_animation_ended()
 
 const MOVE_ACC = 1.0
 const ROT_ACC = 0.2
@@ -24,12 +26,19 @@ var cursor_pivot : Node3D
 var cursor_viewport_pos : Vector2
 
 enum MouseDragMode { IDLE, MOVE, ROTATE, ZOOM }
-var perspective_first : bool = false
-var mouse_drag_mode : int = MouseDragMode.IDLE
-var mouse_move_sensitivity : float = 0.05
-var mouse_rotate_sensitivity : float = 0.005
-var mouse_zoom_sensitivity : float = 0.05
+var perspective_first := false
+var mouse_drag_mode := MouseDragMode.IDLE
+var mouse_move_sensitivity := 0.05
+var mouse_rotate_sensitivity := 0.005
+var mouse_zoom_sensitivity := 0.05
 var mouse_vector_sum := Vector3(0,0,0)
+
+var top_view_animation_progress := 0.0
+const TOP_VIEW_ANIMATION_DURATION := 1.0
+const TOP_VIEW_CURSOR_PIVOT_POSITION := Vector3(9.625,0,9.625)
+const TOP_VIEW_CAMERA_EULER_ANGLE := Vector3(-PI*0.5,0,0)
+const TOP_VIEW_CAMERA_POSITION := Vector3.UP*15
+
 
 func _ready() -> void:
 	cursor_pivot = get_parent()
@@ -66,7 +75,9 @@ func _input(event: InputEvent) -> void:
 		mouse_vector_sum = Vector3(sum_x,sum_y,0)
 		
 	if event.is_action_pressed("change_perspective"):
-		perspective_first=not perspective_first
+		emit_signal("perspective_changed")
+	if event.is_action_pressed("top_view"):
+		emit_signal("top_view")
 		
 	if event.is_action_released("wheel_up"):
 		self.translate(Vector3(0,0,mouse_zoom_sensitivity*MOUSE_WHEEL_UNIT))
@@ -75,7 +86,9 @@ func _input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	var mouse_vector :Vector3 = mouse_vector_sum*MOUSE_MOVE_SPD
-	if perspective_first :
+	if top_view_animation_progress>0:
+		top_view_animation(delta)
+	elif perspective_first :
 		move_first(delta)
 		mouse_first(mouse_vector)
 	else:
@@ -185,7 +198,7 @@ func move_first(delta : float) -> void:
 	self.global_translate(Vector3(direction.z,0,-direction.x).normalized() * move_spd.x * delta)
 	self.global_translate(Vector3.UP * move_spd.y * delta)
 	self.global_translate(Vector3(direction.x,0,direction.z).normalized() * move_spd.z * delta)
-func move_third(delta : float):
+func move_third(delta : float) -> void:
 	if Input.is_action_pressed("move_left"):
 		if move_spd.x< -MOVE_SPD_MAX:
 			move_spd.x = -MOVE_SPD_MAX
@@ -292,7 +305,7 @@ func move_third(delta : float):
 	var pos = Vector3(sin(rot.y)*cos(rot.x)*distance,sin(-rot.x)*distance,cos(rot.y)*cos(rot.x)*distance)
 	self.position = pos
 
-func mouse_first(mouse_vector : Vector3):
+func mouse_first(mouse_vector : Vector3) -> void:
 	if not mouse_vector.is_equal_approx(Vector3(0,0,0)):
 		mouse_vector_sum -= mouse_vector
 		match mouse_drag_mode:
@@ -311,7 +324,7 @@ func mouse_first(mouse_vector : Vector3):
 				self.rotate(self.transform.basis.x.normalized(),mouse_vector.y)
 			MouseDragMode.ZOOM:
 				self.translate(Vector3(0,0,mouse_vector.y))
-func mouse_third(mouse_vector : Vector3):
+func mouse_third(mouse_vector : Vector3) -> void:
 	if not mouse_vector.is_equal_approx(Vector3(0,0,0)):
 			mouse_vector_sum -= mouse_vector
 			match mouse_drag_mode:
@@ -335,11 +348,32 @@ func mouse_third(mouse_vector : Vector3):
 					self.position = pos
 				MouseDragMode.ZOOM:
 					self.translate(Vector3(0,0,mouse_vector.y))
-					
-func render_cursor():
+
+func render_cursor() -> void:
 	var pos :Vector2 = unproject_position(cursor_pivot.global_position)
 	if pos.is_equal_approx(cursor_viewport_pos):
 		pass
 	else:
 		emit_signal("cursor_viewport_pos_changed", pos)
 		cursor_viewport_pos = pos
+
+func top_view_animation(delta : float) -> void:
+	top_view_animation_progress -= delta
+	var lerp_progress := (TOP_VIEW_ANIMATION_DURATION-top_view_animation_progress)/TOP_VIEW_ANIMATION_DURATION
+	
+	var camera_target_rotation := Quaternion.from_euler(TOP_VIEW_CAMERA_EULER_ANGLE)
+	self.quaternion=self.quaternion.slerp(camera_target_rotation,lerp_progress)
+	self.position = self.position.lerp(TOP_VIEW_CAMERA_POSITION, lerp_progress)
+	cursor_pivot.position = cursor_pivot.position.lerp(TOP_VIEW_CURSOR_PIVOT_POSITION, lerp_progress)
+	
+	if top_view_animation_progress <0 :
+		emit_signal("top_view_animation_ended")
+
+
+func _on_perspective_changed(is_first: bool) -> void:
+	perspective_first=not perspective_first
+
+func _on_top_view() -> void:
+	top_view_animation_progress=TOP_VIEW_ANIMATION_DURATION
+func _on_top_view_icon_button_pressed() -> void:
+	_on_top_view()

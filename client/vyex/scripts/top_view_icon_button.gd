@@ -9,18 +9,26 @@ const enabled_color := Color(1,1,1,0.6)
 var toggle_flag := true
 
 func _ready() -> void:
-	self.modulate=disabled_color
+	self.modulate=enabled_color
 
 func _on_mouse_entered() -> void:
 	self.modulate=hovered_color
 func _on_mouse_exited() -> void:
-	if toggle_flag:
-		self.modulate=enabled_color
-	else:
+	if self.disabled:
 		self.modulate=disabled_color
+	else:
+		self.modulate=enabled_color
 func _on_button_down() -> void:
 	self.modulate=clicked_color
 func _on_button_up() -> void:
 	self.modulate=hovered_color
-func _on_toggled(toggled_on: bool) -> void:
-	toggle_flag = toggled_on
+
+
+func _on_camera_3d_top_view() -> void:
+	self.modulate=disabled_color
+	self.disabled=true
+func _on_camera_3d_top_view_animation_ended() -> void:
+	self.modulate=enabled_color
+	self.disabled=false
+func _on_pressed() -> void:
+	_on_camera_3d_top_view()
