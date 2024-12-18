@@ -174,7 +174,7 @@ def get_verification_mail():
     """
     return VerificationMail()
 
-def send_verification_mail(verification_code : str, receiver_email : EmailStr, verification_mail: VerificationMail = Depends(get_verification_mail)):
+def send_verification_mail(verification_code : str, receiver_email : EmailStr):
     """
     Send a verification mail to the user.
     
@@ -183,6 +183,7 @@ def send_verification_mail(verification_code : str, receiver_email : EmailStr, v
         receiver_email (EmailStr) : The email of the receiver.
         verification_mail (VerificationMail) : The verification mail singleton.
     """
+    verification_mail = get_verification_mail()
     verification_mail.send(verification_code, receiver_email)
 
 get_verification_mail()

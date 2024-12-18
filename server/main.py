@@ -14,6 +14,9 @@ from db import engine, create_db_and_tables, User, Game, Action, GameState, Acti
 from token_manager import get_token_manager, user_id_from_token
 from verification_mail import send_verification_mail
 
+VERIFICATION_CODE_LENGTH = 6 # TODO : seperate Constants file
+VERIFICATION_EXPIRE_TIME = 600 # TODO : seperate Constants file
+
 app = FastAPI()
 
 @app.get("/", response_model=str)
@@ -71,7 +74,7 @@ async def expire_verification(uuid:UUID, delay:int=600):
     del unverified_users[uuid]
 
 @app.post("/register", status_code=200, response_model=UUID)
-async def create_user(user_create: UserCreate, code:str=Depends(generate_verification_code), send_mail = Depends(send_verification_mail)):
+async def create_user(user_create: UserCreate):
     with Session(engine) as session:
         email=session.get(User, user_create.email)
         if email is not None:
@@ -86,7 +89,9 @@ async def create_user(user_create: UserCreate, code:str=Depends(generate_verific
             registered_at=datetime.now()
         )
         uuid = uuid4()
-        unverified_users[uuid] = (user, generate_verification_code(6)) # TODO : seperate Constants
+        unverified_users[uuid] = (user, generate_verification_code(VERIFICATION_CODE_LENGTH))
+        asyncio.create_task(expire_verification(uuid,VERIFICATION_EXPIRE_TIME))
+        send_verification_mail(unverified_users[uuid][1],user_create.email)
         return uuid
         
 @app.post("/verify/{uuid}", status_code=201, response_model=int)
