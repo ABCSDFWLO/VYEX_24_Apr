@@ -125,3 +125,4 @@ language = "en"
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [connection signal="pressed" from="LogoStroke/MainEnterButton" to="." method="_on_main_enter_button_pressed"]
+[connection signal="pressed" from="LoginForm/panel/LoginButton" to="." method="_on_login_button_pressed"]
