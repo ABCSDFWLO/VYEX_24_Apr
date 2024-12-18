@@ -29,7 +29,7 @@ texture = ExtResource("1_2av6n")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Button" type="Button" parent="LogoStroke"]
+[node name="MainEnterButton" type="Button" parent="LogoStroke"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -42,5 +42,86 @@ offset_right = 23.5
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 32
+text = "Enter"
+language = "en"
+
+[node name="LoginForm" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+
+[node name="panel" type="Control" parent="LoginForm"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -127.0
+offset_bottom = 73.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="IdLabel" type="Label" parent="LoginForm/panel"]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 38.0
+theme_override_font_sizes/font_size = 32
+text = "ID"
+
+[node name="IdTextEdit" type="TextEdit" parent="LoginForm/panel"]
+layout_mode = 1
+offset_top = 42.0
+offset_right = 400.0
+offset_bottom = 92.0
+theme_override_font_sizes/font_size = 32
+
+[node name="PasswordLabel" type="Label" parent="LoginForm/panel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -90.0
+offset_right = 139.0
+offset_bottom = -52.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+text = "Password"
+
+[node name="PasswordTextEdit" type="TextEdit" parent="LoginForm/panel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+offset_right = 400.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+
+[node name="LoginButton" type="Button" parent="LoginForm/panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 63.0
+offset_top = 21.0
+offset_right = 148.0
+offset_bottom = 67.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
 text = "Login"
 language = "en"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[connection signal="pressed" from="LogoStroke/MainEnterButton" to="." method="_on_main_enter_button_pressed"]
