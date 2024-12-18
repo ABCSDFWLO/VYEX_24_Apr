@@ -329,36 +329,36 @@ func mouse_first(mouse_vector : Vector3) -> void:
 				self.translate(Vector3(0,0,mouse_vector.y))
 func mouse_third(mouse_vector : Vector3) -> void:
 	if not mouse_vector.is_equal_approx(Vector3(0,0,0)):
-			mouse_vector_sum -= mouse_vector
-			match mouse_drag_mode:
-				MouseDragMode.IDLE:
-					pass
-				MouseDragMode.MOVE:
-					move_spd=Vector3(0,0,0)
-					cursor_pivot.translate(self.global_basis*mouse_vector)
-				MouseDragMode.ROTATE:
-					move_spd=Vector3(0,0,0)
-					var direction = self.transform.basis.z.normalized()
-					var distance = self.position.length()
-					if direction.y >= ROT_DIR_MAX and mouse_vector.y < 0:
-						mouse_vector.y = 0
-					elif direction.y <= -ROT_DIR_MAX and mouse_vector.y > 0:
-						mouse_vector.y = 0
-					self.rotate(Vector3.UP, mouse_vector.x)
-					self.rotate(self.transform.basis.x.normalized(),mouse_vector.y)
-					var rot = self.global_rotation
-					var pos = Vector3(sin(rot.y)*cos(rot.x)*distance,sin(-rot.x)*distance,cos(rot.y)*cos(rot.x)*distance)
-					self.position = pos
-				MouseDragMode.ZOOM:
-					self.translate(Vector3(0,0,mouse_vector.y))
+		mouse_vector_sum -= mouse_vector
+		match mouse_drag_mode:
+			MouseDragMode.IDLE:
+				pass
+			MouseDragMode.MOVE:
+				move_spd=Vector3(0,0,0)
+				cursor_pivot.translate(self.global_basis*mouse_vector)
+			MouseDragMode.ROTATE:
+				var direction = self.transform.basis.z.normalized()
+				var distance = self.position.length()
+				if direction.y >= ROT_DIR_MAX and mouse_vector.y < 0:
+					mouse_vector.y = 0
+				elif direction.y <= -ROT_DIR_MAX and mouse_vector.y > 0:
+					mouse_vector.y = 0
+				self.rotate(Vector3.UP, mouse_vector.x)
+				self.rotate(self.transform.basis.x.normalized(),mouse_vector.y)
+				var rot = self.global_rotation
+				var pos = Vector3(sin(rot.y)*cos(rot.x)*distance,sin(-rot.x)*distance,cos(rot.y)*cos(rot.x)*distance)
+				self.position = pos
+			MouseDragMode.ZOOM:
+				self.translate(Vector3(0,0,mouse_vector.y))
 
 func render_cursor() -> void:
 	var pos :Vector2 = unproject_position(cursor_pivot.global_position)
-	if pos.is_equal_approx(cursor_viewport_pos):
-		pass
-	else:
-		emit_signal("cursor_viewport_pos_changed", pos)
-		cursor_viewport_pos = pos
+	if (cursor_pivot.global_position - self.global_position).dot(self.transform.basis.z.normalized()) <0:
+		if pos.is_equal_approx(cursor_viewport_pos):
+			pass
+		else:
+			emit_signal("cursor_viewport_pos_changed", pos)
+			cursor_viewport_pos = pos
 
 func top_view_animation(delta : float) -> void:
 	top_view_animation_progress -= delta

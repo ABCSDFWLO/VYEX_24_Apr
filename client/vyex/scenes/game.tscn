@@ -22,19 +22,19 @@
 offsets = PackedFloat32Array(0, 0.432203, 0.830508, 1)
 colors = PackedColorArray(0.490196, 0.431373, 0.513726, 1, 0.815686, 0.721569, 0.658824, 1, 0.87451, 0.827451, 0.764706, 1, 0.972549, 0.929412, 0.890196, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_ocpk2"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lmhxd"]
 gradient = SubResource("Gradient_mj0kf")
 fill_from = Vector2(1, 1)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_podw6"]
-panorama = SubResource("GradientTexture2D_ocpk2")
+panorama = SubResource("GradientTexture2D_lmhxd")
 
-[sub_resource type="Sky" id="Sky_ngy25"]
+[sub_resource type="Sky" id="Sky_qknti"]
 sky_material = SubResource("PanoramaSkyMaterial_podw6")
 
 [sub_resource type="Environment" id="Environment_ugmn1"]
 background_mode = 2
-sky = SubResource("Sky_ngy25")
+sky = SubResource("Sky_qknti")
 
 [sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_2secx"]
 
