@@ -81,10 +81,22 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("top_view"):
 		_on_top_view_icon_button_pressed()
 		emit_signal("top_view")
+	#if event.is_action_pressed("orthogonal_view"):
+		#if self.projection==Camera3D.PROJECTION_ORTHOGONAL:
+			#self.projection=Camera3D.PROJECTION_PERSPECTIVE
+		#else:
+			#self.projection=Camera3D.PROJECTION_ORTHOGONAL
+			#self.size=self.position.length()
 		
 	if event.is_action_released("wheel_up"):
+		#if self.projection==Camera3D.PROJECTION_ORTHOGONAL:
+			#self.size-=0.5
+		#else:
 		self.translate(Vector3(0,0,-mouse_zoom_sensitivity*MOUSE_WHEEL_UNIT))
 	elif event.is_action_released("wheel_down"):
+		#if self.projection==Camera3D.PROJECTION_ORTHOGONAL:
+			#self.size+=0.5
+		#else:
 		self.translate(Vector3(0,0,+mouse_zoom_sensitivity*MOUSE_WHEEL_UNIT))
 
 func _process(delta: float) -> void:
