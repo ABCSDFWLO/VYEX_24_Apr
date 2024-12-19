@@ -11,7 +11,7 @@ import string
 import asyncio
 
 from db import engine, create_db_and_tables, User, Game, Action, GameState, ActionType
-from token_manager import get_token_manager, user_id_from_token
+from token_manager import TokenManager, user_id_from_token
 from verification_mail import send_verification_mail
 
 VERIFICATION_CODE_LENGTH = 6 # TODO : seperate Constants file
@@ -118,7 +118,7 @@ async def verify_user(uuid: UUID=Path(...), verify_code: str = Body(len=6)):
             return user.id
         
 @app.post("/login", status_code=200, response_model=List[str])
-async def login_user(user_login: UserLogin, token_manager=Depends(get_token_manager)):
+async def login_user(user_login: UserLogin, token_manager:TokenManager =Depends()):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.email == user_login.email)).first()
         if user is None:
@@ -129,7 +129,7 @@ async def login_user(user_login: UserLogin, token_manager=Depends(get_token_mana
             return token_manager.generate_token(user.id)
         
 @app.post("/logout", status_code=200)
-async def logout_user(user_id: int = Depends(user_id_from_token), token_manager=Depends(get_token_manager)):
+async def logout_user(user_id: int = Depends(user_id_from_token), token_manager:TokenManager=Depends()):
     token_manager.block_token(user_id)
 
 class GameOut(BaseModel):
@@ -186,3 +186,22 @@ async def enter_game(game_id: int, password:Union[str,None] = Body(...), user_id
         except IntegrityError:
             session.rollback()
             raise HTTPException(status_code=500, detail="Database error")
+        
+@app.post("/create_game", status_code=201, response_model=int)
+async def create_game(password:Union[str,None] = Body(None), user_id: int = Depends(user_id_from_token)):
+    with Session(engine) as session:
+        game = Game(
+            state=GameState.Running,
+            started_at=datetime.now(),
+            player1_id=user_id,
+            player2_id=None,
+            password_hash=bcrypt.hash(password) if password is not None else None
+        )
+        session.add(game)
+        try:
+            session.commit()
+            session.refresh(game)
+        except IntegrityError:
+            session.rollback()
+            raise HTTPException(status_code=500, detail="Database error")
+        return game.id
