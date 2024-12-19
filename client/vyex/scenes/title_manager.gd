@@ -8,7 +8,7 @@ extends Control
 
 @onready var http_request : HTTPRequest = $HTTPRequest
 
-const HOST := "localhost"
+const HOST := "127.0.0.1"
 const PORT_WITH_COLON := ":8000"
 const LOGIN_URL := "/login"
 
@@ -19,4 +19,10 @@ func _on_main_enter_button_pressed() -> void:
 	tween.tween_property(login_form,"modulate",Color(1,1,1,1),0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 func _on_login_button_pressed() -> void:
-	http_request.request("http://"+HOST+PORT_WITH_COLON+"/")
+	var body = JSON.new().stringify({"email":login_id_textedit.text,"password":login_password_textedit.text})
+	var error = http_request.request("http://"+HOST+PORT_WITH_COLON+LOGIN_URL,[],HTTPClient.METHOD_POST, body)
+	if error != OK:
+		push_error("error occurred")
+
+func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+	print(result, response_code, headers, body.get_string_from_utf8())

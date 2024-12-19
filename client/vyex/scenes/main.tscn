@@ -46,6 +46,7 @@ text = "Enter"
 language = "en"
 
 [node name="LoginForm" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,13 +75,14 @@ layout_mode = 1
 offset_right = 40.0
 offset_bottom = 38.0
 theme_override_font_sizes/font_size = 32
-text = "ID"
+text = "ID (e-mail)"
 
 [node name="IdTextEdit" type="TextEdit" parent="LoginForm/panel"]
 layout_mode = 1
 offset_top = 42.0
 offset_right = 400.0
 offset_bottom = 92.0
+focus_next = NodePath("../PasswordTextEdit")
 theme_override_font_sizes/font_size = 32
 
 [node name="PasswordLabel" type="Label" parent="LoginForm/panel"]
@@ -103,6 +105,7 @@ anchor_bottom = 1.0
 offset_top = -50.0
 offset_right = 400.0
 grow_vertical = 0
+focus_next = NodePath("../LoginButton")
 theme_override_font_sizes/font_size = 32
 
 [node name="LoginButton" type="Button" parent="LoginForm/panel"]
@@ -118,6 +121,7 @@ offset_right = 148.0
 offset_bottom = 67.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_next = NodePath("../IdTextEdit")
 theme_override_font_sizes/font_size = 32
 text = "Login"
 language = "en"
@@ -126,3 +130,4 @@ language = "en"
 
 [connection signal="pressed" from="LogoStroke/MainEnterButton" to="." method="_on_main_enter_button_pressed"]
 [connection signal="pressed" from="LoginForm/panel/LoginButton" to="." method="_on_login_button_pressed"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]
