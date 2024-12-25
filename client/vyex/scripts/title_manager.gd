@@ -3,8 +3,8 @@ extends Control
 @onready var logo_stroke :TextureRect = $LogoStroke
 @onready var main_enter_button :Button = $LogoStroke/MainEnterButton
 @onready var login_form : Control = $LoginForm
-@onready var login_id_textedit : TextEdit = $LoginForm/panel/IdTextEdit
-@onready var login_password_textedit : TextEdit = $LoginForm/panel/PasswordTextEdit
+@onready var login_id_textedit : LineEdit = $LoginForm/panel/IdTextEdit
+@onready var login_password_textedit : LineEdit = $LoginForm/panel/PasswordTextEdit
 
 @onready var http_request : HTTPRequest = $HTTPRequest
 

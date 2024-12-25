@@ -77,7 +77,7 @@ offset_bottom = 38.0
 theme_override_font_sizes/font_size = 32
 text = "ID (e-mail)"
 
-[node name="IdTextEdit" type="TextEdit" parent="LoginForm/panel"]
+[node name="IdTextEdit" type="LineEdit" parent="LoginForm/panel"]
 layout_mode = 1
 offset_top = 42.0
 offset_right = 400.0
@@ -97,7 +97,7 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 32
 text = "Password"
 
-[node name="PasswordTextEdit" type="TextEdit" parent="LoginForm/panel"]
+[node name="PasswordTextEdit" type="LineEdit" parent="LoginForm/panel"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -107,6 +107,7 @@ offset_right = 400.0
 grow_vertical = 0
 focus_next = NodePath("../LoginButton")
 theme_override_font_sizes/font_size = 32
+secret = true
 
 [node name="LoginButton" type="Button" parent="LoginForm/panel"]
 layout_mode = 1
