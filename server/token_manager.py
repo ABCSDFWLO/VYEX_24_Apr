@@ -13,8 +13,8 @@ class TokenManager:
     Using 3 random codes to encode the user_id in the token.
     """
     _instance = None
-    TOKEN_EXPIRATION_TIME = 15 # 60 * 60
-    RANDOM_CODE_REFRESH_INTERVAL = 15 # 60 * 60 * 3
+    TOKEN_EXPIRATION_TIME = 60 * 60
+    RANDOM_CODE_REFRESH_INTERVAL = 60 * 60 * 3
     TOKEN_COUNT = 3
     KEY = "user_id"
 

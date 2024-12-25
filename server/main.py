@@ -364,7 +364,7 @@ async def login_user(user_login: UserLogin, token_manager:TokenManager =Depends(
     with Session(engine) as session:
         user = session.exec(select(User).where(User.email == user_login.email)).first()
         if user is None:
-            raise HTTPException(status_code=400, detail="Email not found", headers={"WWW-Authenticate": "Bearer"})
+            raise HTTPException(status_code=400, detail="Email not found")
         elif not bcrypt.verify(user_login.password, user.password_hash):
             raise HTTPException(status_code=400, detail="Invalid password")
         else:
@@ -373,6 +373,15 @@ async def login_user(user_login: UserLogin, token_manager:TokenManager =Depends(
 @app.post("/logout", status_code=200)
 async def logout_user(user_id: int = Depends(user_id_from_token), token_manager:TokenManager=Depends()):
     token_manager.block_token(user_id)
+
+@app.post("/token", status_code=200)
+async def refresh_token(token: List[str], token_manager:TokenManager=Depends()):
+    user_id = token_manager.verify_token(token)
+    with Session(engine) as session:
+        user = session.get(User, user_id)
+        if user is None:
+            raise HTTPException(status_code=400, detail="user not found")
+        return token_manager.generate_token(user_id)
 
 class GameOut(BaseModel):
     id : int
