@@ -3,15 +3,16 @@ extends Control
 @onready var logo_stroke :TextureRect = $LogoStroke
 @onready var main_enter_button :Button = $LogoStroke/MainEnterButton
 @onready var login_form : Control = $LoginForm
-@onready var login_id_lineedit : LineEdit = $LoginForm/panel/IdTextEdit
-@onready var login_password_lineedit : LineEdit = $LoginForm/panel/PasswordTextEdit
-@onready var error_label : Label = $LoginForm/panel/ErrorLabel
+@onready var login_id_lineedit : LineEdit = $LoginForm/panel/IdLineEdit
+@onready var login_password_lineedit : LineEdit = $LoginForm/panel/PasswordLineEdit
+@onready var login_error_label : Label = $LoginForm/panel/LoginErrorLabel
 
 @onready var login_http_request : HTTPRequest = $LoginForm/LoginHTTPRequest
 
 const HOST := "127.0.0.1"
 const PORT_WITH_COLON := ":8000"
 const LOGIN_URL := "/login"
+const REGISTER_URL := "/register"
 
 func _on_main_enter_button_pressed() -> void:
 	main_enter_button.visible=false
@@ -27,11 +28,21 @@ func _on_login_button_pressed() -> void:
 		push_error("error occurred")
 
 func _on_login_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
-	if result != HTTPRequest.RESULT_SUCCESS:
-		error_label.modulate=Color(0.5,0,0,1)
-		error_label.visible=true
+	if response_code != HTTPClient.RESPONSE_OK and response_code != HTTPClient.RESPONSE_CREATED:
+		var data = JSON.parse_string(body.get_string_from_utf8())
+		var msg = "Unexpected error occurred. retry later."
+		if data.has("detail"):
+			var detail = data["detail"]
+			if detail is Array and detail.size() > 0 and detail[0].has("msg"):
+				msg = detail[0]["msg"]
+			else:
+				msg = detail
+		print("msg: ", msg)
+		login_error_label.modulate=Color(0.5,0,0,1)
+		login_error_label.text=msg
+		login_error_label.visible=true
 		var tween = get_tree().create_tween()
-		tween.tween_property(error_label,"modulate",Color(0.5,0,0,0),2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		tween.tween_property(login_error_label,"modulate",Color(0.5,0,0,0),2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	else:
 		var response_token = JSON.parse_string(body.get_string_from_utf8())
 		print(response_token)

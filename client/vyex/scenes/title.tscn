@@ -46,7 +46,7 @@ text = "Enter"
 language = "en"
 
 [node name="LoginForm" type="Control" parent="."]
-modulate = Color(1, 1, 1, 0)
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,12 +78,12 @@ offset_bottom = 38.0
 theme_override_font_sizes/font_size = 32
 text = "ID (e-mail)"
 
-[node name="IdTextEdit" type="LineEdit" parent="LoginForm/panel"]
+[node name="IdLineEdit" type="LineEdit" parent="LoginForm/panel"]
 layout_mode = 1
 offset_top = 42.0
 offset_right = 400.0
 offset_bottom = 92.0
-focus_next = NodePath("../PasswordTextEdit")
+focus_next = NodePath("../PasswordLineEdit")
 theme_override_font_sizes/font_size = 32
 
 [node name="PasswordLabel" type="Label" parent="LoginForm/panel"]
@@ -94,12 +94,13 @@ offset_bottom = 138.0
 theme_override_font_sizes/font_size = 32
 text = "Password"
 
-[node name="PasswordTextEdit" type="LineEdit" parent="LoginForm/panel"]
+[node name="PasswordLineEdit" type="LineEdit" parent="LoginForm/panel" node_paths=PackedStringArray("shortcut_context")]
 layout_mode = 1
 offset_top = 142.0
 offset_right = 400.0
 offset_bottom = 192.0
 focus_next = NodePath("../LoginButton")
+shortcut_context = NodePath("../LoginButton")
 theme_override_font_sizes/font_size = 32
 secret = true
 
@@ -115,7 +116,7 @@ offset_top = -46.0
 offset_right = -126.0
 grow_horizontal = 0
 grow_vertical = 0
-focus_next = NodePath("../IdTextEdit")
+focus_next = NodePath("../IdLineEdit")
 theme_override_font_sizes/font_size = 32
 text = "Register"
 language = "en"
@@ -129,26 +130,24 @@ offset_left = 315.0
 offset_top = -46.0
 offset_right = 400.0
 grow_vertical = 0
-focus_next = NodePath("../IdTextEdit")
+focus_next = NodePath("../IdLineEdit")
 theme_override_font_sizes/font_size = 32
 text = "Login"
 language = "en"
 
-[node name="ErrorLabel" type="Label" parent="LoginForm/panel"]
+[node name="LoginErrorLabel" type="Label" parent="LoginForm/panel"]
 visible = false
 layout_mode = 1
 offset_top = 200.0
 offset_right = 234.0
 offset_bottom = 229.0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 12
 text = "Invalid ID or Password"
 horizontal_alignment = 2
 
 [node name="LoginHTTPRequest" type="HTTPRequest" parent="LoginForm"]
 
 [node name="RegisterForm" type="Control" parent="."]
-visible = false
-modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -165,10 +164,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -500.0
-offset_top = -150.0
-offset_right = -100.0
-offset_bottom = 150.0
+offset_left = -400.0
+offset_top = -200.0
+offset_bottom = 200.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
@@ -180,7 +178,7 @@ offset_bottom = 38.0
 theme_override_font_sizes/font_size = 32
 text = "ID (e-mail)"
 
-[node name="IdTextEdit" type="LineEdit" parent="RegisterForm/panel"]
+[node name="IdLineEdit" type="LineEdit" parent="RegisterForm/panel"]
 layout_mode = 1
 offset_top = 42.0
 offset_right = 400.0
@@ -201,7 +199,22 @@ layout_mode = 1
 offset_top = 142.0
 offset_right = 400.0
 offset_bottom = 192.0
-focus_next = NodePath("../LoginButton")
+focus_next = NodePath("../RegisterBackButton")
+theme_override_font_sizes/font_size = 32
+secret = true
+
+[node name="PasswordCheckLabel" type="Label" parent="RegisterForm/panel"]
+offset_top = 100.0
+offset_right = 139.0
+offset_bottom = 138.0
+theme_override_font_sizes/font_size = 32
+text = "Password"
+
+[node name="PasswordCheckLineEdit2" type="LineEdit" parent="RegisterForm/panel"]
+offset_top = 142.0
+offset_right = 400.0
+offset_bottom = 192.0
+focus_next = NodePath("../RegisterBackButton")
 theme_override_font_sizes/font_size = 32
 secret = true
 
@@ -217,12 +230,12 @@ offset_top = -46.0
 offset_right = -126.0
 grow_horizontal = 0
 grow_vertical = 0
-focus_next = NodePath("../IdTextEdit")
+focus_next = NodePath("../IdLineEdit")
 theme_override_font_sizes/font_size = 32
-text = "Register"
+text = "Submit"
 language = "en"
 
-[node name="LoginButton" type="Button" parent="RegisterForm/panel"]
+[node name="RegisterBackButton" type="Button" parent="RegisterForm/panel"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -231,21 +244,23 @@ offset_left = 315.0
 offset_top = -46.0
 offset_right = 400.0
 grow_vertical = 0
-focus_next = NodePath("../IdTextEdit")
+focus_next = NodePath("../IdLineEdit")
 theme_override_font_sizes/font_size = 32
-text = "Login"
+text = "Back"
 language = "en"
 
-[node name="ErrorLabel" type="Label" parent="RegisterForm/panel"]
-visible = false
+[node name="RegisterErrorLabel" type="Label" parent="RegisterForm/panel"]
 layout_mode = 1
-offset_top = 200.0
-offset_right = 234.0
-offset_bottom = 229.0
+offset_left = 1.0
+offset_top = 293.0
+offset_right = 235.0
+offset_bottom = 322.0
 theme_override_colors/font_color = Color(0.564706, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
 text = "Invalid ID or Password"
 horizontal_alignment = 2
+
+[node name="RegisterHTTPRequest" type="HTTPRequest" parent="RegisterForm"]
 
 [connection signal="pressed" from="LogoStroke/MainEnterButton" to="." method="_on_main_enter_button_pressed"]
 [connection signal="pressed" from="LoginForm/panel/LoginButton" to="." method="_on_login_button_pressed"]
