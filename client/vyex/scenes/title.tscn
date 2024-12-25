@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c8pogt74tekhd"]
 
 [ext_resource type="Texture2D" uid="uid://c3xr8fplwegd2" path="res://assets/sprites/logo.png" id="1_2av6n"]
-[ext_resource type="Script" path="res://scenes/title_manager.gd" id="1_dr6ne"]
+[ext_resource type="Script" path="res://scripts/title_manager.gd" id="1_dr6ne"]
 
 [node name="Control" type="Control"]
 layout_mode = 3

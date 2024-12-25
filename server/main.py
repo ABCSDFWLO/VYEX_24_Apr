@@ -1,7 +1,7 @@
 from typing import Annotated, List, Tuple, Union
 from uuid import uuid4, UUID
 from fastapi import Body, Depends, FastAPI, HTTPException, Header, Path, Query
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
 from sqlmodel import Session, col, select
 from sqlalchemy.exc import IntegrityError
@@ -19,31 +19,80 @@ VERIFICATION_EXPIRE_TIME = 600 # TODO : seperate Constants file
 
 app = FastAPI()
 
-@app.get("/", response_model=str)
+@app.get(
+    "/",
+    response_model=str,
+    responses={
+        200: {
+            "description": "Successful Response",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "hello": {
+                            "summary": "Hello",
+                            "value": "Hello"
+                        }
+                    }
+                }
+            }
+        }
+    }
+    )
 async def root():
     return "hello"
 
 class UserOut(BaseModel):
-    id : int
-    name : str
-    email : EmailStr
-    registered_at : datetime
+    id : int = Field(..., title="User ID", description="The ID of the user", example=1)
+    name : str = Field(..., title="User Name", description="The name of the user", example="John Doe")
+    email : EmailStr = Field(..., title="User Email", description="The email of the user", example="example@example.com")
+    registered_at : datetime = Field(..., title="Registration Date", description="The date the user registered", example=datetime.now())
 
 class UserCreate(BaseModel):
-    name : str
-    email : EmailStr
-    password : str
+    name : str = Field(..., title="User Name", description="The name of the user", example="John Doe")
+    email : EmailStr = Field(..., title="User Email", description="The email of the user", example="exmaple@example.com")
+    password : str = Field(..., title="User Password", description="The password of the user", example="password")
 
 class UserLogin(BaseModel):
-    email : EmailStr
-    password : str
+    email : EmailStr = Field(..., title="User Email", description="The email of the user", example="example@example.com")
+    password : str = Field(..., title="User Password", description="The password of the user", example="password")
 
 unverified_users = { UUID:(User,str) }
 def generate_verification_code(length:int)->str:
     charset = string.ascii_lowercase + string.digits
     return ''.join(random.choices(charset, k=length))
 
-@app.get("/users", response_model=List[UserOut])
+@app.get(
+    "/users",
+    response_model=List[UserOut],
+    responses = {
+        200: {
+            "description": "Successful Response",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "users": {
+                            "summary": "Users",
+                            "value": [
+                                {
+                                    "id": 1,
+                                    "name": "John Doe",
+                                    "email": "example@examples.com",
+                                    "registered_at": "2021-09-15T12:00:00"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "Jane Doe",
+                                    "email": "janedoe@example.com",
+                                    "registered_at": "2021-09-15T12:00:00"
+                                },
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+    }
+    )
 async def get_users():
     with Session(engine) as session:
         users = session.exec(select(User)).all()
@@ -56,7 +105,45 @@ async def get_users():
             ) for user in users
         ]
 
-@app.get("/user/{user_name}", response_model=UserOut)
+@app.get(
+    "/user/{user_name}",
+    response_model=UserOut,
+    responses = {
+        200: {
+            "description": "Successful Response",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "user": {
+                            "summary": "User",
+                            "value": {
+                                "id": 1,
+                                "name": "John Doe",
+                                "email": "example@example.com",
+                                "registered_at": "2021-09-15T12:00:00"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        404: {
+            "description": "User not found",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "user_not_found": {
+                            "summary": "User not found",
+                            "value": {
+                                "detail": "User not found"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    )
 async def get_user(user_name: str):
     with Session(engine) as session:
         result =  session.exec(select(User).where(User.name == user_name)).first()
@@ -73,8 +160,48 @@ async def expire_verification(uuid:UUID, delay:int=600):
     await asyncio.sleep(delay)
     del unverified_users[uuid]
 
-@app.post("/register", status_code=200, response_model=UUID)
-async def create_user(user_create: UserCreate):
+@app.post(
+    "/register", 
+    status_code=200,
+    response_model=UUID,
+    responses={
+        200: {
+            "description": "Successful registration",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "successful_registration": {
+                            "summary": "Successful registration",
+                            "value": "123e4567-e89b-12d3-a456-426614174000"
+                        }
+                    }
+                }
+            }
+        },
+        400: {
+            "description": "Email or Name already exists",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "email_exists": {
+                            "summary": "Email already exists",
+                            "value": {
+                                "detail": "Email already exists"
+                            }
+                        },
+                        "name_exists": {
+                            "summary": "Name already exists",
+                            "value": {
+                                "detail": "Name already exists"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+)
+async def create_user(user_create: UserCreate = Body(..., title="User Creation", description="The user to be created")):
     with Session(engine) as session:
         email=session.get(User, user_create.email)
         if email is not None:
@@ -94,8 +221,78 @@ async def create_user(user_create: UserCreate):
         send_verification_mail(unverified_users[uuid][1],user_create.email)
         return uuid
         
-@app.post("/verify/{uuid}", status_code=201, response_model=int)
-async def verify_user(uuid: UUID=Path(...), verify_code: str = Body(len=6)):
+@app.post(
+    "/verify/{uuid}",
+    status_code=201,
+    response_model=int,
+    responses={
+        201: {
+            "description": "Successful verification",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "successful_verification": {
+                            "summary": "Successful verification",
+                            "value": 1
+                        }
+                    }
+                }
+            }
+        },
+        400: {
+            "description": "Invalid verification code",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "invalid_verification_code": {
+                            "summary": "Invalid verification code",
+                            "value": {
+                                "detail": "Invalid verification code"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        404: {
+            "description": "Invalid User or UUID",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "invalid_user": {
+                            "summary": "Invalid User",
+                            "value": {
+                                "detail": "User not found"
+                            }
+                        },
+                        "invalid_uuid": {
+                            "summary": "Invalid UUID",
+                            "value": {
+                                "detail": "Invalid UUID"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        500: {
+            "description": "Database error",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "database_error": {
+                            "summary": "Database error",
+                            "value": {
+                                "detail": "Database error"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    )
+async def verify_user(uuid: UUID=Path(...), verify_code: str = Query(..., min_length=6, max_length=6)):
     with Session(engine) as session:
         unverified_user_record = unverified_users.get(uuid) # Tuple, [0]: User, [1]: Verify Code
         if unverified_user_record is None:
@@ -117,12 +314,57 @@ async def verify_user(uuid: UUID=Path(...), verify_code: str = Body(len=6)):
             del unverified_users[uuid]
             return user.id
         
-@app.post("/login", status_code=200, response_model=List[str])
+@app.post("/login",
+    status_code=200,
+    response_model=List[str],
+    responses={
+        200: {
+            "description": "Successful login",
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "successful_login": {
+                            "summary": "Successful login",
+                            "value": {
+                                "access_token": [
+                                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1Njc4OTAxMjM0IiwibmFtZSI6IkphbmUgRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MDEyMzQ1Njc4IiwibmFtZSI6IkpvbmUgRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+                                ],
+                            }
+                        },
+                    }
+                }
+            }
+        },
+        400: {
+                "description": "Invalid email or password",
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            "email_not_found": {
+                                "summary": "Email not found",
+                                "value": {
+                                    "detail": "Email not found"
+                                }
+                            },
+                            "invalid_password": {
+                                "summary": "Invalid password",
+                                "value": {
+                                    "detail": "Invalid password"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+    }
+    )
 async def login_user(user_login: UserLogin, token_manager:TokenManager =Depends()):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.email == user_login.email)).first()
         if user is None:
-            raise HTTPException(status_code=400, detail="Email not found")
+            raise HTTPException(status_code=400, detail="Email not found", headers={"WWW-Authenticate": "Bearer"})
         elif not bcrypt.verify(user_login.password, user.password_hash):
             raise HTTPException(status_code=400, detail="Invalid password")
         else:

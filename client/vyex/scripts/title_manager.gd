@@ -25,4 +25,5 @@ func _on_login_button_pressed() -> void:
 		push_error("error occurred")
 
 func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
-	print(result, response_code, headers, body.get_string_from_utf8())
+	if result != HTTPRequest.RESULT_SUCCESS:
+		push_error(result)
