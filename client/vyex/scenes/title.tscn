@@ -64,8 +64,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -500.0
-offset_top = -127.0
-offset_bottom = 73.0
+offset_top = -150.0
+offset_right = -100.0
+offset_bottom = 150.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
@@ -87,48 +88,66 @@ theme_override_font_sizes/font_size = 32
 
 [node name="PasswordLabel" type="Label" parent="LoginForm/panel"]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -90.0
+offset_top = 100.0
 offset_right = 139.0
-offset_bottom = -52.0
-grow_vertical = 0
+offset_bottom = 138.0
 theme_override_font_sizes/font_size = 32
 text = "Password"
 
 [node name="PasswordTextEdit" type="LineEdit" parent="LoginForm/panel"]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -50.0
+offset_top = 142.0
 offset_right = 400.0
-grow_vertical = 0
+offset_bottom = 192.0
 focus_next = NodePath("../LoginButton")
 theme_override_font_sizes/font_size = 32
 secret = true
 
+[node name="RegisterButton" type="Button" parent="LoginForm/panel"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -46.0
+offset_right = -126.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_next = NodePath("../IdTextEdit")
+theme_override_font_sizes/font_size = 32
+text = "Register"
+language = "en"
+
 [node name="LoginButton" type="Button" parent="LoginForm/panel"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 63.0
-offset_top = 21.0
-offset_right = 148.0
-offset_bottom = 67.0
-grow_horizontal = 2
+offset_left = 315.0
+offset_top = -46.0
+offset_right = 400.0
 grow_vertical = 0
 focus_next = NodePath("../IdTextEdit")
 theme_override_font_sizes/font_size = 32
 text = "Login"
 language = "en"
 
+[node name="ErrorLabel" type="Label" parent="LoginForm/panel"]
+visible = false
+layout_mode = 1
+offset_top = 200.0
+offset_right = 234.0
+offset_bottom = 229.0
+theme_override_colors/font_color = Color(0.564706, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Invalid ID or Password"
+horizontal_alignment = 2
+
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [connection signal="pressed" from="LogoStroke/MainEnterButton" to="." method="_on_main_enter_button_pressed"]
+[connection signal="pressed" from="LoginForm/panel/RegisterButton" to="." method="_on_login_button_pressed"]
 [connection signal="pressed" from="LoginForm/panel/LoginButton" to="." method="_on_login_button_pressed"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

@@ -5,6 +5,7 @@ extends Control
 @onready var login_form : Control = $LoginForm
 @onready var login_id_textedit : LineEdit = $LoginForm/panel/IdTextEdit
 @onready var login_password_textedit : LineEdit = $LoginForm/panel/PasswordTextEdit
+@onready var error_label : Label = $LoginForm/panel/ErrorLabel
 
 @onready var http_request : HTTPRequest = $HTTPRequest
 
