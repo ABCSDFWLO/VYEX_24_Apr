@@ -36,7 +36,7 @@ class TokenManager:
     def verify_token(self, token: List[str]) -> int:
         """Verify the token and return the user_id."""
         if len(token) != TokenManager.TOKEN_COUNT:
-            raise ValueError("Invalid token count : "+str(len(token)))
+            raise HTTPException(status_code=400,detail="Invalid token count : "+str(len(token)))
         correct = 0
         user_id = None
         for code in self.random_codes:
@@ -46,15 +46,21 @@ class TokenManager:
                     if user_id is None:
                         user_id = decoded_user_id
                     elif self.blocked_tokens and user_id in [t[0] for t in self.blocked_tokens]:
-                        raise ValueError("Token is blocked : "+str(user_id))
+                        raise HTTPException(status_code=403, detail="Token is blocked : "+str(user_id))
                     elif user_id != decoded_user_id:
-                        raise ValueError("Token user_id mismatch : "+str(user_id)+" != "+str(decoded_user_id))
+                        raise ValueError(status_code=400, detail="Token user_id mismatch : "+str(user_id)+" != "+str(decoded_user_id))
                     correct += 1
                 except jwt.InvalidTokenError:
                     pass
+                except jwt.ExpiredSignatureError:
+                    raise HTTPException(status_code=401,detail="Token expired")
+                except ValueError as e:
+                    print(e)
+                except HTTPException as e:
+                    raise e
         if correct >= TokenManager.TOKEN_COUNT - 1:
             return user_id
-        raise ValueError("Not enough valid tokens : "+str(correct))
+        raise HTTPException(status_code=401,detail="Not enough valid tokens : "+str(correct))
     
     def block_token(self, user_id: int):
         """Block a token for a user."""
