@@ -1,9 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://cb60yt7p66k87"]
+[gd_scene load_steps=4 format=3 uid="uid://cb60yt7p66k87"]
 
+[ext_resource type="Script" path="res://scripts/token_manager.gd" id="1_8gm0t"]
 [ext_resource type="PackedScene" uid="uid://c8pogt74tekhd" path="res://scenes/title.tscn" id="1_lla8j"]
-[ext_resource type="Script" path="res://scenes/scene_manager.gd" id="1_u3jbs"]
+[ext_resource type="Script" path="res://scripts/scene_manager.gd" id="1_u3jbs"]
 
 [node name="Main" type="Node"]
+
+[node name="TokenManager" type="Node" parent="."]
+script = ExtResource("1_8gm0t")
+
+[node name="Timer" type="Timer" parent="TokenManager"]
+wait_time = 2.759
+autostart = true
+
+[node name="TokenHTTPRequest" type="HTTPRequest" parent="TokenManager"]
 
 [node name="SceneManager" type="Node" parent="."]
 script = ExtResource("1_u3jbs")
@@ -11,3 +21,7 @@ script = ExtResource("1_u3jbs")
 [node name="Scene" type="Node" parent="."]
 
 [node name="Control" parent="Scene" instance=ExtResource("1_lla8j")]
+
+[connection signal="timeout" from="TokenManager/Timer" to="TokenManager" method="_on_timer_timeout"]
+[connection signal="request_completed" from="TokenManager/TokenHTTPRequest" to="TokenManager" method="_on_token_http_request_request_completed"]
+[connection signal="login" from="Scene/Control" to="TokenManager" method="_on_control_login"]

@@ -204,6 +204,7 @@ theme_override_font_sizes/font_size = 32
 secret = true
 
 [node name="PasswordCheckLabel" type="Label" parent="RegisterForm/panel"]
+layout_mode = 0
 offset_top = 100.0
 offset_right = 139.0
 offset_bottom = 138.0
@@ -211,6 +212,7 @@ theme_override_font_sizes/font_size = 32
 text = "Password"
 
 [node name="PasswordCheckLineEdit2" type="LineEdit" parent="RegisterForm/panel"]
+layout_mode = 0
 offset_top = 142.0
 offset_right = 400.0
 offset_bottom = 192.0
