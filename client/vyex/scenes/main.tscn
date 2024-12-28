@@ -18,10 +18,8 @@ autostart = true
 [node name="SceneManager" type="Node" parent="."]
 script = ExtResource("1_u3jbs")
 
-[node name="Scene" type="Node" parent="."]
-
-[node name="Control" parent="Scene" instance=ExtResource("1_lla8j")]
+[node name="Title" parent="SceneManager" instance=ExtResource("1_lla8j")]
 
 [connection signal="timeout" from="TokenManager/Timer" to="TokenManager" method="_on_timer_timeout"]
 [connection signal="request_completed" from="TokenManager/TokenHTTPRequest" to="TokenManager" method="_on_token_http_request_request_completed"]
-[connection signal="login" from="Scene/Control" to="TokenManager" method="_on_control_login"]
+[connection signal="login" from="SceneManager/Title" to="TokenManager" method="_on_control_login"]
