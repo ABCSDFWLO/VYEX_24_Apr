@@ -300,7 +300,7 @@ async def verify_user(uuid: UUID=Path(...), verify_code: str = Body(..., min_len
         user = unverified_user_record[0]
         if user is None:
             raise HTTPException(status_code=404, detail="User not found")
-        if unverified_user_record[1] != verify_code:
+        if unverified_user_record[1] != verify_code.lower():
             raise HTTPException(status_code=400, detail="Invalid verification code")
         user.registered_at = datetime.now()
         session.add(user)
