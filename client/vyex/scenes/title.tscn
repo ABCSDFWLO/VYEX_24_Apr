@@ -148,6 +148,7 @@ horizontal_alignment = 2
 [node name="LoginHTTPRequest" type="HTTPRequest" parent="LoginForm"]
 
 [node name="RegisterForm" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -164,8 +165,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -400.0
+offset_left = -500.0
 offset_top = -200.0
+offset_right = -100.0
 offset_bottom = 200.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -183,7 +185,7 @@ layout_mode = 1
 offset_top = 42.0
 offset_right = 400.0
 offset_bottom = 92.0
-focus_next = NodePath("../PasswordTextEdit")
+focus_next = NodePath("../PasswordLineEdit")
 theme_override_font_sizes/font_size = 32
 
 [node name="PasswordLabel" type="Label" parent="RegisterForm/panel"]
@@ -194,7 +196,7 @@ offset_bottom = 138.0
 theme_override_font_sizes/font_size = 32
 text = "Password"
 
-[node name="PasswordTextEdit" type="LineEdit" parent="RegisterForm/panel"]
+[node name="PasswordLineEdit" type="LineEdit" parent="RegisterForm/panel"]
 layout_mode = 1
 offset_top = 142.0
 offset_right = 400.0
@@ -205,17 +207,17 @@ secret = true
 
 [node name="PasswordCheckLabel" type="Label" parent="RegisterForm/panel"]
 layout_mode = 0
-offset_top = 100.0
+offset_top = 200.0
 offset_right = 139.0
-offset_bottom = 138.0
+offset_bottom = 238.0
 theme_override_font_sizes/font_size = 32
 text = "Password"
 
-[node name="PasswordCheckLineEdit2" type="LineEdit" parent="RegisterForm/panel"]
+[node name="PasswordCheckLineEdit" type="LineEdit" parent="RegisterForm/panel"]
 layout_mode = 0
-offset_top = 142.0
+offset_top = 242.0
 offset_right = 400.0
-offset_bottom = 192.0
+offset_bottom = 292.0
 focus_next = NodePath("../RegisterBackButton")
 theme_override_font_sizes/font_size = 32
 secret = true
@@ -264,6 +266,152 @@ horizontal_alignment = 2
 
 [node name="RegisterHTTPRequest" type="HTTPRequest" parent="RegisterForm"]
 
+[node name="RegisterVerifyForm" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+
+[node name="panel" type="Control" parent="RegisterVerifyForm"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -200.0
+offset_right = -100.0
+offset_bottom = 200.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CodeLabel" type="Label" parent="RegisterVerifyForm/panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -159.5
+offset_top = 50.0
+offset_right = 159.5
+offset_bottom = 88.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+text = "Enter Verification Code"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="RegisterVerifyForm/panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 100.0
+offset_bottom = 165.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Code1" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/minimum_character_width = 1
+theme_override_font_sizes/font_size = 48
+placeholder_text = "_"
+alignment = 1
+max_length = 1
+
+[node name="Code2" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/minimum_character_width = 1
+theme_override_font_sizes/font_size = 48
+placeholder_text = "_"
+alignment = 1
+max_length = 1
+
+[node name="Code3" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/minimum_character_width = 1
+theme_override_font_sizes/font_size = 48
+placeholder_text = "_"
+alignment = 1
+max_length = 1
+
+[node name="Code4" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/minimum_character_width = 1
+theme_override_font_sizes/font_size = 48
+placeholder_text = "_"
+alignment = 1
+max_length = 1
+
+[node name="Code5" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/minimum_character_width = 1
+theme_override_font_sizes/font_size = 48
+placeholder_text = "_"
+alignment = 1
+max_length = 1
+
+[node name="Code6" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/minimum_character_width = 1
+theme_override_font_sizes/font_size = 48
+placeholder_text = "_"
+alignment = 1
+max_length = 1
+
+[node name="InfoLabel" type="Label" parent="RegisterVerifyForm/panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -187.0
+offset_top = 200.0
+offset_right = 187.0
+offset_bottom = 238.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "The Verification code is sent to your email : "
+horizontal_alignment = 1
+
+[node name="EmailLabel" type="Label" parent="RegisterVerifyForm/panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -187.0
+offset_top = 230.0
+offset_right = 187.0
+offset_bottom = 268.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "example.com@"
+horizontal_alignment = 1
+
+[node name="VerifyButton" type="Button" parent="RegisterVerifyForm/panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -62.0
+offset_top = -46.0
+offset_right = 62.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_next = NodePath("../IdLineEdit")
+theme_override_font_sizes/font_size = 32
+text = "Verify"
+language = "en"
+
+[node name="RegisterVerifyHTTPRequest" type="HTTPRequest" parent="RegisterVerifyForm"]
+
 [connection signal="pressed" from="LogoStroke/MainEnterButton" to="." method="_on_main_enter_button_pressed"]
+[connection signal="pressed" from="LoginForm/panel/RegisterButton" to="." method="_on_register_button_pressed"]
 [connection signal="pressed" from="LoginForm/panel/LoginButton" to="." method="_on_login_button_pressed"]
 [connection signal="request_completed" from="LoginForm/LoginHTTPRequest" to="." method="_on_login_http_request_request_completed"]
+[connection signal="request_completed" from="RegisterForm/RegisterHTTPRequest" to="." method="_on_register_http_request_request_completed"]
+[connection signal="request_completed" from="RegisterVerifyForm/RegisterVerifyHTTPRequest" to="." method="_on_register_http_request_request_completed"]
