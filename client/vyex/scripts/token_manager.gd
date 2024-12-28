@@ -13,13 +13,12 @@ func _on_timer_timeout() -> void:
 	print(data)
 	var error = token_http_request.request("http://"+Constants.HOST+Constants.PORT_WITH_COLON+Constants.TOKEN_URL,[],HTTPClient.METHOD_POST,data)
 	if error != OK:
-		push_error("error occurred")
+		push_error("error occurred while http request", error)
 	timer.start()
 
 func _on_token_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	if response_code != HTTPClient.RESPONSE_OK and response_code != HTTPClient.RESPONSE_CREATED:
 		var data = JSON.parse_string(body.get_string_from_utf8())
-		print(data)
 		var msg = "Unexpected error occurred. retry later."
 		if data.has("detail"):
 			var detail = data["detail"]
@@ -41,6 +40,5 @@ func _parse_tokens() -> String:
 	return result
 
 func _on_control_login(tokens: Array) -> void:
-	print(tokens)
 	for i in range(0,3):
 		self.tokens[i]=tokens[i]
