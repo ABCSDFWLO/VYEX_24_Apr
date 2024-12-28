@@ -99,7 +99,7 @@ layout_mode = 1
 offset_top = 142.0
 offset_right = 400.0
 offset_bottom = 192.0
-focus_next = NodePath("../RegisterButton")
+focus_next = NodePath("../LoginButton")
 shortcut_context = NodePath("../LoginButton")
 theme_override_font_sizes/font_size = 32
 secret = true
@@ -116,7 +116,7 @@ offset_top = -46.0
 offset_right = -126.0
 grow_horizontal = 0
 grow_vertical = 0
-focus_next = NodePath("../LoginButton")
+focus_next = NodePath("../IdLineEdit")
 theme_override_font_sizes/font_size = 32
 text = "Register"
 language = "en"
@@ -139,10 +139,11 @@ language = "en"
 visible = false
 layout_mode = 1
 offset_top = 200.0
-offset_right = 167.0
+offset_right = 234.0
 offset_bottom = 229.0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 12
 text = "Invalid ID or Password"
+horizontal_alignment = 2
 
 [node name="LoginHTTPRequest" type="HTTPRequest" parent="LoginForm"]
 
@@ -165,9 +166,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -500.0
-offset_top = -250.0
+offset_top = -200.0
 offset_right = -100.0
-offset_bottom = 250.0
+offset_bottom = 200.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
@@ -184,58 +185,40 @@ layout_mode = 1
 offset_top = 42.0
 offset_right = 400.0
 offset_bottom = 92.0
-focus_next = NodePath("../NameLineEdit")
-theme_override_font_sizes/font_size = 32
-
-[node name="NameLabel" type="Label" parent="RegisterForm/panel"]
-layout_mode = 0
-offset_top = 100.0
-offset_right = 139.0
-offset_bottom = 138.0
-theme_override_font_sizes/font_size = 32
-text = "Name"
-
-[node name="NameLineEdit" type="LineEdit" parent="RegisterForm/panel"]
-layout_mode = 0
-offset_top = 142.0
-offset_right = 400.0
-offset_bottom = 192.0
 focus_next = NodePath("../PasswordLineEdit")
 theme_override_font_sizes/font_size = 32
 
 [node name="PasswordLabel" type="Label" parent="RegisterForm/panel"]
 layout_mode = 1
-offset_left = 1.0
-offset_top = 200.0
-offset_right = 140.0
-offset_bottom = 238.0
+offset_top = 100.0
+offset_right = 139.0
+offset_bottom = 138.0
 theme_override_font_sizes/font_size = 32
 text = "Password"
 
 [node name="PasswordLineEdit" type="LineEdit" parent="RegisterForm/panel"]
 layout_mode = 1
-offset_top = 242.0
+offset_top = 142.0
 offset_right = 400.0
-offset_bottom = 292.0
-focus_next = NodePath("../PasswordCheckLineEdit")
+offset_bottom = 192.0
+focus_next = NodePath("../RegisterBackButton")
 theme_override_font_sizes/font_size = 32
 secret = true
 
 [node name="PasswordCheckLabel" type="Label" parent="RegisterForm/panel"]
 layout_mode = 0
-offset_left = 1.0
-offset_top = 300.0
-offset_right = 140.0
-offset_bottom = 338.0
+offset_top = 200.0
+offset_right = 139.0
+offset_bottom = 238.0
 theme_override_font_sizes/font_size = 32
-text = "Password Check"
+text = "Password"
 
 [node name="PasswordCheckLineEdit" type="LineEdit" parent="RegisterForm/panel"]
 layout_mode = 0
-offset_top = 342.0
+offset_top = 242.0
 offset_right = 400.0
-offset_bottom = 392.0
-focus_next = NodePath("../SubmitButton")
+offset_bottom = 292.0
+focus_next = NodePath("../RegisterBackButton")
 theme_override_font_sizes/font_size = 32
 secret = true
 
@@ -251,7 +234,7 @@ offset_top = -46.0
 offset_right = -126.0
 grow_horizontal = 0
 grow_vertical = 0
-focus_next = NodePath("../RegisterBackButton")
+focus_next = NodePath("../IdLineEdit")
 theme_override_font_sizes/font_size = 32
 text = "Submit"
 language = "en"
@@ -271,18 +254,20 @@ text = "Back"
 language = "en"
 
 [node name="RegisterErrorLabel" type="Label" parent="RegisterForm/panel"]
-visible = false
 layout_mode = 1
 offset_left = 1.0
-offset_top = 404.0
+offset_top = 293.0
 offset_right = 235.0
-offset_bottom = 433.0
-theme_override_font_sizes/font_size = 20
+offset_bottom = 322.0
+theme_override_colors/font_color = Color(0.564706, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
 text = "Invalid ID or Password"
+horizontal_alignment = 2
 
 [node name="RegisterHTTPRequest" type="HTTPRequest" parent="RegisterForm"]
 
 [node name="RegisterVerifyForm" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -330,7 +315,6 @@ grow_horizontal = 2
 alignment = 1
 
 [node name="Code1" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_constants/minimum_character_width = 1
 theme_override_font_sizes/font_size = 48
@@ -339,7 +323,6 @@ alignment = 1
 max_length = 1
 
 [node name="Code2" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_constants/minimum_character_width = 1
 theme_override_font_sizes/font_size = 48
@@ -348,7 +331,6 @@ alignment = 1
 max_length = 1
 
 [node name="Code3" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_constants/minimum_character_width = 1
 theme_override_font_sizes/font_size = 48
@@ -357,7 +339,6 @@ alignment = 1
 max_length = 1
 
 [node name="Code4" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_constants/minimum_character_width = 1
 theme_override_font_sizes/font_size = 48
@@ -366,7 +347,6 @@ alignment = 1
 max_length = 1
 
 [node name="Code5" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_constants/minimum_character_width = 1
 theme_override_font_sizes/font_size = 48
@@ -375,7 +355,6 @@ alignment = 1
 max_length = 1
 
 [node name="Code6" type="LineEdit" parent="RegisterVerifyForm/panel/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_constants/minimum_character_width = 1
 theme_override_font_sizes/font_size = 48
@@ -411,21 +390,6 @@ theme_override_font_sizes/font_size = 20
 text = "example.com@"
 horizontal_alignment = 1
 
-[node name="VerifyErrorLabel" type="Label" parent="RegisterVerifyForm/panel"]
-visible = false
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -186.0
-offset_top = 278.0
-offset_right = 188.0
-offset_bottom = 316.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 20
-text = "not valid"
-horizontal_alignment = 1
-
 [node name="VerifyButton" type="Button" parent="RegisterVerifyForm/panel"]
 layout_mode = 1
 anchors_preset = 7
@@ -450,22 +414,5 @@ language = "en"
 [connection signal="pressed" from="LoginForm/panel/LoginButton" to="." method="_on_login_button_pressed"]
 [connection signal="request_completed" from="LoginForm/LoginHTTPRequest" to="." method="_on_login_http_request_request_completed"]
 [connection signal="pressed" from="RegisterForm/panel/SubmitButton" to="." method="_on_submit_button_pressed"]
-[connection signal="pressed" from="RegisterForm/panel/RegisterBackButton" to="." method="_on_register_back_button_pressed"]
 [connection signal="request_completed" from="RegisterForm/RegisterHTTPRequest" to="." method="_on_register_http_request_request_completed"]
-[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code1" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_1_text_change_rejected"]
-[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code1" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_1_text_changed"]
-[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code1" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_1_text_submitted"]
-[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code2" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_2_text_change_rejected"]
-[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code2" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_2_text_changed"]
-[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code2" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_2_text_submitted"]
-[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code3" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_3_text_change_rejected"]
-[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code3" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_3_text_changed"]
-[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code3" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_3_text_submitted"]
-[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code4" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_4_text_change_rejected"]
-[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code4" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_4_text_changed"]
-[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code4" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_4_text_submitted"]
-[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code5" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_5_text_change_rejected"]
-[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code5" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_5_text_changed"]
-[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code5" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_5_text_submitted"]
-[connection signal="pressed" from="RegisterVerifyForm/panel/VerifyButton" to="." method="_on_verify_button_pressed"]
-[connection signal="request_completed" from="RegisterVerifyForm/RegisterVerifyHTTPRequest" to="." method="_on_register_verify_http_request_request_completed"]
+[connection signal="request_completed" from="RegisterVerifyForm/RegisterVerifyHTTPRequest" to="." method="_on_register_http_request_request_completed"]

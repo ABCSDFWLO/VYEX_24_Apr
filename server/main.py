@@ -292,7 +292,7 @@ async def create_user(user_create: UserCreate = Body(..., title="User Creation",
         }
     }
     )
-async def verify_user(uuid: UUID=Path(...), verify_code: str = Query(..., min_length=6, max_length=6)):
+async def verify_user(uuid: UUID=Path(...), verify_code: str = Body(..., min_length=6, max_length=6)):
     with Session(engine) as session:
         unverified_user_record = unverified_users.get(uuid) # Tuple, [0]: User, [1]: Verify Code
         if unverified_user_record is None:
