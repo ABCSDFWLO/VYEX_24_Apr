@@ -20,6 +20,16 @@ script = ExtResource("1_u3jbs")
 
 [node name="Title" parent="SceneManager" instance=ExtResource("1_lla8j")]
 
+[node name="Fade" type="ColorRect" parent="SceneManager"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
 [connection signal="timeout" from="TokenManager/Timer" to="TokenManager" method="_on_timer_timeout"]
 [connection signal="request_completed" from="TokenManager/TokenHTTPRequest" to="TokenManager" method="_on_token_http_request_request_completed"]
 [connection signal="login" from="SceneManager/Title" to="TokenManager" method="_on_control_login"]
+[connection signal="login" from="SceneManager/Title" to="SceneManager" method="_on_title_login"]
