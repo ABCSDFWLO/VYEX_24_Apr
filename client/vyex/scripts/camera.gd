@@ -77,10 +77,10 @@ func _input(event: InputEvent) -> void:
 		
 	if event.is_action_pressed("change_perspective"):
 		_on_camera_lock_on_cursor_icon_button_pressed()
-		emit_signal("perspective_changed",perspective_first)
+		perspective_changed.emit(perspective_first)
 	if event.is_action_pressed("top_view"):
 		_on_top_view_icon_button_pressed()
-		emit_signal("top_view")
+		top_view.emit()
 	#if event.is_action_pressed("orthogonal_view"):
 		#if self.projection==Camera3D.PROJECTION_ORTHOGONAL:
 			#self.projection=Camera3D.PROJECTION_PERSPECTIVE
@@ -369,7 +369,7 @@ func render_cursor() -> void:
 		if pos.is_equal_approx(cursor_viewport_pos):
 			pass
 		else:
-			emit_signal("cursor_viewport_pos_changed", pos)
+			cursor_viewport_pos_changed.emit(pos)
 			cursor_viewport_pos = pos
 
 func top_view_animation(delta : float) -> void:
@@ -382,7 +382,7 @@ func top_view_animation(delta : float) -> void:
 	cursor_pivot.position = cursor_pivot.position.lerp(TOP_VIEW_CURSOR_PIVOT_POSITION, lerp_progress)
 	
 	if top_view_animation_progress <0 :
-		emit_signal("top_view_animation_ended")
+		top_view_animation_ended.emit()
 
 
 func _on_top_view_icon_button_pressed() -> void:
