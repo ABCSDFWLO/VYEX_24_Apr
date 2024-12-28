@@ -284,6 +284,7 @@ text = "Invalid ID or Password"
 [node name="RegisterHTTPRequest" type="HTTPRequest" parent="RegisterForm"]
 
 [node name="RegisterVerifyForm" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -454,5 +455,23 @@ language = "en"
 [connection signal="pressed" from="RegisterForm/panel/SubmitButton" to="." method="_on_submit_button_pressed"]
 [connection signal="pressed" from="RegisterForm/panel/RegisterBackButton" to="." method="_on_register_back_button_pressed"]
 [connection signal="request_completed" from="RegisterForm/RegisterHTTPRequest" to="." method="_on_register_http_request_request_completed"]
+[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code1" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_1_text_change_rejected"]
+[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code1" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_1_text_changed"]
+[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code1" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_1_text_submitted"]
+[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code2" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_2_text_change_rejected"]
+[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code2" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_2_text_changed"]
+[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code2" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_2_text_submitted"]
+[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code3" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_3_text_change_rejected"]
+[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code3" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_3_text_changed"]
+[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code3" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_3_text_submitted"]
+[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code4" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_4_text_change_rejected"]
+[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code4" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_4_text_changed"]
+[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code4" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_4_text_submitted"]
+[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code5" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_5_text_change_rejected"]
+[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code5" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_5_text_changed"]
+[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code5" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_5_text_submitted"]
+[connection signal="text_change_rejected" from="RegisterVerifyForm/panel/HBoxContainer/Code6" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_6_text_change_rejected"]
+[connection signal="text_changed" from="RegisterVerifyForm/panel/HBoxContainer/Code6" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_6_text_changed"]
+[connection signal="text_submitted" from="RegisterVerifyForm/panel/HBoxContainer/Code6" to="RegisterVerifyForm/panel/HBoxContainer" method="_on_code_6_text_submitted"]
 [connection signal="pressed" from="RegisterVerifyForm/panel/VerifyButton" to="." method="_on_verify_button_pressed"]
 [connection signal="request_completed" from="RegisterVerifyForm/RegisterVerifyHTTPRequest" to="." method="_on_register_verify_http_request_request_completed"]
