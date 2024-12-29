@@ -39,6 +39,12 @@ func _parse_tokens() -> String:
 	result[-1] = "]"
 	return result
 
+func get_token_header() -> Array[String]:
+	var result :Array[String]= []
+	for i in range(3) :
+		result.append("token"+str(i+1)+":"+tokens[i])
+	return result
+
 func _on_control_login(tokens: Array) -> void:
 	for i in range(0,3):
 		self.tokens[i]=tokens[i]
