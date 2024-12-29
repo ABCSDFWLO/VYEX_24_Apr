@@ -1,9 +1,14 @@
 extends GridContainer
 
+var lobby_manager : Control
+
 const PADDING = 20
 const COLUMNS = 13
 
-func add_new_row(name : String, locked : bool, player1 : String, player2 : String) -> void:
+func _ready() -> void:
+	lobby_manager=get_parent().get_parent().get_parent().get_parent()
+
+func add_row(id: int, name : String, locked : bool, player1 : String, player2 : String) -> void:
 	var pads : Array[Control] = []
 	for i in range(0,7):
 		pads.append(Control.new())
@@ -20,6 +25,11 @@ func add_new_row(name : String, locked : bool, player1 : String, player2 : Strin
 	vs_label.text = "vs"
 	var join_button : Button = Button.new()
 	join_button.text = "observe" if not player1.is_empty() and not player2.is_empty() else "join"
+	var http_request : HTTPRequest = HTTPRequest.new()
+	join_button.add_child(http_request)
+	join_button.pressed.connect(func():
+		lobby_manager._on_join_button_pressed(id, locked)
+		)
 	self.add_child(pads[0])
 	self.add_child(locked_label)
 	self.add_child(pads[1])
@@ -54,7 +64,7 @@ func move_row(from : int, to : int)->void:
 		for i in range(COLUMNS):
 			var child = self.get_child((from+1)*COLUMNS-i)
 			self.move_child(child,to*COLUMNS)
-			
+
 func clear()->void:
 	var child_count = self.get_child_count()
 	for i in range(COLUMNS,child_count):

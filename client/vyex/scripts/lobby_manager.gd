@@ -13,26 +13,36 @@ var scene_manager : Node
 @onready var create_name_lineedit : LineEdit = $CreatePanel/MarginContainer/VBoxContainer/NameLineEdit
 @onready var create_password_lineedit : LineEdit = $CreatePanel/MarginContainer/VBoxContainer/PasswordLineEdit
 @onready var room_grid_container : GridContainer = $VBoxContainer/PanelContainer/ScrollContainer/GridContainer
+@onready var join_panel : PanelContainer = $JoinPanel
+@onready var join_button : Button = $JoinPanel/MarginContainer/VBoxContainer/JoinButton
+@onready var join_password_lineedit : LineEdit = $JoinPanel/MarginContainer/VBoxContainer/PasswordLineEdit
+@onready var join_http_request : HTTPRequest = $JoinPanel/MarginContainer/VBoxContainer/JoinButton/HTTPRequest
 
-var rooms : Array[Dictionary]
+var rooms : Array
 
 func _ready() -> void:
 	token_manager=get_node("/root/Main/TokenManager")
 	scene_manager=get_node("/root/Main/SceneManager")
 	enter_game.connect(scene_manager._on_lobby_enter_game)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 func render()->void:
-	pass
+	room_grid_container.clear()
+	for game in rooms:
+		var id : int = game["id"]
+		var name : String = game["name"]
+		var locked : bool = game["has_password"]
+		var player1 : String = game["player1"]["name"]
+		var player2 : String = game["player2"]["name"] if not game["player2"] == null else ""
+		room_grid_container.add_row(id,name,locked,player1,player2)
 
 func refresh()->void:
 	var query : String = "?name="+search_lineedit.text
 	var error = refresh_http_request.request("http://"+Constants.HOST+Constants.PORT_WITH_COLON+Constants.GAMES_URL+query,[],HTTPClient.METHOD_GET)
 	if error != OK:
 		push_error("error occurred while http request", error)
+
+func _validate_game(game : Dictionary) -> bool:
+	return game.has("id") and game.has("state") and game.has("name") and game.has("has_password") and game.has("player1") and game.has("player2")
 
 func _on_refresh_button_pressed() -> void:
 	refresh()
@@ -71,5 +81,63 @@ func _on_create_http_request_request_completed(result: int, response_code: int, 
 				msg = detail
 		push_error(msg)
 	else:
-		var response_tokens = JSON.parse_string(body.get_string_from_utf8())
+		var response = JSON.parse_string(body.get_string_from_utf8())
+		enter_game.emit()
+
+func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+	if response_code != HTTPClient.RESPONSE_OK and response_code != HTTPClient.RESPONSE_CREATED:
+		var data = JSON.parse_string(body.get_string_from_utf8())
+		var msg = "Unexpected error occurred. retry later."
+		if data.has("detail"):
+			var detail = data["detail"]
+			if detail is Array and detail.size() > 0 and detail[0].has("msg"):
+				msg = detail[0]["msg"]
+			else:
+				msg = detail
+		push_error(msg)
+	else:
+		var response_games = JSON.parse_string(body.get_string_from_utf8())
+		for game in response_games:
+			if not _validate_game(game):
+				return
+		rooms = response_games
+		render()
+
+func _on_join_button_pressed(id : int, locked : bool):
+	var url = "http://"+Constants.HOST+Constants.PORT_WITH_COLON+Constants.ENTER_GAME_URL+"/"+str(id)
+	var header = token_manager.get_token_header()
+	if locked:
+		join_panel.modulate=Color(1,1,1,0)
+		join_panel.visible=true
+		var tween = get_tree().create_tween()
+		tween.tween_property(join_panel,"modulate",Color(1,1,1,1),0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		join_button.pressed.connect(func():
+			var body = "\""+join_password_lineedit.text+"\""
+			join_http_request.request(url,header,HTTPClient.METHOD_POST,body)
+			)
+	else:
+		join_http_request.request(url,header,HTTPClient.METHOD_POST)
+
+func _on_join_panel_cancel_button_pressed() -> void:
+	join_panel.modulate=Color(1,1,1,1)
+	var tween = get_tree().create_tween()
+	tween.tween_property(join_panel,"modulate",Color(1,1,1,0),0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_callback(func()->void:
+		join_panel.visible=false
+		)
+
+func _on_join_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+	if response_code != HTTPClient.RESPONSE_OK and response_code != HTTPClient.RESPONSE_CREATED:
+		var data = JSON.parse_string(body.get_string_from_utf8())
+		var msg = "Unexpected error occurred. retry later."
+		if data.has("detail"):
+			var detail = data["detail"]
+			if detail is Array and detail.size() > 0 and detail[0].has("msg"):
+				msg = detail[0]["msg"]
+			else:
+				msg = detail
+		push_error(msg)
+	else:
+		var response = JSON.parse_string(body.get_string_from_utf8())
+		print(response)
 		enter_game.emit()

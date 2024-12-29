@@ -207,8 +207,54 @@ text = "create"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="CreatePanel/MarginContainer/VBoxContainer/CreateButton"]
 
+[node name="JoinPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="JoinPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="JoinPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="PasswordLabel" type="Label" parent="JoinPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Password"
+
+[node name="PasswordLineEdit" type="LineEdit" parent="JoinPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="JoinPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "cancel"
+
+[node name="JoinButton" type="Button" parent="JoinPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "join"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="JoinPanel/MarginContainer/VBoxContainer/JoinButton"]
+
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]
+[connection signal="request_completed" from="VBoxContainer/HBoxContainer/RefreshButton/HTTPRequest" to="." method="_on_http_request_request_completed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
 [connection signal="pressed" from="CreatePanel/MarginContainer/VBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="CreatePanel/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_panel_create_button_pressed"]
 [connection signal="request_completed" from="CreatePanel/MarginContainer/VBoxContainer/CreateButton/HTTPRequest" to="." method="_on_create_http_request_request_completed"]
+[connection signal="pressed" from="JoinPanel/MarginContainer/VBoxContainer/CancelButton" to="." method="_on_join_panel_cancel_button_pressed"]
+[connection signal="request_completed" from="JoinPanel/MarginContainer/VBoxContainer/JoinButton/HTTPRequest" to="." method="_on_join_http_request_request_completed"]
