@@ -84,6 +84,17 @@ text = "refresh"
 layout_mode = 2
 text = "+ create room"
 
+[node name="MenuBar" type="MenuBar" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="PopupMenu" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar"]
+
+[node name="PopupMenu2" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar"]
+auto_translate_mode = 1
+
+[node name="PopupMenu3" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar"]
+auto_translate_mode = 1
+
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -205,10 +216,4 @@ text = "cancel"
 layout_mode = 2
 text = "create"
 
-[node name="HTTPRequest" type="HTTPRequest" parent="CreatePanel/MarginContainer/VBoxContainer/CreateButton"]
-
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
-[connection signal="pressed" from="CreatePanel/MarginContainer/VBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
-[connection signal="pressed" from="CreatePanel/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_panel_create_button_pressed"]
-[connection signal="request_completed" from="CreatePanel/MarginContainer/VBoxContainer/CreateButton/HTTPRequest" to="." method="_on_create_http_request_request_completed"]
