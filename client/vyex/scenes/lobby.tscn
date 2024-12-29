@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://c3xr8fplwegd2" path="res://assets/sprites/logo.png" id="2_fvmej"]
 [ext_resource type="Texture2D" uid="uid://bxfeshubktxqe" path="res://assets/sprites/logo_blur.png" id="2_pu4ud"]
+[ext_resource type="Script" path="res://scripts/lobby_grid_container.gd" id="3_x1d5u"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -80,6 +81,7 @@ size_flags_vertical = 3
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/PanelContainer"]
 layout_mode = 2
 columns = 13
+script = ExtResource("3_x1d5u")
 
 [node name="padding1" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
