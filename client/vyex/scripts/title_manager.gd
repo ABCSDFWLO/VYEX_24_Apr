@@ -152,3 +152,10 @@ func _on_register_verify_http_request_request_completed(result: int, response_co
 		var response = JSON.parse_string(body.get_string_from_utf8())
 		print(response)
 		register_verify_form.visible=false
+		login_form.visible=true
+
+func _on_login_text_submitted(new_text: String) -> void:
+	_on_login_button_pressed()
+
+func _on_register_text_submitted(new_text: String) -> void:
+	_on_register_button_pressed()
