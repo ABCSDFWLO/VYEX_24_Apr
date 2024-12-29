@@ -386,6 +386,7 @@ async def refresh_token(token: List[str], token_manager:TokenManager=Depends()):
 class GameOut(BaseModel):
     id : int
     state : GameState
+    name : str
     started_at : datetime
     ended_at : datetime
     player1_id : int
@@ -400,6 +401,7 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
             GameOut(
                 id=game.id,
                 state=game.state,
+                name=game.name,
                 started_at=game.started_at,
                 ended_at=game.ended_at,
                 player1_id=game.player1_id,
@@ -439,10 +441,11 @@ async def enter_game(game_id: int, password:Union[str,None] = Body(...), user_id
             raise HTTPException(status_code=500, detail="Database error")
         
 @app.post("/create_game", status_code=201, response_model=int)
-async def create_game(password:Union[str,None] = Body(None), user_id: int = Depends(user_id_from_token)):
+async def create_game(name:Union[str,None]=Body(None), password:Union[str,None] = Body(None), user_id: int = Depends(user_id_from_token)):
     with Session(engine) as session:
         game = Game(
             state=GameState.Running,
+            name=name if name is not None else "New Game",
             started_at=datetime.now(),
             player1_id=user_id,
             player2_id=None,

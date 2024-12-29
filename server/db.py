@@ -35,6 +35,7 @@ class User(SQLModel, table=True):
 class Game(SQLModel, table=True):
     id: int = Field(primary_key=True)
     state: GameState
+    name: str
     started_at: datetime
     ended_at: datetime
     player1_id: int = Field(foreign_key="user.id")
