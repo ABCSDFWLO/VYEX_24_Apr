@@ -10,7 +10,7 @@
 script = ExtResource("1_8gm0t")
 
 [node name="Timer" type="Timer" parent="TokenManager"]
-wait_time = 2.759
+wait_time = 60.0
 autostart = true
 
 [node name="TokenHTTPRequest" type="HTTPRequest" parent="TokenManager"]

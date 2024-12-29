@@ -1,5 +1,7 @@
 extends Control
 
+signal login(tokens : Array)
+
 @onready var logo_stroke :TextureRect = $LogoStroke
 @onready var main_enter_button :Button = $LogoStroke/MainEnterButton
 @onready var login_form : Control = $LoginForm
@@ -27,8 +29,6 @@ extends Control
 @onready var login_http_request : HTTPRequest = $LoginForm/LoginHTTPRequest
 @onready var register_http_request : HTTPRequest = $RegisterForm/RegisterHTTPRequest
 @onready var register_verify_http_request : HTTPRequest = $RegisterVerifyForm/RegisterVerifyHTTPRequest
-
-signal login(tokens : Array)
 
 var register_verify_url : String = ""
 var register_verify_email : String = ""
