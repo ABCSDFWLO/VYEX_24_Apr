@@ -398,11 +398,9 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
     with Session(engine) as session:
         if name is None:
             games = session.exec(
-                select(Game, User).join(User, Game.player1_id == User.id).where(col(Game.state).in_(state))
+                select(Game, User).join(User, Game.player1_id == User.id).join(User,Game.player2_id==User.id,isouter=True).where(col(Game.state).in_(state))
             ).all()
-            player2s = session.exec(
-                select(User).where(User.id.in_([game.Game.player2_id for game in games if game.Game.player2_id is not None]))
-            ).all()
+            print(games)
             result = [
                 GameOut(
                     id=game.Game.id,
@@ -417,10 +415,10 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
                         registered_at=game.User.registered_at
                     ),
                     player2=UserOut(
-                        id=game.Game.player2_id,
-                        name=[player.name for player in player2s if player.id == game.Game.player2_id][0],
-                        email=[player.email for player in player2s if player.id == game.Game.player2_id][0],
-                        registered_at=[player.registered_at for player in player2s if player.id == game.Game.player2_id][0]
+                        id=game.User.id,
+                        name=game.User.name,
+                        email=game.User.email,
+                        registered_at=game.User.registered_at
                     ) if game.Game.player2_id is not None else None,
                     has_password=game.Game.password_hash is not None
                 ) for game in games
@@ -428,7 +426,7 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
             return result
         else:
             games = session.exec(
-                select(Game, User).join(User, Game.player1_id == User.id).where(
+                select(Game, User).join(User, Game.player1_id == User.id).join(User,Game.player2_id==User.id,isouter=True).where(
                     and_(
                         col(Game.state).in_(state),
                         or_(
@@ -451,16 +449,19 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
                         email=game.User.email,
                         registered_at=game.User.registered_at
                     ),
-                    player2=session.exec(
-                        select(User).where(User.id == game.Game.player2_id).limit(1)
-                    ).first() if game.Game.player2_id is not None else None,
+                    player2=UserOut(
+                        id=game.User.id,
+                        name=game.User.name,
+                        email=game.User.email,
+                        registered_at=game.User.registered_at
+                    ) if game.Game.player2_id is not None else None,
                     has_password=game.Game.password_hash is not None
                 ) for game in games
             ]
             return result
 
 @app.post("/enter_game/{game_id}", status_code=200)
-async def enter_game(game_id: int, password:Union[str,None] = Body(...), user_id: int = Depends(user_id_from_token)):
+async def enter_game(game_id: int, password:Union[str,None] = Body(None), user_id: int = Depends(user_id_from_token)):
     with Session(engine) as session:
         game = session.get(Game, game_id)
         if game is None:
@@ -470,9 +471,9 @@ async def enter_game(game_id: int, password:Union[str,None] = Body(...), user_id
         elif game.player1_id == None:
             game.player1_id = user_id
         elif game.player2_id == None:
-            if game.password_hash is not None and password is None:
+            if game.password_hash is not None and (password is None or len(password) == 0):
                 raise HTTPException(status_code=400, detail="Password Required")
-            elif game.password_hash != password:
+            elif game.password_hash is not None and not bcrypt.verify(password, game.password_hash):
                 raise HTTPException(status_code=400, detail="Invalid Password")
             game.player2_id = user_id
         elif game.player1_id == user_id or game.player2_id == user_id:
