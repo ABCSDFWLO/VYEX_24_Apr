@@ -3,7 +3,7 @@ from uuid import uuid4, UUID
 from fastapi import Body, Depends, FastAPI, HTTPException, Header, Path, Query
 from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
-from sqlmodel import Session, and_, col, or_, select
+from sqlmodel import Session, and_, col, or_, select, Relationship
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import bcrypt
 import random
@@ -388,9 +388,9 @@ class GameOut(BaseModel):
     state : GameState
     name : str
     started_at : datetime
-    ended_at : Union[datetime,None]
+    ended_at : datetime | None
     player1 : UserOut
-    player2 : Union[UserOut,None]
+    player2 : UserOut | None
     has_password : bool
 
 @app.get("/games", response_model=List[GameOut])
@@ -398,35 +398,34 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
     with Session(engine) as session:
         if name is None:
             games = session.exec(
-                select(Game, User).join(User, Game.player1_id == User.id).join(User,Game.player2_id==User.id,isouter=True).where(col(Game.state).in_(state))
+                select(Game).where(Game.state.in_(state))
             ).all()
-            print(games)
             result = [
                 GameOut(
-                    id=game.Game.id,
-                    state=game.Game.state,
-                    name=game.Game.name,
-                    started_at=game.Game.started_at,
-                    ended_at=game.Game.ended_at,
+                    id=game.id,
+                    state=game.state,
+                    name=game.name,
+                    started_at=game.started_at,
+                    ended_at=game.ended_at,
                     player1=UserOut(
-                        id=game.User.id,
-                        name=game.User.name,
-                        email=game.User.email,
-                        registered_at=game.User.registered_at
+                        id=game.player1.id,
+                        name=game.player1.name,
+                        email=game.player1.email,
+                        registered_at=game.player1.registered_at
                     ),
                     player2=UserOut(
-                        id=game.User.id,
-                        name=game.User.name,
-                        email=game.User.email,
-                        registered_at=game.User.registered_at
-                    ) if game.Game.player2_id is not None else None,
-                    has_password=game.Game.password_hash is not None
+                        id=game.player2.id,
+                        name=game.player2.name,
+                        email=game.player2.email,
+                        registered_at=game.player2.registered_at
+                    ) if game.player2_id is not None else None,
+                    has_password=game.password_hash is not None
                 ) for game in games
             ]
             return result
         else:
             games = session.exec(
-                select(Game, User).join(User, Game.player1_id == User.id).join(User,Game.player2_id==User.id,isouter=True).where(
+                select(Game).where(
                     and_(
                         col(Game.state).in_(state),
                         or_(
@@ -438,24 +437,24 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
             ).all()
             result = [
                 GameOut(
-                    id=game.Game.id,
-                    state=game.Game.state,
-                    name=game.Game.name,
-                    started_at=game.Game.started_at,
-                    ended_at=game.Game.ended_at,
+                    id=game.id,
+                    state=game.state,
+                    name=game.name,
+                    started_at=game.started_at,
+                    ended_at=game.ended_at,
                     player1=UserOut(
-                        id=game.User.id,
-                        name=game.User.name,
-                        email=game.User.email,
-                        registered_at=game.User.registered_at
-                    ),
+                        id=game.player1.id,
+                        name=game.player1.name,
+                        email=game.player1.email,
+                        registered_at=game.player1.registered_at
+                        ),
                     player2=UserOut(
-                        id=game.User.id,
-                        name=game.User.name,
-                        email=game.User.email,
-                        registered_at=game.User.registered_at
-                    ) if game.Game.player2_id is not None else None,
-                    has_password=game.Game.password_hash is not None
+                        id=game.player2.id,
+                        name=game.player2.name,
+                        email=game.player2.email,
+                        registered_at=game.player2.registered_at
+                    ) if game.player2_id is not None else None,
+                    has_password=game.password_hash is not None
                 ) for game in games
             ]
             return result
