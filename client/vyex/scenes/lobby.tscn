@@ -1,5 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://lh7dfbb2ctdj"]
 
+[ext_resource type="Script" path="res://scripts/lobby_manager.gd" id="1_rx0ub"]
 [ext_resource type="Texture2D" uid="uid://c3xr8fplwegd2" path="res://assets/sprites/logo.png" id="2_fvmej"]
 [ext_resource type="Texture2D" uid="uid://bxfeshubktxqe" path="res://assets/sprites/logo_blur.png" id="2_pu4ud"]
 [ext_resource type="Script" path="res://scripts/lobby_grid_container.gd" id="3_x1d5u"]
@@ -11,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_rx0ub")
 
 [node name="LogoStroke" type="TextureRect" parent="."]
 visible = false
