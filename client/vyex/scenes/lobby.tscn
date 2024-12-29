@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://lh7dfbb2ctdj"]
+[gd_scene load_steps=5 format=3 uid="uid://lh7dfbb2ctdj"]
 
 [ext_resource type="Texture2D" uid="uid://c3xr8fplwegd2" path="res://assets/sprites/logo.png" id="2_fvmej"]
 [ext_resource type="Texture2D" uid="uid://bxfeshubktxqe" path="res://assets/sprites/logo_blur.png" id="2_pu4ud"]
@@ -66,11 +66,19 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="SearchButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "search"
 
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="HTTPRequest" type="HTTPRequest" parent="VBoxContainer/HBoxContainer/SearchButton"]
+
+[node name="RefreshButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "refresh"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="VBoxContainer/HBoxContainer/RefreshButton"]
+
+[node name="CreateButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "+ create room"
 
@@ -78,65 +86,118 @@ text = "+ create room"
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/PanelContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer"]
 layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 columns = 13
 script = ExtResource("3_x1d5u")
 
-[node name="padding1" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding1" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="lock" type="Label" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="lock" type="Label" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "lock
 "
 
-[node name="padding2" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding2" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Name"
 
-[node name="padding3" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding3" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="Label6" type="Label" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="Label6" type="Label" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "player1"
 
-[node name="padding4" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding4" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="Label3" type="Label" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "vs"
 
-[node name="padding5" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding5" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="Label4" type="Label" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="Label4" type="Label" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "player2"
 
-[node name="padding6" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding6" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="Label5" type="Label" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="Label5" type="Label" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 layout_mode = 2
 text = "join"
 
-[node name="padding7" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding7" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Name"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Password"
+
+[node name="LineEdit2" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "cancel"
+
+[node name="Button2" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "create"

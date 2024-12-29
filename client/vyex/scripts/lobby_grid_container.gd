@@ -58,6 +58,6 @@ func move_row(from : int, to : int)->void:
 func clear()->void:
 	var child_count = self.get_child_count()
 	for i in range(COLUMNS,child_count):
-		var child = self.get_child(13)
+		var child = self.get_child(COLUMNS)
 		self.remove_child(child)
 		child.queue_free()
