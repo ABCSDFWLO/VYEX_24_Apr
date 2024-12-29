@@ -37,9 +37,9 @@ class Game(SQLModel, table=True):
     state: GameState
     name: str
     started_at: datetime
-    ended_at: datetime
+    ended_at: Union[datetime,None]
     player1_id: int = Field(foreign_key="user.id")
-    player2_id: int = Field(foreign_key="user.id")
+    player2_id: Union[int,None] = Field(foreign_key="user.id")
     password_hash: Union[str,None]
 class Action(SQLModel, table=True):
     id: int = Field(primary_key=True)

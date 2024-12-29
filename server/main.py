@@ -3,7 +3,7 @@ from uuid import uuid4, UUID
 from fastapi import Body, Depends, FastAPI, HTTPException, Header, Path, Query
 from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
-from sqlmodel import Session, col, select
+from sqlmodel import Session, and_, col, or_, select
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import bcrypt
 import random
@@ -394,22 +394,46 @@ class GameOut(BaseModel):
     has_password : bool
 
 @app.get("/games", response_model=List[GameOut])
-async def get_games(state: Union[List[GameState],None] = Query(default=[GameState.Running], min_length=1, max_length=3)):
+async def get_games(state: Union[List[GameState],None] = Query(default=[GameState.Running], min_length=1, max_length=3), name:Union[str,None] = Query(None)):
     with Session(engine) as session:
-        games = session.exec(select(Game).where(col(Game.state).in_(state))).all()
-        result = [
-            GameOut(
-                id=game.id,
-                state=game.state,
-                name=game.name,
-                started_at=game.started_at,
-                ended_at=game.ended_at,
-                player1_id=game.player1_id,
-                player2_id=game.player2_id,
-                has_password=game.password_hash is not None
-            ) for game in games
-        ]
-        return result
+        if name is None:
+            games = session.exec(select(Game).where(col(Game.state).in_(state))).all()
+            result = [
+                GameOut(
+                    id=game.id,
+                    state=game.state,
+                    name=game.name,
+                    started_at=game.started_at,
+                    ended_at=game.ended_at,
+                    player1_id=game.player1_id,
+                    player2_id=game.player2_id,
+                    has_password=game.password_hash is not None
+                ) for game in games
+            ]
+            return result
+        else:
+            games = session.exec(select(Game).where(
+                and_(
+                    col(Game.state).in_(state),
+                    or_(
+                        col(Game.id).like(f"%{name}%"),
+                        col(Game.player1_id).like(f"%{name}%"),
+                        col(Game.player2_id).like(f"%{name}%"),
+                        col(Game.name).like(f"%{name}%")
+                    )))).all()
+            result = [
+                GameOut(
+                    id=game.id,
+                    state=game.state,
+                    name=game.name,
+                    started_at=game.started_at,
+                    ended_at=game.ended_at,
+                    player1_id=game.player1_id,
+                    player2_id=game.player2_id,
+                    has_password=game.password_hash is not None
+                ) for game in games
+            ]
+            return result
 
 @app.post("/enter_game/{game_id}", status_code=200)
 async def enter_game(game_id: int, password:Union[str,None] = Body(...), user_id: int = Depends(user_id_from_token)):
@@ -449,7 +473,7 @@ async def create_game(name:Union[str,None]=Body(None), password:Union[str,None] 
             started_at=datetime.now(),
             player1_id=user_id,
             player2_id=None,
-            password_hash=bcrypt.hash(password) if password is not None else None
+            password_hash=bcrypt.hash(password) if password is not None and len(password)>0 else None
         )
         session.add(game)
         try:
