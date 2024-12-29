@@ -2,8 +2,8 @@ extends Control
 
 signal enter_game()
 
-var token_manager : Node
-var scene_manager : Node
+@onready var token_manager : Node = get_node("/root/Main/TokenManager")
+@onready var scene_manager : Node = get_node("/root/Main/SceneManager")
 
 @onready var search_http_request : HTTPRequest = $VBoxContainer/HBoxContainer/SearchButton/HTTPRequest
 @onready var refresh_http_request : HTTPRequest = $VBoxContainer/HBoxContainer/RefreshButton/HTTPRequest
@@ -21,8 +21,6 @@ var scene_manager : Node
 var rooms : Array
 
 func _ready() -> void:
-	token_manager=get_node("/root/Main/TokenManager")
-	scene_manager=get_node("/root/Main/SceneManager")
 	enter_game.connect(scene_manager._on_lobby_enter_game)
 
 func render()->void:
@@ -43,6 +41,24 @@ func refresh()->void:
 
 func _validate_game(game : Dictionary) -> bool:
 	return game.has("id") and game.has("state") and game.has("name") and game.has("has_password") and game.has("player1") and game.has("player2")
+
+func _http_response_preprocess(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray, callback: Callable, error_callback: Callable) -> void:
+	if response_code != HTTPClient.RESPONSE_OK and response_code != HTTPClient.RESPONSE_CREATED:
+		var data = JSON.parse_string(body.get_string_from_utf8())
+		var msg = "Unexpected error occurred. retry later."
+		if data == null:
+			msg = body.get_string_from_utf8()
+		elif data.has("detail"):
+			var detail = data["detail"]
+			if detail is Array and detail.size() > 0 and detail[0].has("msg"):
+				msg = detail[0]["msg"] # 422
+			else:
+				msg = detail # 400,401,403,...etc
+		push_error("msg:"+msg)
+		error_callback.callv([msg])
+	else:
+		var response = JSON.parse_string(body.get_string_from_utf8())
+		callback.callv([response])
 
 func _on_refresh_button_pressed() -> void:
 	refresh()
@@ -70,38 +86,22 @@ func _on_create_panel_create_button_pressed() -> void:
 		push_error("error occurred while http request", error)
 
 func _on_create_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
-	if response_code != HTTPClient.RESPONSE_OK and response_code != HTTPClient.RESPONSE_CREATED:
-		var data = JSON.parse_string(body.get_string_from_utf8())
-		var msg = "Unexpected error occurred. retry later."
-		if data.has("detail"):
-			var detail = data["detail"]
-			if detail is Array and detail.size() > 0 and detail[0].has("msg"):
-				msg = detail[0]["msg"]
-			else:
-				msg = detail
-		push_error(msg)
-	else:
-		var response = JSON.parse_string(body.get_string_from_utf8())
-		enter_game.emit()
+	_http_response_preprocess(result, response_code, headers, body,
+	func(response):
+		enter_game.emit(),
+	func(msg):pass
+	)
 
 func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
-	if response_code != HTTPClient.RESPONSE_OK and response_code != HTTPClient.RESPONSE_CREATED:
-		var data = JSON.parse_string(body.get_string_from_utf8())
-		var msg = "Unexpected error occurred. retry later."
-		if data.has("detail"):
-			var detail = data["detail"]
-			if detail is Array and detail.size() > 0 and detail[0].has("msg"):
-				msg = detail[0]["msg"]
-			else:
-				msg = detail
-		push_error(msg)
-	else:
-		var response_games = JSON.parse_string(body.get_string_from_utf8())
+	_http_response_preprocess(result, response_code, headers, body,
+	func(response_games):
 		for game in response_games:
 			if not _validate_game(game):
 				return
 		rooms = response_games
-		render()
+		render(),
+	func(msg):pass
+	)
 
 func _on_join_button_pressed(id : int, locked : bool):
 	var url = "http://"+Constants.HOST+Constants.PORT_WITH_COLON+Constants.ENTER_GAME_URL+"/"+str(id)
@@ -127,17 +127,8 @@ func _on_join_panel_cancel_button_pressed() -> void:
 		)
 
 func _on_join_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
-	if response_code != HTTPClient.RESPONSE_OK and response_code != HTTPClient.RESPONSE_CREATED:
-		var data = JSON.parse_string(body.get_string_from_utf8())
-		var msg = "Unexpected error occurred. retry later."
-		if data.has("detail"):
-			var detail = data["detail"]
-			if detail is Array and detail.size() > 0 and detail[0].has("msg"):
-				msg = detail[0]["msg"]
-			else:
-				msg = detail
-		push_error(msg)
-	else:
-		var response = JSON.parse_string(body.get_string_from_utf8())
-		print(response)
-		enter_game.emit()
+	_http_response_preprocess(result, response_code, headers, body,
+	func(response):
+		enter_game.emit(),
+	func(msg):pass
+	)

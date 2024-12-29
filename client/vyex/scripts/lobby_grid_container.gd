@@ -1,12 +1,9 @@
 extends GridContainer
 
-var lobby_manager : Control
+@onready var lobby_manager : Control = get_parent().get_parent().get_parent().get_parent()
 
-const PADDING = 20
-const COLUMNS = 13
-
-func _ready() -> void:
-	lobby_manager=get_parent().get_parent().get_parent().get_parent()
+const PADDING := 20
+const COLUMNS := 13
 
 func add_row(id: int, name : String, locked : bool, player1 : String, player2 : String) -> void:
 	var pads : Array[Control] = []

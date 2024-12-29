@@ -5,24 +5,24 @@ signal perspective_changed(is_first : bool)
 signal top_view()
 signal top_view_animation_ended()
 
-const MOVE_ACC = 1.0
-const ROT_ACC = 0.2
+const MOVE_ACC := 1.0
+const ROT_ACC := 0.2
 
-const MOVE_SPD_MAX = 10.0
-const ROT_SPD_MAX = 2.0
+const MOVE_SPD_MAX := 10.0
+const ROT_SPD_MAX := 2.0
 
-const MOVE_SPD_EPS = 1.1
-const ROT_SPD_EPS = 0.21
+const MOVE_SPD_EPS := 1.1
+const ROT_SPD_EPS := 0.21
 
-const ROT_DIR_MAX = 0.99
+const ROT_DIR_MAX := 0.99
 
-const MOUSE_MOVE_SPD = 0.3
-const MOUSE_WHEEL_UNIT = 30
+const MOUSE_MOVE_SPD := 0.3
+const MOUSE_WHEEL_UNIT := 30
 
 var move_spd := Vector3(0,0,0)
 var rot_spd := Vector2(0,0)
 
-var cursor_pivot : Node3D
+@onready var cursor_pivot : Node3D = get_parent()
 var cursor_viewport_pos : Vector2
 
 enum MouseDragMode { IDLE, MOVE, ROTATE, ZOOM }
@@ -41,7 +41,6 @@ const TOP_VIEW_CAMERA_POSITION := Vector3.UP*20
 
 
 func _ready() -> void:
-	cursor_pivot = get_parent()
 	perspective_first=false
 	top_view_animation_progress=TOP_VIEW_ANIMATION_DURATION
 

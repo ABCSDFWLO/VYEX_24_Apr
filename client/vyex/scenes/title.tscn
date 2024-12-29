@@ -59,16 +59,16 @@ mouse_force_pass_scroll_events = false
 
 [node name="panel" type="Control" parent="LoginForm"]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -500.0
+offset_left = 76.0
 offset_top = -150.0
-offset_right = -100.0
+offset_right = 476.0
 offset_bottom = 150.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
@@ -160,16 +160,16 @@ mouse_force_pass_scroll_events = false
 
 [node name="panel" type="Control" parent="RegisterForm"]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -500.0
+offset_left = 76.0
 offset_top = -250.0
-offset_right = -100.0
+offset_right = 476.0
 offset_bottom = 250.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
@@ -296,16 +296,16 @@ mouse_force_pass_scroll_events = false
 
 [node name="panel" type="Control" parent="RegisterVerifyForm"]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -500.0
+offset_left = 76.0
 offset_top = -200.0
-offset_right = -100.0
+offset_right = 476.0
 offset_bottom = 200.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("3_tm66w")

@@ -3,10 +3,19 @@ extends Control
 const IDLE_COLOR = Color(1,1,1,0.5)
 const HIGHLIGHTED_COLOR = Color(1,0,0,1)
 
-var cursor : Array[Control]
+@onready var cursor : Array[Control] = [
+	$CursorUpLeft,
+	$CursorUp,
+	$CursorUpRight,
+	$CursorLeft,
+	$CursorIn,
+	$CursorRight,
+	$CursorDownLeft,
+	$CursorDown,
+	$CursorDownRight
+	]
 
 func _ready() -> void:
-	cursor = [$CursorUpLeft,$CursorUp,$CursorUpRight,$CursorLeft,$CursorIn,$CursorRight,$CursorDownLeft,$CursorDown,$CursorDownRight]
 	self.modulate = IDLE_COLOR
 
 func _input(event: InputEvent) -> void:
