@@ -1,6 +1,7 @@
 extends GridContainer
 
 const PADDING = 20
+const COLUMNS = 13
 
 func add_new_row(name : String, locked : bool, player1 : String, player2 : String) -> void:
 	var pads : Array[Control] = []
@@ -35,18 +36,28 @@ func add_new_row(name : String, locked : bool, player1 : String, player2 : Strin
 
 func delete_row(index : int)->void:
 	var child_count = self.get_child_count()
-	if index+12 > child_count:
-		push_error("delete_row : index out of range")
+	if index < 1 or index > child_count % COLUMNS:
+		push_error("delete_row : index out of range ["+str(index)+"]")
 		return
 	else:
-		for i in range(13):
-			var child = self.get_child(index*13)
+		for i in range(COLUMNS):
+			var child = self.get_child(index*COLUMNS)
 			self.remove_child(child)
 			child.queue_free()
 
+func move_row(from : int, to : int)->void:
+	var child_count = self.get_child_count()
+	if from < 1 or from > child_count % COLUMNS or to < 1 or to > child_count % COLUMNS:
+		push_error("move_row : index out of range ["+str(from)+","+str(to)+"]")
+		return
+	else:
+		for i in range(COLUMNS):
+			var child = self.get_child((from+1)*COLUMNS-i)
+			self.move_child(child,to*COLUMNS)
+			
 func clear()->void:
 	var child_count = self.get_child_count()
-	for i in range(13,child_count):
+	for i in range(COLUMNS,child_count):
 		var child = self.get_child(13)
 		self.remove_child(child)
 		child.queue_free()
