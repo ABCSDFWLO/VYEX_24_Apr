@@ -5,19 +5,6 @@ signal perspective_changed(is_first : bool)
 signal top_view()
 signal top_view_animation_ended()
 
-const MOVE_ACC := 1.0
-const ROT_ACC := 0.2
-
-const MOVE_SPD_MAX := 10.0
-const ROT_SPD_MAX := 2.0
-
-const MOVE_SPD_EPS := 1.1
-const ROT_SPD_EPS := 0.21
-
-const ROT_DIR_MAX := 0.99
-
-const MOUSE_MOVE_SPD := 0.3
-const MOUSE_WHEEL_UNIT := 30
 
 var move_spd := Vector3(0,0,0)
 var rot_spd := Vector2(0,0)
@@ -34,15 +21,11 @@ var mouse_zoom_sensitivity := 0.05
 var mouse_vector_sum := Vector3(0,0,0)
 
 var top_view_animation_progress := 0.0
-const TOP_VIEW_ANIMATION_DURATION := 0.5
-const TOP_VIEW_CURSOR_PIVOT_POSITION := Vector3(9.625,0,9.625)
-const TOP_VIEW_CAMERA_EULER_ANGLE := Vector3(-PI*0.499,0,0) #0.5 freezes the move
-const TOP_VIEW_CAMERA_POSITION := Vector3.UP*20
 
 
 func _ready() -> void:
 	perspective_first=false
-	top_view_animation_progress=TOP_VIEW_ANIMATION_DURATION
+	top_view_animation_progress=Constants.TOP_VIEW_ANIMATION_DURATION
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("move_with_drag"):
@@ -91,15 +74,15 @@ func _input(event: InputEvent) -> void:
 		#if self.projection==Camera3D.PROJECTION_ORTHOGONAL:
 			#self.size-=0.5
 		#else:
-		self.translate(Vector3(0,0,-mouse_zoom_sensitivity*MOUSE_WHEEL_UNIT))
+		self.translate(Vector3(0,0,-mouse_zoom_sensitivity*Constants.MOUSE_WHEEL_UNIT))
 	elif event.is_action_released("wheel_down"):
 		#if self.projection==Camera3D.PROJECTION_ORTHOGONAL:
 			#self.size+=0.5
 		#else:
-		self.translate(Vector3(0,0,+mouse_zoom_sensitivity*MOUSE_WHEEL_UNIT))
+		self.translate(Vector3(0,0,+mouse_zoom_sensitivity*Constants.MOUSE_WHEEL_UNIT))
 
 func _process(delta: float) -> void:
-	var mouse_vector :Vector3 = mouse_vector_sum*MOUSE_MOVE_SPD
+	var mouse_vector :Vector3 = mouse_vector_sum*Constants.MOUSE_MOVE_SPD
 	if top_view_animation_progress>0:
 		top_view_animation(delta)
 	elif perspective_first :
@@ -112,99 +95,99 @@ func _process(delta: float) -> void:
 
 func move_first(delta : float) -> void:
 	if Input.is_action_pressed("move_left"):
-		if move_spd.x< -MOVE_SPD_MAX:
-			move_spd.x = -MOVE_SPD_MAX
+		if move_spd.x< -Constants.MOVE_SPD_MAX:
+			move_spd.x = -Constants.MOVE_SPD_MAX
 		else:
-			move_spd.x -= MOVE_ACC
+			move_spd.x -= Constants.MOVE_ACC
 	elif Input.is_action_pressed("move_right"):
-		if move_spd.x > MOVE_SPD_MAX:
-			move_spd.x = MOVE_SPD_MAX
+		if move_spd.x > Constants.MOVE_SPD_MAX:
+			move_spd.x = Constants.MOVE_SPD_MAX
 		else:
-			move_spd.x += MOVE_ACC
+			move_spd.x += Constants.MOVE_ACC
 	else:
-		if move_spd.x < MOVE_SPD_EPS and move_spd.x > -MOVE_SPD_EPS:
+		if move_spd.x < Constants.MOVE_SPD_EPS and move_spd.x > -Constants.MOVE_SPD_EPS:
 			move_spd.x = 0
 		elif move_spd.x > 0:
-			move_spd.x -= MOVE_ACC
+			move_spd.x -= Constants.MOVE_ACC
 		elif move_spd.x < 0:
-			move_spd.x += MOVE_ACC
+			move_spd.x += Constants.MOVE_ACC
 	
 	if Input.is_action_pressed("move_front"):
-		if move_spd.z < -MOVE_SPD_MAX:
-			move_spd.z = -MOVE_SPD_MAX
+		if move_spd.z < -Constants.MOVE_SPD_MAX:
+			move_spd.z = -Constants.MOVE_SPD_MAX
 		else:
-			move_spd.z -= MOVE_ACC
+			move_spd.z -= Constants.MOVE_ACC
 	elif Input.is_action_pressed("move_back"):
-		if move_spd.z > MOVE_SPD_MAX:
-			move_spd.z = MOVE_SPD_MAX
+		if move_spd.z > Constants.MOVE_SPD_MAX:
+			move_spd.z = Constants.MOVE_SPD_MAX
 		else:
-			move_spd.z += MOVE_ACC
+			move_spd.z += Constants.MOVE_ACC
 	else:
-		if move_spd.z < MOVE_SPD_EPS and move_spd.z > -MOVE_SPD_EPS:
+		if move_spd.z < Constants.MOVE_SPD_EPS and move_spd.z > -Constants.MOVE_SPD_EPS:
 			move_spd.z = 0
 		elif move_spd.z > 0:
-			move_spd.z -= MOVE_ACC
+			move_spd.z -= Constants.MOVE_ACC
 		elif move_spd.z < 0:
-			move_spd.z += MOVE_ACC
+			move_spd.z += Constants.MOVE_ACC
 
 	if Input.is_action_pressed("move_up"):
-		if move_spd.y > MOVE_SPD_MAX:
-			move_spd.y = MOVE_SPD_MAX
+		if move_spd.y > Constants.MOVE_SPD_MAX:
+			move_spd.y = Constants.MOVE_SPD_MAX
 		else:
-			move_spd.y += MOVE_ACC
+			move_spd.y += Constants.MOVE_ACC
 	elif Input.is_action_pressed("move_down"):
-		if move_spd.y < -MOVE_SPD_MAX:
-			move_spd.y = -MOVE_SPD_MAX
+		if move_spd.y < -Constants.MOVE_SPD_MAX:
+			move_spd.y = -Constants.MOVE_SPD_MAX
 		else:
-			move_spd.y -= MOVE_ACC
+			move_spd.y -= Constants.MOVE_ACC
 	else:
-		if move_spd.y < MOVE_SPD_EPS and move_spd.y > -MOVE_SPD_EPS:
+		if move_spd.y < Constants.MOVE_SPD_EPS and move_spd.y > -Constants.MOVE_SPD_EPS:
 			move_spd.y = 0
 		elif move_spd.y > 0:
-			move_spd.y -= MOVE_ACC
+			move_spd.y -= Constants.MOVE_ACC
 		elif move_spd.y < 0:
-			move_spd.y += MOVE_ACC
+			move_spd.y += Constants.MOVE_ACC
 	
 	if Input.is_action_pressed("rotate_x_clock"):
-		if rot_spd.x < -ROT_SPD_MAX:
-			rot_spd.x = -ROT_SPD_MAX
+		if rot_spd.x < -Constants.ROT_SPD_MAX:
+			rot_spd.x = -Constants.ROT_SPD_MAX
 		else:
-			rot_spd.x -= ROT_ACC
+			rot_spd.x -= Constants.ROT_ACC
 	elif Input.is_action_pressed("rotate_x_counterclock"):
-		if rot_spd.x > ROT_SPD_MAX:
-			rot_spd.x = ROT_SPD_MAX
+		if rot_spd.x > Constants.ROT_SPD_MAX:
+			rot_spd.x = Constants.ROT_SPD_MAX
 		else:
-			rot_spd.x += ROT_ACC
+			rot_spd.x += Constants.ROT_ACC
 	else:
-		if rot_spd.x < ROT_SPD_EPS and rot_spd.x > -ROT_SPD_EPS:
+		if rot_spd.x < Constants.ROT_SPD_EPS and rot_spd.x > -Constants.ROT_SPD_EPS:
 			rot_spd.x = 0
 		elif rot_spd.x > 0:
-			rot_spd.x -= ROT_ACC
+			rot_spd.x -= Constants.ROT_ACC
 		elif rot_spd.x < 0:
-			rot_spd.x += ROT_ACC
+			rot_spd.x += Constants.ROT_ACC
 	
 	if Input.is_action_pressed("rotate_y_clock"):
-		if rot_spd.y > ROT_SPD_MAX:
-			rot_spd.y = ROT_SPD_MAX
+		if rot_spd.y > Constants.ROT_SPD_MAX:
+			rot_spd.y = Constants.ROT_SPD_MAX
 		else:
-			rot_spd.y += ROT_ACC
+			rot_spd.y += Constants.ROT_ACC
 	elif Input.is_action_pressed("rotate_y_counterclock"):
-		if rot_spd.y < -ROT_SPD_MAX:
-			rot_spd.y = -ROT_SPD_MAX
+		if rot_spd.y < -Constants.ROT_SPD_MAX:
+			rot_spd.y = -Constants.ROT_SPD_MAX
 		else:
-			rot_spd.y -= ROT_ACC
+			rot_spd.y -= Constants.ROT_ACC
 	else:
-		if rot_spd.y < ROT_SPD_EPS and rot_spd.y > -ROT_SPD_EPS:
+		if rot_spd.y < Constants.ROT_SPD_EPS and rot_spd.y > -Constants.ROT_SPD_EPS:
 			rot_spd.y = 0
 		elif rot_spd.y > 0:
-			rot_spd.y -= ROT_ACC
+			rot_spd.y -= Constants.ROT_ACC
 		elif rot_spd.y < 0:
-			rot_spd.y += ROT_ACC
+			rot_spd.y += Constants.ROT_ACC
 
 	var direction = self.transform.basis.z.normalized()
-	if direction.y >= ROT_DIR_MAX and rot_spd.y < 0:
+	if direction.y >= Constants.ROT_DIR_MAX and rot_spd.y < 0:
 		rot_spd.y = 0
-	elif direction.y <= -ROT_DIR_MAX and rot_spd.y > 0:
+	elif direction.y <= -Constants.ROT_DIR_MAX and rot_spd.y > 0:
 		rot_spd.y = 0
 		
 	self.rotate(Vector3.UP, rot_spd.x * delta)
@@ -214,100 +197,100 @@ func move_first(delta : float) -> void:
 	self.global_translate(Vector3(direction.x,0,direction.z).normalized() * move_spd.z * delta)
 func move_third(delta : float) -> void:
 	if Input.is_action_pressed("move_left"):
-		if move_spd.x< -MOVE_SPD_MAX:
-			move_spd.x = -MOVE_SPD_MAX
+		if move_spd.x< -Constants.MOVE_SPD_MAX:
+			move_spd.x = -Constants.MOVE_SPD_MAX
 		else:
-			move_spd.x -= MOVE_ACC
+			move_spd.x -= Constants.MOVE_ACC
 	elif Input.is_action_pressed("move_right"):
-		if move_spd.x > MOVE_SPD_MAX:
-			move_spd.x = MOVE_SPD_MAX
+		if move_spd.x > Constants.MOVE_SPD_MAX:
+			move_spd.x = Constants.MOVE_SPD_MAX
 		else:
-			move_spd.x += MOVE_ACC
+			move_spd.x += Constants.MOVE_ACC
 	else:
-		if move_spd.x < MOVE_SPD_EPS and move_spd.x > -MOVE_SPD_EPS:
+		if move_spd.x < Constants.MOVE_SPD_EPS and move_spd.x > -Constants.MOVE_SPD_EPS:
 			move_spd.x = 0
 		elif move_spd.x > 0:
-			move_spd.x -= MOVE_ACC
+			move_spd.x -= Constants.MOVE_ACC
 		elif move_spd.x < 0:
-			move_spd.x += MOVE_ACC
+			move_spd.x += Constants.MOVE_ACC
 	
 	if Input.is_action_pressed("move_front"):
-		if move_spd.z < -MOVE_SPD_MAX:
-			move_spd.z = -MOVE_SPD_MAX
+		if move_spd.z < -Constants.MOVE_SPD_MAX:
+			move_spd.z = -Constants.MOVE_SPD_MAX
 		else:
-			move_spd.z -= MOVE_ACC
+			move_spd.z -= Constants.MOVE_ACC
 	elif Input.is_action_pressed("move_back"):
-		if move_spd.z > MOVE_SPD_MAX:
-			move_spd.z = MOVE_SPD_MAX
+		if move_spd.z > Constants.MOVE_SPD_MAX:
+			move_spd.z = Constants.MOVE_SPD_MAX
 		else:
-			move_spd.z += MOVE_ACC
+			move_spd.z += Constants.MOVE_ACC
 	else:
-		if move_spd.z < MOVE_SPD_EPS and move_spd.z > -MOVE_SPD_EPS:
+		if move_spd.z < Constants.MOVE_SPD_EPS and move_spd.z > -Constants.MOVE_SPD_EPS:
 			move_spd.z = 0
 		elif move_spd.z > 0:
-			move_spd.z -= MOVE_ACC
+			move_spd.z -= Constants.MOVE_ACC
 		elif move_spd.z < 0:
-			move_spd.z += MOVE_ACC
+			move_spd.z += Constants.MOVE_ACC
 
 	if Input.is_action_pressed("move_up"):
-		if move_spd.y > MOVE_SPD_MAX:
-			move_spd.y = MOVE_SPD_MAX
+		if move_spd.y > Constants.MOVE_SPD_MAX:
+			move_spd.y = Constants.MOVE_SPD_MAX
 		else:
-			move_spd.y += MOVE_ACC
+			move_spd.y += Constants.MOVE_ACC
 	elif Input.is_action_pressed("move_down"):
-		if move_spd.y < -MOVE_SPD_MAX:
-			move_spd.y = -MOVE_SPD_MAX
+		if move_spd.y < -Constants.MOVE_SPD_MAX:
+			move_spd.y = -Constants.MOVE_SPD_MAX
 		else:
-			move_spd.y -= MOVE_ACC
+			move_spd.y -= Constants.MOVE_ACC
 	else:
-		if move_spd.y < MOVE_SPD_EPS and move_spd.y > -MOVE_SPD_EPS:
+		if move_spd.y < Constants.MOVE_SPD_EPS and move_spd.y > -Constants.MOVE_SPD_EPS:
 			move_spd.y = 0
 		elif move_spd.y > 0:
-			move_spd.y -= MOVE_ACC
+			move_spd.y -= Constants.MOVE_ACC
 		elif move_spd.y < 0:
-			move_spd.y += MOVE_ACC
+			move_spd.y += Constants.MOVE_ACC
 	
 	if Input.is_action_pressed("rotate_x_clock"):
-		if rot_spd.x < -ROT_SPD_MAX:
-			rot_spd.x = -ROT_SPD_MAX
+		if rot_spd.x < -Constants.ROT_SPD_MAX:
+			rot_spd.x = -Constants.ROT_SPD_MAX
 		else:
-			rot_spd.x -= ROT_ACC
+			rot_spd.x -= Constants.ROT_ACC
 	elif Input.is_action_pressed("rotate_x_counterclock"):
-		if rot_spd.x > ROT_SPD_MAX:
-			rot_spd.x = ROT_SPD_MAX
+		if rot_spd.x > Constants.ROT_SPD_MAX:
+			rot_spd.x = Constants.ROT_SPD_MAX
 		else:
-			rot_spd.x += ROT_ACC
+			rot_spd.x += Constants.ROT_ACC
 	else:
-		if rot_spd.x < ROT_SPD_EPS and rot_spd.x > -ROT_SPD_EPS:
+		if rot_spd.x < Constants.ROT_SPD_EPS and rot_spd.x > -Constants.ROT_SPD_EPS:
 			rot_spd.x = 0
 		elif rot_spd.x > 0:
-			rot_spd.x -= ROT_ACC
+			rot_spd.x -= Constants.ROT_ACC
 		elif rot_spd.x < 0:
-			rot_spd.x += ROT_ACC
+			rot_spd.x += Constants.ROT_ACC
 	
 	if Input.is_action_pressed("rotate_y_clock"):
-		if rot_spd.y > ROT_SPD_MAX:
-			rot_spd.y = ROT_SPD_MAX
+		if rot_spd.y > Constants.ROT_SPD_MAX:
+			rot_spd.y = Constants.ROT_SPD_MAX
 		else:
-			rot_spd.y += ROT_ACC
+			rot_spd.y += Constants.ROT_ACC
 	elif Input.is_action_pressed("rotate_y_counterclock"):
-		if rot_spd.y < -ROT_SPD_MAX:
-			rot_spd.y = -ROT_SPD_MAX
+		if rot_spd.y < -Constants.ROT_SPD_MAX:
+			rot_spd.y = -Constants.ROT_SPD_MAX
 		else:
-			rot_spd.y -= ROT_ACC
+			rot_spd.y -= Constants.ROT_ACC
 	else:
-		if rot_spd.y < ROT_SPD_EPS and rot_spd.y > -ROT_SPD_EPS:
+		if rot_spd.y < Constants.ROT_SPD_EPS and rot_spd.y > -Constants.ROT_SPD_EPS:
 			rot_spd.y = 0
 		elif rot_spd.y > 0:
-			rot_spd.y -= ROT_ACC
+			rot_spd.y -= Constants.ROT_ACC
 		elif rot_spd.y < 0:
-			rot_spd.y += ROT_ACC
+			rot_spd.y += Constants.ROT_ACC
 
 	var direction = self.transform.basis.z.normalized()
 	var distance = self.position.length()
-	if direction.y >= ROT_DIR_MAX and rot_spd.y < 0:
+	if direction.y >= Constants.ROT_DIR_MAX and rot_spd.y < 0:
 		rot_spd.y = 0
-	elif direction.y <= -ROT_DIR_MAX and rot_spd.y > 0:
+	elif direction.y <= -Constants.ROT_DIR_MAX and rot_spd.y > 0:
 		rot_spd.y = 0
 		
 	cursor_pivot.translate(Vector3(direction.z,0,-direction.x).normalized() * move_spd.x * delta)
@@ -330,9 +313,9 @@ func mouse_first(mouse_vector : Vector3) -> void:
 				self.translate(mouse_vector)
 			MouseDragMode.ROTATE:
 				var direction = self.transform.basis.z.normalized()
-				if direction.y >= ROT_DIR_MAX and mouse_vector.y < 0:
+				if direction.y >= Constants.ROT_DIR_MAX and mouse_vector.y < 0:
 					mouse_vector.y = 0
-				elif direction.y <= -ROT_DIR_MAX and mouse_vector.y > 0:
+				elif direction.y <= -Constants.ROT_DIR_MAX and mouse_vector.y > 0:
 					mouse_vector.y = 0
 				self.rotate(Vector3.UP, mouse_vector.x)
 				self.rotate(self.transform.basis.x.normalized(),mouse_vector.y)
@@ -350,9 +333,9 @@ func mouse_third(mouse_vector : Vector3) -> void:
 			MouseDragMode.ROTATE:
 				var direction = self.transform.basis.z.normalized()
 				var distance = self.position.length()
-				if direction.y >= ROT_DIR_MAX and mouse_vector.y < 0:
+				if direction.y >= Constants.ROT_DIR_MAX and mouse_vector.y < 0:
 					mouse_vector.y = 0
-				elif direction.y <= -ROT_DIR_MAX and mouse_vector.y > 0:
+				elif direction.y <= -Constants.ROT_DIR_MAX and mouse_vector.y > 0:
 					mouse_vector.y = 0
 				self.rotate(Vector3.UP, mouse_vector.x)
 				self.rotate(self.transform.basis.x.normalized(),mouse_vector.y)
@@ -373,18 +356,18 @@ func render_cursor() -> void:
 
 func top_view_animation(delta : float) -> void:
 	top_view_animation_progress -= delta
-	var lerp_progress := (TOP_VIEW_ANIMATION_DURATION-top_view_animation_progress)/TOP_VIEW_ANIMATION_DURATION
+	var lerp_progress := (Constants.TOP_VIEW_ANIMATION_DURATION-top_view_animation_progress)/Constants.TOP_VIEW_ANIMATION_DURATION
 	
-	var camera_target_rotation := Quaternion.from_euler(TOP_VIEW_CAMERA_EULER_ANGLE)
+	var camera_target_rotation := Quaternion.from_euler(Constants.TOP_VIEW_CAMERA_EULER_ANGLE)
 	self.quaternion=self.quaternion.slerp(camera_target_rotation,lerp_progress)
-	self.position = self.position.lerp(TOP_VIEW_CAMERA_POSITION, lerp_progress)
-	cursor_pivot.position = cursor_pivot.position.lerp(TOP_VIEW_CURSOR_PIVOT_POSITION, lerp_progress)
+	self.position = self.position.lerp(Constants.TOP_VIEW_CAMERA_POSITION, lerp_progress)
+	cursor_pivot.position = cursor_pivot.position.lerp(Constants.TOP_VIEW_CURSOR_PIVOT_POSITION, lerp_progress)
 	
 	if top_view_animation_progress <0 :
 		top_view_animation_ended.emit()
 
 
 func _on_top_view_icon_button_pressed() -> void:
-	top_view_animation_progress=TOP_VIEW_ANIMATION_DURATION
+	top_view_animation_progress=Constants.TOP_VIEW_ANIMATION_DURATION
 func _on_camera_lock_on_cursor_icon_button_pressed() -> void:
 	perspective_first=not perspective_first
