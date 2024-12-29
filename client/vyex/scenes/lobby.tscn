@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://lh7dfbb2ctdj"]
+[gd_scene load_steps=4 format=3 uid="uid://lh7dfbb2ctdj"]
 
 [ext_resource type="Texture2D" uid="uid://c3xr8fplwegd2" path="res://assets/sprites/logo.png" id="2_fvmej"]
 [ext_resource type="Texture2D" uid="uid://bxfeshubktxqe" path="res://assets/sprites/logo_blur.png" id="2_pu4ud"]
@@ -79,7 +79,7 @@ size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/PanelContainer"]
 layout_mode = 2
-columns = 11
+columns = 13
 
 [node name="padding1" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
@@ -90,7 +90,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "lock
 "
-horizontal_alignment = 1
 
 [node name="padding2" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
@@ -99,10 +98,18 @@ layout_mode = 2
 [node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "player1"
-horizontal_alignment = 1
+text = "Name"
 
 [node name="padding3" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Label6" type="Label" parent="VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "player1"
+
+[node name="padding4" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
@@ -110,9 +117,8 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 text = "vs"
-horizontal_alignment = 1
 
-[node name="padding4" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding5" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
@@ -120,9 +126,8 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 text = "player2"
-horizontal_alignment = 1
 
-[node name="padding5" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding6" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
@@ -130,6 +135,6 @@ layout_mode = 2
 layout_mode = 2
 text = "join"
 
-[node name="padding6" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
+[node name="padding7" type="Control" parent="VBoxContainer/PanelContainer/GridContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
