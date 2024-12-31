@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://xjllm0t2kc75"]
+
+[ext_resource type="PackedScene" uid="uid://bs7e53hou1wp4" path="res://assets/3d_models/board2_3.blend" id="1_yvd2c"]
+[ext_resource type="PackedScene" uid="uid://diugtcylujhai" path="res://assets/3d_models/board2_4.blend" id="2_s4mpq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4nx7s"]
+size = Vector3(2.75, 2.25, 2.75)
+
+[node name="Kann" type="StaticBody3D"]
+
+[node name="Bright" parent="." instance=ExtResource("1_yvd2c")]
+
+[node name="Dark" parent="." instance=ExtResource("2_s4mpq")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_4nx7s")

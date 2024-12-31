@@ -22,6 +22,7 @@ var mouse_zoom_sensitivity := 0.05
 var mouse_vector_sum := Vector3(0,0,0)
 
 var top_view_animation_progress := 0.0
+var top_view_cursor_pivot_position : Vector3
 
 var ray_from := Vector3.ZERO
 var ray_to := Vector3.ZERO
@@ -385,7 +386,7 @@ func top_view_animation(delta : float) -> void:
 	var camera_target_rotation := Quaternion.from_euler(Constants.TOP_VIEW_CAMERA_EULER_ANGLE)
 	self.quaternion=self.quaternion.slerp(camera_target_rotation,lerp_progress)
 	self.position = self.position.lerp(Constants.TOP_VIEW_CAMERA_POSITION, lerp_progress)
-	cursor_pivot.position = cursor_pivot.position.lerp(Constants.TOP_VIEW_CURSOR_PIVOT_POSITION, lerp_progress)
+	cursor_pivot.position = cursor_pivot.position.lerp(top_view_cursor_pivot_position, lerp_progress)
 	
 	if top_view_animation_progress <0 :
 		top_view_animation_ended.emit()
@@ -395,3 +396,5 @@ func _on_top_view_icon_button_pressed() -> void:
 	top_view_animation_progress=Constants.TOP_VIEW_ANIMATION_DURATION
 func _on_camera_lock_on_cursor_icon_button_pressed() -> void:
 	perspective_first=not perspective_first
+func _on_pann_cursor_origin_ready(pos: Vector3) -> void:
+	top_view_cursor_pivot_position = pos

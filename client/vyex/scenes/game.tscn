@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://cyp6xektf10o4"]
+[gd_scene load_steps=13 format=3 uid="uid://cyp6xektf10o4"]
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_8ynu1"]
 [ext_resource type="Texture2D" uid="uid://bhx6fkweufgcq" path="res://assets/sprites/cursor.png" id="2_66jnn"]
 [ext_resource type="Sky" uid="uid://bntd4wo5qrfmf" path="res://scenes/gradsky.tres" id="2_bet2t"]
 [ext_resource type="Script" path="res://scripts/cursor.gd" id="11_imup5"]
+[ext_resource type="Script" path="res://scripts/pann.gd" id="12_hd345"]
 [ext_resource type="Texture2D" uid="uid://xme1hrydjkrs" path="res://assets/sprites/cursor_out.png" id="12_iii3n"]
 [ext_resource type="Texture2D" uid="uid://c8qpmu0wqto4h" path="res://assets/sprites/top_view.png" id="14_5xit5"]
 [ext_resource type="Script" path="res://scripts/top_view_icon_button.gd" id="15_ql04k"]
@@ -312,6 +313,10 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("17_klxg5")
 
+[node name="Pann" type="Node3D" parent="."]
+script = ExtResource("12_hd345")
+initial_state = Array[Array]([[true, true, true, true, true, false, false], [true, true, true, true, true, true, false], [true, true, true, true, true, true, true], [true, true, true, true, true, true, true], [true, true, true, true, true, true, true], [false, true, true, true, true, true, true], [false, false, true, true, true, true, true]])
+
 [connection signal="cursor_viewport_pos_changed" from="CursorPivot/Camera3D" to="Control/Cursor" method="_on_camera_3d_cursor_viewport_pos_changed"]
 [connection signal="perspective_changed" from="CursorPivot/Camera3D" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_camera_3d_perspective_changed"]
 [connection signal="top_view" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_top_view"]
@@ -328,3 +333,4 @@ script = ExtResource("17_klxg5")
 [connection signal="mouse_exited" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="Control/IconPanel/CameraLockOnCursorIconButton" to="CursorPivot/Camera3D" method="_on_camera_lock_on_cursor_icon_button_pressed"]
 [connection signal="pressed" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_pressed"]
+[connection signal="cursor_origin_ready" from="Pann" to="CursorPivot/Camera3D" method="_on_pann_cursor_origin_ready"]
