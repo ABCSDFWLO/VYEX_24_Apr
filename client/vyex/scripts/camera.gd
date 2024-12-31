@@ -4,12 +4,13 @@ signal cursor_viewport_pos_changed(pos : Vector2)
 signal perspective_changed(is_first : bool)
 signal top_view()
 signal top_view_animation_ended()
+signal ray_hit(pos : Vector3)
 
+@onready var cursor_pivot : Node3D = get_parent()
 
 var move_spd := Vector3(0,0,0)
 var rot_spd := Vector2(0,0)
 
-@onready var cursor_pivot : Node3D = get_parent()
 var cursor_viewport_pos : Vector2
 
 enum MouseDragMode { IDLE, MOVE, ROTATE, ZOOM }
@@ -22,6 +23,9 @@ var mouse_vector_sum := Vector3(0,0,0)
 
 var top_view_animation_progress := 0.0
 
+var ray_from := Vector3.ZERO
+var ray_to := Vector3.ZERO
+var ray_cast_pending = false
 
 func _ready() -> void:
 	perspective_first=false
@@ -34,6 +38,11 @@ func _input(event: InputEvent) -> void:
 		mouse_drag_mode = MouseDragMode.ROTATE
 	elif event.is_action_pressed("zoom_with_drag"):
 		mouse_drag_mode = MouseDragMode.ZOOM
+	
+	if event.is_action_pressed("click"):
+		ray_from = self.project_ray_origin(event.position)
+		ray_to = ray_from + self.project_ray_normal(event.position) * Constants.RAY_LENGTH
+		ray_cast_pending = true
 	
 	if event.is_action_released("move_with_drag") \
 	or event.is_action_released("rotate_with_drag") \
@@ -92,6 +101,9 @@ func _process(delta: float) -> void:
 		move_third(delta)
 		mouse_third(mouse_vector)
 	render_cursor()
+
+func _physics_process(delta: float) -> void:
+	ray_cast()
 
 func move_first(delta : float) -> void:
 	if Input.is_action_pressed("move_left"):
@@ -353,6 +365,18 @@ func render_cursor() -> void:
 		else:
 			cursor_viewport_pos_changed.emit(pos)
 			cursor_viewport_pos = pos
+
+func ray_cast() -> void:
+	if ray_cast_pending:
+		ray_cast_pending = false
+		var world = get_world_3d()
+		var space_state = world.direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(ray_from,ray_to)
+		var result = space_state.intersect_ray(query)
+		if result:
+			print(result)
+			ray_hit.emit(result.position)
+		
 
 func top_view_animation(delta : float) -> void:
 	top_view_animation_progress -= delta

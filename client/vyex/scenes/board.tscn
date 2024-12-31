@@ -1,11 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://cnrdrklmd55ub"]
+[gd_scene load_steps=4 format=3 uid="uid://cnrdrklmd55ub"]
 
 [ext_resource type="PackedScene" uid="uid://w5bps2satdd" path="res://assets/3d_models/board1_1.blend" id="1_wcdju"]
 [ext_resource type="PackedScene" uid="uid://ccj65bth22io1" path="res://assets/3d_models/board1_2.blend" id="2_arwre"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_f8ebs"]
+size = Vector3(2.5, 2, 2.5)
+
 [node name="Board" type="Node3D"]
 
 [node name="boardA1" parent="." instance=ExtResource("1_wcdju")]
+
+[node name="Area3D" type="StaticBody3D" parent="boardA1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="boardA1/Area3D"]
+shape = SubResource("BoxShape3D_f8ebs")
 
 [node name="boardA2" parent="." instance=ExtResource("2_arwre")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.75)

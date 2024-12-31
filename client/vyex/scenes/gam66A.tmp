@@ -1,0 +1,383 @@
+[gd_scene load_steps=24 format=3 uid="uid://cyp6xektf10o4"]
+
+[ext_resource type="Script" path="res://scripts/camera.gd" id="1_8ynu1"]
+[ext_resource type="PackedScene" uid="uid://bct52a0fbe4k5" path="res://assets/3d_models/piece1_1.blend" id="1_ebitj"]
+[ext_resource type="Texture2D" uid="uid://bhx6fkweufgcq" path="res://assets/sprites/cursor.png" id="2_66jnn"]
+[ext_resource type="PackedScene" uid="uid://b21f567j56qx6" path="res://assets/3d_models/piece2_1.blend" id="3_osaa7"]
+[ext_resource type="PackedScene" uid="uid://bg4nvfeldbkq7" path="res://assets/3d_models/piece1_2.blend" id="4_mu8cw"]
+[ext_resource type="PackedScene" uid="uid://dul73jni1qtqx" path="res://assets/3d_models/piece2_2.blend" id="4_r5exs"]
+[ext_resource type="PackedScene" uid="uid://b5flwhywpjwdx" path="res://assets/3d_models/piece3_2.blend" id="5_dmkw3"]
+[ext_resource type="PackedScene" uid="uid://d3wthq2qif25y" path="res://assets/3d_models/piece4_1.blend" id="6_8e4u0"]
+[ext_resource type="PackedScene" uid="uid://bqbvi1hvp0env" path="res://assets/3d_models/piece4_2.blend" id="7_ysv83"]
+[ext_resource type="PackedScene" uid="uid://bsx47hv4kjsb3" path="res://assets/3d_models/piece3_1.blend" id="8_odmxn"]
+[ext_resource type="Script" path="res://scripts/cursor.gd" id="11_imup5"]
+[ext_resource type="PackedScene" uid="uid://cnrdrklmd55ub" path="res://scenes/board.tscn" id="12_5j4b5"]
+[ext_resource type="Texture2D" uid="uid://xme1hrydjkrs" path="res://assets/sprites/cursor_out.png" id="12_iii3n"]
+[ext_resource type="Texture2D" uid="uid://c8qpmu0wqto4h" path="res://assets/sprites/top_view.png" id="14_5xit5"]
+[ext_resource type="Script" path="res://scripts/top_view_icon_button.gd" id="15_ql04k"]
+[ext_resource type="Texture2D" uid="uid://v4inm0q6mega" path="res://assets/sprites/camera_lock_on_cursor.png" id="15_xvf62"]
+[ext_resource type="Script" path="res://scripts/camera_lock_on_cursor_icon_button.gd" id="17_klxg5"]
+
+[sub_resource type="Gradient" id="Gradient_mj0kf"]
+offsets = PackedFloat32Array(0, 0.432203, 0.830508, 1)
+colors = PackedColorArray(0.490196, 0.431373, 0.513726, 1, 0.815686, 0.721569, 0.658824, 1, 0.87451, 0.827451, 0.764706, 1, 0.972549, 0.929412, 0.890196, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lmhxd"]
+gradient = SubResource("Gradient_mj0kf")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_podw6"]
+panorama = SubResource("GradientTexture2D_lmhxd")
+
+[sub_resource type="Sky" id="Sky_qknti"]
+sky_material = SubResource("PanoramaSkyMaterial_podw6")
+
+[sub_resource type="Environment" id="Environment_ugmn1"]
+background_mode = 2
+sky = SubResource("Sky_qknti")
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_2secx"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CursorPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.625, 0, 9.625)
+metadata/_edit_group_ = true
+
+[node name="Camera3D" type="Camera3D" parent="CursorPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+script = ExtResource("1_8ynu1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ugmn1")
+camera_attributes = SubResource("CameraAttributesPhysical_2secx")
+
+[node name="PieceWhiteKing" parent="." instance=ExtResource("1_ebitj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 1.5, 2.75)
+
+[node name="PieceWhiteDriller1" parent="." instance=ExtResource("3_osaa7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 5.5)
+
+[node name="PieceBlackDriller1" parent="." instance=ExtResource("4_r5exs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 1.5, 13.75)
+
+[node name="PieceWhiteDriller2" parent="." instance=ExtResource("3_osaa7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.5, 0)
+
+[node name="PieceBlacKing" parent="." instance=ExtResource("4_mu8cw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 1.5, 16.5)
+
+[node name="PieceBlackDriller2" parent="." instance=ExtResource("4_r5exs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 1.5, 19.25)
+
+[node name="PieceBlackWaller" parent="." instance=ExtResource("5_dmkw3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 1.5, 13.75)
+
+[node name="PieceWhiteSlayer" parent="." instance=ExtResource("6_8e4u0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="PieceBlackSlayer" parent="." instance=ExtResource("7_ysv83")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.25, 1.5, 19.25)
+
+[node name="PieceWhiteWaller" parent="." instance=ExtResource("8_odmxn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.58, 5.5)
+
+[node name="Board" parent="." instance=ExtResource("12_5j4b5")]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Cursor" type="Control" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("11_imup5")
+
+[node name="CursorIn" type="Control" parent="Control/Cursor"]
+anchors_preset = 0
+
+[node name="TexturRect" type="TextureRect" parent="Control/Cursor/CursorIn"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_66jnn")
+expand_mode = 1
+
+[node name="CursorUp" type="Control" parent="Control/Cursor"]
+layout_mode = 1
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/Cursor/CursorUp"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = 20.0
+offset_right = 10.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_iii3n")
+expand_mode = 1
+
+[node name="CursorUpLeft" type="Control" parent="Control/Cursor"]
+layout_mode = 1
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/Cursor/CursorUpLeft"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.785398
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("12_iii3n")
+expand_mode = 1
+
+[node name="CursorUpRight" type="Control" parent="Control/Cursor"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/Cursor/CursorUpRight"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.785398
+texture = ExtResource("12_iii3n")
+expand_mode = 1
+
+[node name="CursorLeft" type="Control" parent="Control/Cursor"]
+layout_mode = 1
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/Cursor/CursorLeft"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -10.0
+offset_right = 40.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.5708
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("12_iii3n")
+expand_mode = 1
+
+[node name="CursorRight" type="Control" parent="Control/Cursor"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/Cursor/CursorRight"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -10.0
+offset_right = -10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.5708
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("12_iii3n")
+expand_mode = 1
+
+[node name="CursorDown" type="Control" parent="Control/Cursor"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/Cursor/CursorDown"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -30.0
+offset_right = 10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 3.14159
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("12_iii3n")
+expand_mode = 1
+
+[node name="CursorDownLeft" type="Control" parent="Control/Cursor"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/Cursor/CursorDownLeft"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -30.0
+offset_right = 40.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -2.35619
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("12_iii3n")
+expand_mode = 1
+
+[node name="CursorDownRight" type="Control" parent="Control/Cursor"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/Cursor/CursorDownRight"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -30.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 2.35619
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("12_iii3n")
+expand_mode = 1
+
+[node name="IconPanel" type="Control" parent="Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="TopViewIconButton" type="TextureButton" parent="Control/IconPanel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -56.0
+offset_top = 16.0
+offset_right = -24.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+tooltip_text = "Reset Cursor And Top View"
+toggle_mode = true
+texture_normal = ExtResource("14_5xit5")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("15_ql04k")
+
+[node name="CameraLockOnCursorIconButton" type="TextureButton" parent="Control/IconPanel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -88.0
+offset_top = 16.0
+offset_right = -56.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+tooltip_text = "Camera Lock on Cursor (third perspective)"
+texture_normal = ExtResource("15_xvf62")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("17_klxg5")
+
+[connection signal="cursor_viewport_pos_changed" from="CursorPivot/Camera3D" to="Control/Cursor" method="_on_camera_3d_cursor_viewport_pos_changed"]
+[connection signal="perspective_changed" from="CursorPivot/Camera3D" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_camera_3d_perspective_changed"]
+[connection signal="top_view" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_top_view"]
+[connection signal="top_view_animation_ended" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_top_view_animation_ended"]
+[connection signal="button_down" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_button_down"]
+[connection signal="button_up" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_button_up"]
+[connection signal="mouse_entered" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/IconPanel/TopViewIconButton" to="CursorPivot/Camera3D" method="_on_top_view_icon_button_pressed"]
+[connection signal="pressed" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_pressed"]
+[connection signal="button_down" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_button_down"]
+[connection signal="button_up" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_button_up"]
+[connection signal="mouse_entered" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/IconPanel/CameraLockOnCursorIconButton" to="CursorPivot/Camera3D" method="_on_camera_lock_on_cursor_icon_button_pressed"]
+[connection signal="pressed" from="Control/IconPanel/CameraLockOnCursorIconButton" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_pressed"]
