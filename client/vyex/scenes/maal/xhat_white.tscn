@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://by2ac2pgpik8p"]
+[gd_scene load_steps=4 format=3 uid="uid://by2ac2pgpik8p"]
 
 [ext_resource type="PackedScene" uid="uid://cqcjyhggjlj1t" path="res://assets/3d_models/piece3_5.blend" id="1_dixkb"]
+[ext_resource type="PackedScene" uid="uid://ddqs5cnakp11" path="res://assets/3d_models/piece3_7.blend" id="2_mtibl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_iky5s"]
 size = Vector3(2, 1.12494, 2)
@@ -8,6 +9,9 @@ size = Vector3(2, 1.12494, 2)
 [node name="XhatWhite" type="StaticBody3D"]
 
 [node name="piece3_5" parent="." instance=ExtResource("1_dixkb")]
+
+[node name="piece3_7" parent="." instance=ExtResource("2_mtibl")]
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.313, 0)

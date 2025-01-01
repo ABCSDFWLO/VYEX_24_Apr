@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbe2dvuq3i2wk"]
+[gd_scene load_steps=5 format=3 uid="uid://dbe2dvuq3i2wk"]
 
 [ext_resource type="PackedScene" uid="uid://bknc6mnl2b0k2" path="res://assets/3d_models/piece1_5.blend" id="1_60e6g"]
+[ext_resource type="PackedScene" uid="uid://01xoue1vs7wb" path="res://assets/3d_models/piece1_7.blend" id="2_yq26d"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jgdsq"]
 size = Vector3(2, 1, 2)
@@ -11,6 +12,9 @@ size = Vector3(0.75, 2, 0.75)
 [node name="EwngWhite" type="StaticBody3D"]
 
 [node name="piece1_5" parent="." instance=ExtResource("1_60e6g")]
+
+[node name="piece1_7" parent="." instance=ExtResource("2_yq26d")]
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
