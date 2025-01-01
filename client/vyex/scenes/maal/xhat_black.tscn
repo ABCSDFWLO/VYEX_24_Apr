@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://5q7mfohmenik"]
+[gd_scene load_steps=5 format=3 uid="uid://5q7mfohmenik"]
 
+[ext_resource type="PackedScene" uid="uid://dbx20hqmsct40" path="res://assets/3d_models/piece5_2.blend" id="1_fi3h1"]
 [ext_resource type="PackedScene" uid="uid://dt5vrr3b4g4ws" path="res://assets/3d_models/piece3_4.blend" id="1_tcsc8"]
 [ext_resource type="PackedScene" uid="uid://cvpc2cv5ejf2a" path="res://assets/3d_models/piece3_6.blend" id="2_mb87r"]
 
@@ -8,7 +9,10 @@ size = Vector3(2, 1.125, 2)
 
 [node name="XhatBlack" type="StaticBody3D"]
 
+[node name="piece5_2" parent="." instance=ExtResource("1_fi3h1")]
+
 [node name="piece3_4" parent="." instance=ExtResource("1_tcsc8")]
+visible = false
 
 [node name="piece3_6" parent="." instance=ExtResource("2_mb87r")]
 visible = false

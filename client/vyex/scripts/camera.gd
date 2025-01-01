@@ -377,7 +377,9 @@ func ray_cast() -> void:
 		if result:
 			print(result)
 			ray_hit.emit(result.position)
-		
+			var collider : StaticBody3D = result.collider
+			if collider != null:
+				collider.position=Vector3(10000,10000,10000)
 
 func top_view_animation(delta : float) -> void:
 	top_view_animation_progress -= delta

@@ -29,10 +29,7 @@ const TOP_VIEW_ANIMATION_DURATION := 0.5
 const TOP_VIEW_CAMERA_EULER_ANGLE := Vector3(-PI*0.499,0,0) #0.5 freezes the move
 const TOP_VIEW_CAMERA_POSITION := Vector3.UP*20
 
-
-const RAY_LENGTH := 100000
-
-
+const RAY_LENGTH := 4000
 
 const KANN_INNER_SIZE := 2.5
 const KANN_OUTER_SIZE := 2.75

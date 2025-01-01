@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://wjlrvkbew2m5"]
+[gd_scene load_steps=6 format=3 uid="uid://wjlrvkbew2m5"]
 
 [ext_resource type="PackedScene" uid="uid://cv3xsc2ksp070" path="res://assets/3d_models/piece1_4.blend" id="1_mcpcw"]
 [ext_resource type="PackedScene" uid="uid://b580jfpg1x67t" path="res://assets/3d_models/piece1_6.blend" id="2_11dcf"]
+[ext_resource type="PackedScene" uid="uid://c0ed001n1220x" path="res://assets/3d_models/piece1_4_w.blend" id="3_7sm4g"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1gyfw"]
 size = Vector3(2, 1, 2)
@@ -23,3 +24,6 @@ shape = SubResource("BoxShape3D_1gyfw")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_tdbwe")
+
+[node name="piece1_4_w" parent="." instance=ExtResource("3_7sm4g")]
+visible = false
