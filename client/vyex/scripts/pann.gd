@@ -8,7 +8,15 @@ enum Maal {
 	NONE=0,
 }
 
-@export var initial_state_pann : Array[PackedByteArray]
+@export var initial_state_pann : Array[PackedByteArray] = [
+	[65, 1, 33, 1, 1, 0, 0],
+	[1, 49, 1, 1, 1, 1, 0],
+	[33, 1, 17, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 81, 1, 97],
+	[0, 1, 1, 1, 1, 113, 1],
+	[0, 0, 1, 1, 97, 1, 129],
+]
 @onready var kann_resource := preload("res://scenes/kann.tscn")
 @onready var maal_resource := {
 	Maal.XAHT_WHITE : preload("res://scenes/maal/xhat_white.tscn"),
@@ -47,7 +55,7 @@ func _ready() -> void:
 	}
 	for i in range(x_size):
 		var row = initial_state_pann[i]
-		if row == null:
+		if row == null or row.is_empty():
 			continue
 		else:
 			var y_temp_size := initial_state_pann[i].size()
@@ -67,7 +75,7 @@ func _ready() -> void:
 						kann_temp.position = Vector3(x,y,z)
 						self.add_child(kann_temp)
 					var maal : Maal = col - col%16
-					if maal  and maal_count[maal] < MAAL_COUNT_MAX[maal]:
+					if maal and maal_count[maal] < MAAL_COUNT_MAX[maal]:
 						maal_count[maal]+=1
 						var maal_temp : StaticBody3D = maal_resource[maal].instantiate()
 						var x = i*Constants.KANN_OUTER_SIZE

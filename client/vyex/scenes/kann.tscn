@@ -12,14 +12,14 @@ size = Vector3(2.75, 2.25, 2.75)
 
 [node name="Kann" type="StaticBody3D"]
 
-[node name="board2_5" parent="." instance=ExtResource("3_6utlg")]
-
-[node name="board2_6" parent="." instance=ExtResource("4_xdq0y")]
-
 [node name="board2_7" parent="." instance=ExtResource("5_4eics")]
-visible = false
 
 [node name="board2_8" parent="." instance=ExtResource("6_0oy7c")]
+
+[node name="board2_5" parent="." instance=ExtResource("3_6utlg")]
+visible = false
+
+[node name="board2_6" parent="." instance=ExtResource("4_xdq0y")]
 visible = false
 
 [node name="Bright" parent="." instance=ExtResource("1_yvd2c")]

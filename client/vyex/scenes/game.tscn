@@ -311,7 +311,6 @@ script = ExtResource("17_klxg5")
 
 [node name="Pann" type="Node3D" parent="."]
 script = ExtResource("12_hd345")
-initial_state_pann = Array[PackedByteArray]([PackedByteArray(65, 1, 33, 1, 1, 0, 0), PackedByteArray(1, 49, 1, 1, 1, 1, 0), PackedByteArray(33, 1, 17, 1, 1, 1, 1), PackedByteArray(1, 1, 1, 1, 1, 1, 1), PackedByteArray(1, 1, 1, 1, 81, 1, 97), PackedByteArray(0, 1, 1, 1, 1, 113, 1), PackedByteArray(0, 0, 1, 1, 97, 1, 129)])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ugmn1")
