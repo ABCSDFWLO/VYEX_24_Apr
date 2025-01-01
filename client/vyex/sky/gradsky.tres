@@ -6,8 +6,7 @@ colors = PackedColorArray(0.992157, 0.937255, 0.937255, 1, 0.956863, 0.87451, 0.
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_lmhxd"]
 gradient = SubResource("Gradient_mj0kf")
-fill_from = Vector2(1, 0)
-fill_to = Vector2(1, 1)
+fill_to = Vector2(0, 1)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_podw6"]
 panorama = SubResource("GradientTexture2D_lmhxd")

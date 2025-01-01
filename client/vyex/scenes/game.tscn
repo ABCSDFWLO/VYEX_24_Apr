@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_8ynu1"]
 [ext_resource type="Texture2D" uid="uid://bhx6fkweufgcq" path="res://assets/sprites/cursor.png" id="2_66jnn"]
-[ext_resource type="Sky" uid="uid://bntd4wo5qrfmf" path="res://scenes/gradsky.tres" id="2_bet2t"]
+[ext_resource type="Sky" uid="uid://cx8fwr2krfmjy" path="res://sky/procsky.tres" id="10_nxy2b"]
 [ext_resource type="Script" path="res://scripts/cursor.gd" id="11_imup5"]
 [ext_resource type="Script" path="res://scripts/pann.gd" id="12_hd345"]
 [ext_resource type="Texture2D" uid="uid://xme1hrydjkrs" path="res://assets/sprites/cursor_out.png" id="12_iii3n"]
@@ -14,7 +14,7 @@
 [sub_resource type="Environment" id="Environment_ugmn1"]
 background_mode = 2
 background_color = Color(0.305882, 1, 1, 1)
-sky = ExtResource("2_bet2t")
+sky = ExtResource("10_nxy2b")
 
 [sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_2secx"]
 
@@ -27,10 +27,6 @@ metadata/_edit_group_ = true
 [node name="Camera3D" type="Camera3D" parent="CursorPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
 script = ExtResource("1_8ynu1")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_ugmn1")
-camera_attributes = SubResource("CameraAttributesPhysical_2secx")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -315,7 +311,11 @@ script = ExtResource("17_klxg5")
 
 [node name="Pann" type="Node3D" parent="."]
 script = ExtResource("12_hd345")
-initial_state = Array[Array]([[true, true, true, true, true, false, false], [true, true, true, true, true, true, false], [true, true, true, true, true, true, true], [true, true, true, true, true, true, true], [true, true, true, true, true, true, true], [false, true, true, true, true, true, true], [false, false, true, true, true, true, true]])
+initial_state_pann = Array[PackedByteArray]([PackedByteArray(65, 1, 33, 1, 1, 0, 0), PackedByteArray(1, 49, 1, 1, 1, 1, 0), PackedByteArray(33, 1, 17, 1, 1, 1, 1), PackedByteArray(1, 1, 1, 1, 1, 1, 1), PackedByteArray(1, 1, 1, 1, 81, 1, 97), PackedByteArray(0, 1, 1, 1, 1, 113, 1), PackedByteArray(0, 0, 1, 1, 97, 1, 129)])
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ugmn1")
+camera_attributes = SubResource("CameraAttributesPhysical_2secx")
 
 [connection signal="cursor_viewport_pos_changed" from="CursorPivot/Camera3D" to="Control/Cursor" method="_on_camera_3d_cursor_viewport_pos_changed"]
 [connection signal="perspective_changed" from="CursorPivot/Camera3D" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_camera_3d_perspective_changed"]
