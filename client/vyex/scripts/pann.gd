@@ -81,7 +81,7 @@ func _render_map() -> void:
 						kann_temp.position = Vector3(x,y,z)
 						ref_pos_map[kann_temp]=Vector3i(i,k,j)
 						self.add_child(kann_temp)
-					var maal : Maal = col - col%16
+					var maal : Maal = col - col%16 as Maal
 					if maal and maal_count[maal] < MAAL_COUNT_MAX[maal]:
 						maal_count[maal]+=1
 						var maal_temp : StaticBody3D = maal_resource[maal].instantiate()
