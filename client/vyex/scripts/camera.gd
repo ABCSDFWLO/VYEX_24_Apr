@@ -4,9 +4,10 @@ signal cursor_viewport_pos_changed(pos : Vector2)
 signal perspective_changed(is_first : bool)
 signal top_view()
 signal top_view_animation_ended()
-signal ray_hit(pos : Vector3)
+signal stack_wall(pos:Vector2i)
 
 @onready var cursor_pivot : Node3D = get_parent()
+@onready var pann : Node3D = get_node("../../Pann")
 
 var move_spd := Vector3(0,0,0)
 var rot_spd := Vector2(0,0)
@@ -376,10 +377,10 @@ func ray_cast() -> void:
 		var result = space_state.intersect_ray(query)
 		if result:
 			print(result)
-			ray_hit.emit(result.position)
 			var collider : StaticBody3D = result.collider
 			if collider != null:
-				collider.position=Vector3(10000,10000,10000)
+				var pos : Vector3i = pann.get_pos_by_ref(collider)
+				stack_wall.emit(Vector2i(pos.x,pos.z))
 
 func top_view_animation(delta : float) -> void:
 	top_view_animation_progress -= delta

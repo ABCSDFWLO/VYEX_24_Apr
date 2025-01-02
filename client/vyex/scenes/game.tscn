@@ -318,6 +318,7 @@ camera_attributes = SubResource("CameraAttributesPhysical_2secx")
 
 [connection signal="cursor_viewport_pos_changed" from="CursorPivot/Camera3D" to="Control/Cursor" method="_on_camera_3d_cursor_viewport_pos_changed"]
 [connection signal="perspective_changed" from="CursorPivot/Camera3D" to="Control/IconPanel/CameraLockOnCursorIconButton" method="_on_camera_3d_perspective_changed"]
+[connection signal="stack_wall" from="CursorPivot/Camera3D" to="Pann" method="_on_camera_3d_stack_wall"]
 [connection signal="top_view" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_top_view"]
 [connection signal="top_view_animation_ended" from="CursorPivot/Camera3D" to="Control/IconPanel/TopViewIconButton" method="_on_camera_3d_top_view_animation_ended"]
 [connection signal="button_down" from="Control/IconPanel/TopViewIconButton" to="Control/IconPanel/TopViewIconButton" method="_on_button_down"]

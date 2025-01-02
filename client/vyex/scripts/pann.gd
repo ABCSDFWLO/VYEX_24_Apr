@@ -8,7 +8,7 @@ enum Maal {
 	NONE=0,
 }
 
-@export var initial_state_pann : Array[PackedByteArray] = [
+@export var state_pann : Array[PackedByteArray] = [
 	[65, 1, 33, 1, 1, 0, 0],
 	[1, 49, 1, 1, 1, 1, 0],
 	[33, 1, 17, 1, 1, 1, 1],
@@ -39,9 +39,14 @@ const MAAL_COUNT_MAX := {
 	Maal.EWNG_BLACK : 1,
 	Maal.YZAV_BLACK : 1,
 }
+var ref_pos_map := {}
 
 func _ready() -> void:
-	var x_size := initial_state_pann.size()
+	_render_map()
+	_calc_cursor_origin()
+
+func _render_map() -> void:
+	var x_size := state_pann.size()
 	var y_size := 0
 	var maal_count := {
 		Maal.XAHT_WHITE : 0,
@@ -54,11 +59,11 @@ func _ready() -> void:
 		Maal.YZAV_BLACK : 0,
 	}
 	for i in range(x_size):
-		var row = initial_state_pann[i]
+		var row = state_pann[i]
 		if row == null or row.is_empty():
 			continue
 		else:
-			var y_temp_size := initial_state_pann[i].size()
+			var y_temp_size := state_pann[i].size()
 			if y_size<y_temp_size:
 				y_size=y_temp_size
 			for j in range(y_temp_size):
@@ -73,6 +78,7 @@ func _ready() -> void:
 						var y = k*Constants.KANN_HEIGHT_INTERVAL
 						var z = j*Constants.KANN_OUTER_SIZE
 						kann_temp.position = Vector3(x,y,z)
+						ref_pos_map[kann_temp]=Vector3i(i,k,j)
 						self.add_child(kann_temp)
 					var maal : Maal = col - col%16
 					if maal and maal_count[maal] < MAAL_COUNT_MAX[maal]:
@@ -82,8 +88,37 @@ func _ready() -> void:
 						var y = (col%16)*Constants.KANN_HEIGHT_INTERVAL+Constants.MAAL_FLOOR_OFFSET
 						var z = j*Constants.KANN_OUTER_SIZE
 						maal_temp.position = Vector3(x,y,z)
+						ref_pos_map[maal_temp]=Vector3i(i,col%16,j)
 						self.add_child(maal_temp)
+func _clear_map() -> void:
+	for ref:Node in ref_pos_map.keys():
+		remove_child(ref)
+		ref.queue_free()
+	ref_pos_map.clear()
+
+func _calc_cursor_origin() -> void:
+	var x_size := state_pann.size()
+	var y_size := 0
+	for i in range(x_size):
+		var row = state_pann[i]
+		if row == null or row.is_empty():
+			continue
+		else:
+			var y_temp_size := state_pann[i].size()
+			if y_size<y_temp_size:
+				y_size=y_temp_size
 	var x = (x_size-1)*Constants.KANN_OUTER_SIZE*0.5
 	var y = 0
 	var z = (y_size-1)*Constants.KANN_OUTER_SIZE*0.5
 	cursor_origin_ready.emit(Vector3(x,y,z))
+
+func get_pos_by_ref(ref:Object)->Vector3i:
+	if ref in ref_pos_map.keys():
+		return ref_pos_map[ref]
+	else:
+		return Vector3i(-1,-1,-1)
+
+func _on_camera_3d_stack_wall(pos: Vector2i) -> void:
+	state_pann[pos.x][pos.y]+=1
+	_clear_map()
+	_render_map()
