@@ -31,7 +31,6 @@ const TOP_VIEW_CAMERA_POSITION := Vector3.UP*20
 
 const RAY_LENGTH := 4000
 
-const KANN_INNER_SIZE := 2.5
-const KANN_OUTER_SIZE := 2.68
-const KANN_HEIGHT_INTERVAL := 1.62
-const MAAL_FLOOR_OFFSET := -0.54
+const KANN_WIDTH := 2.5
+const KANN_HEIGHT := 1.5
+const KANN_MARGIN := 0.25

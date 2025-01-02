@@ -11,7 +11,6 @@
 size = Vector3(2.75, 2.25, 2.75)
 
 [node name="Kann" type="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 0.72, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="board2_7" parent="." instance=ExtResource("5_4eics")]
 
