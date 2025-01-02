@@ -29,7 +29,7 @@ enum Maal {
 	Maal.YZAV_BLACK : preload("res://scenes/maal/yzav_black.tscn"),
 }
 
-const MAAL_COUNT_MAX = {
+const MAAL_COUNT_MAX := {
 	Maal.XAHT_WHITE : 1,
 	Maal.VUSU_WHITE : 2,
 	Maal.EWNG_WHITE : 1,
