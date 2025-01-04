@@ -108,9 +108,9 @@ func _calc_cursor_origin() -> void:
 			var y_temp_size := state_pann[i].size()
 			if y_size<y_temp_size:
 				y_size=y_temp_size
-	var x = (x_size-1)*(Constants.KANN_WIDTH+Constants.KANN_MARGIN)*0.5
+	var x = (x_size - 1)*(Constants.KANN_WIDTH + Constants.KANN_MARGIN)*0.5 - Constants.KANN_MARGIN
 	var y = 0
-	var z = (y_size-1)*(Constants.KANN_WIDTH+Constants.KANN_MARGIN)*0.5
+	var z = (y_size - 1)*(Constants.KANN_WIDTH + Constants.KANN_MARGIN)*0.5 - Constants.KANN_MARGIN
 	cursor_origin_ready.emit(Vector3(x,y,z))
 
 func get_pos_by_ref(ref:Object)->Vector3i:
