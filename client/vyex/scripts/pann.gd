@@ -58,7 +58,7 @@ func _render_map() -> void:
 		Maal.EWNG_BLACK : 0,
 		Maal.YZAV_BLACK : 0,
 	}
-	for i in range(x_size):
+	for i in x_size:
 		var row = state_pann[i]
 		if row == null or row.is_empty():
 			continue
@@ -66,11 +66,11 @@ func _render_map() -> void:
 			var y_temp_size := state_pann[i].size()
 			if y_size<y_temp_size:
 				y_size=y_temp_size
-			for j in range(y_temp_size):
+			for j in y_temp_size:
 				var col = row[j]
 				var h = col%16
 				if col == null or h == 0:
-					continue;
+					continue
 				else:
 					for k in h:
 						var kann_temp := kann_resource.instantiate()
@@ -91,6 +91,7 @@ func _render_map() -> void:
 						maal_temp.position = Vector3(x,y,z)
 						ref_pos_map[maal_temp]=Vector3i(i,col%16,j)
 						self.add_child(maal_temp)
+
 func _clear_map() -> void:
 	for ref:Node in ref_pos_map.keys():
 		remove_child(ref)
@@ -100,7 +101,7 @@ func _clear_map() -> void:
 func _calc_cursor_origin() -> void:
 	var x_size := state_pann.size()
 	var y_size := 0
-	for i in range(x_size):
+	for i in x_size:
 		var row = state_pann[i]
 		if row == null or row.is_empty():
 			continue

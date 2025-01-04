@@ -29,7 +29,7 @@ func _on_token_http_request_request_completed(result: int, response_code: int, h
 		push_error("msg: ", msg)
 	else:
 		var response_token = JSON.parse_string(body.get_string_from_utf8())
-		for i in range(0,3):
+		for i in 3:
 			tokens[i]=response_token[i]
 
 func _parse_tokens() -> String:
@@ -41,10 +41,10 @@ func _parse_tokens() -> String:
 
 func get_token_header() -> Array[String]:
 	var result :Array[String]= []
-	for i in range(3) :
+	for i in 3 :
 		result.append("token"+str(i+1)+":"+tokens[i])
 	return result
 
 func _on_control_login(tokens: Array) -> void:
-	for i in range(0,3):
+	for i in 3:
 		self.tokens[i]=tokens[i]

@@ -7,7 +7,7 @@ const COLUMNS := 13
 
 func add_row(id: int, name : String, locked : bool, player1 : String, player2 : String) -> void:
 	var pads : Array[Control] = []
-	for i in range(0,7):
+	for i in 7:
 		pads.append(Control.new())
 		pads[i].custom_minimum_size.x=PADDING
 	var locked_label : Label = Label.new()
@@ -47,7 +47,7 @@ func delete_row(index : int)->void:
 		push_error("delete_row : index out of range ["+str(index)+"]")
 		return
 	else:
-		for i in range(COLUMNS):
+		for i in COLUMNS:
 			var child = self.get_child(index*COLUMNS)
 			self.remove_child(child)
 			child.queue_free()
@@ -58,7 +58,7 @@ func move_row(from : int, to : int)->void:
 		push_error("move_row : index out of range ["+str(from)+","+str(to)+"]")
 		return
 	else:
-		for i in range(COLUMNS):
+		for i in COLUMNS:
 			var child = self.get_child((from+1)*COLUMNS-i)
 			self.move_child(child,to*COLUMNS)
 

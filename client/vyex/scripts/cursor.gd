@@ -42,7 +42,7 @@ func _on_camera_3d_cursor_viewport_pos_changed(pos: Vector2) -> void:
 	elif pos.y>bottom:
 		index+=3
 		
-	for i in range(0,9):
+	for i in 9:
 		if i==index:
 			cursor[i].visible=true
 		else:
