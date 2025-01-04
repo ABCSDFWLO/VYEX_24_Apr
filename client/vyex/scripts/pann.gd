@@ -76,7 +76,7 @@ func _render_map() -> void:
 						var kann_temp := kann_resource.instantiate()
 						kann_temp.get_child((i+j+k)%2).visible=false
 						var x = i*(Constants.KANN_WIDTH + Constants.KANN_MARGIN)
-						var y = k*Constants.KANN_HEIGHT + (k-1)*Constants.KANN_MARGIN
+						var y = k*(Constants.KANN_HEIGHT + Constants.KANN_MARGIN)
 						var z = j*(Constants.KANN_WIDTH + Constants.KANN_MARGIN)
 						kann_temp.position = Vector3(x,y,z)
 						ref_pos_map[kann_temp]=Vector3i(i,k,j)
@@ -86,7 +86,7 @@ func _render_map() -> void:
 						maal_count[maal]+=1
 						var maal_temp : StaticBody3D = maal_resource[maal].instantiate()
 						var x = i*(Constants.KANN_WIDTH + Constants.KANN_MARGIN)
-						var y = (h - 0.5)*Constants.KANN_HEIGHT + h*Constants.KANN_MARGIN
+						var y = (h - 0.5)*Constants.KANN_HEIGHT + (h + 1)*Constants.KANN_MARGIN
 						var z = j*(Constants.KANN_WIDTH + Constants.KANN_MARGIN)
 						maal_temp.position = Vector3(x,y,z)
 						ref_pos_map[maal_temp]=Vector3i(i,col%16,j)
