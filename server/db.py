@@ -15,17 +15,16 @@ class ActionType(Enum):
     Enter_Game = "Enter_Game"
     Leave_Game = "Leave_Game"
     Surrender = "Surrender"
+    Draw_Suggest = "Draw_Suggest"
+    Draw_Accept = "Draw_Accept"
+    Draw_Reject = "Draw_Reject"
     Move = "Move"
-    Build = "Build"
-    Demolish = "Demolish"
-    Return_After_Demolish = "Return_After_Demolish"
-    Win_Slay = "Win_Slay"
-    Win_Climb_Top = "Win_Climb_Top"
-    Win_Lock = "Win_Lock"
-    End_Turn = "End_Turn"
+    Xaht = "Xaht"
+    Vusu = "Vusu"
+    Win_Yzav = "Win_Yzav"
+    Lose_Makk = "Lose_Makk"
     Undo = "Undo"
-    Redo = "Redo"
-    Settle = "Settle"
+    Chuwm_Xaht = "Chuwm_Xaht"
 
 class User(SQLModel, table=True):
     id: int = Field(primary_key=True)
@@ -43,7 +42,7 @@ class Game(SQLModel, table=True):
     name: str
     started_at: datetime
     ended_at: datetime | None
-    player1_id: int = Field(foreign_key="user.id")
+    player1_id: int | None = Field(foreign_key="user.id")
     player2_id: int | None = Field(foreign_key="user.id")
     password_hash: str | None
 

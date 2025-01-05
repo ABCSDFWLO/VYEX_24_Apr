@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Annotated, List, Tuple, Union
 from uuid import uuid4, UUID
 from fastapi import Body, Depends, FastAPI, HTTPException, Header, Path, Query
@@ -393,6 +394,16 @@ class GameOut(BaseModel):
     player2 : UserOut | None
     has_password : bool
 
+class GameCreateHostFirst(Enum):
+    Host_First = 0
+    Host_Last = 1
+    Random = 2
+    
+class GameCreate(BaseModel):
+    name : str | None = Field(None, title="Game Name", description="The name of the game", example="New Game")
+    password : str | None = Field(None, title="Game Password", description="The password of the game", example="password")
+    host_first : GameCreateHostFirst = Field(GameCreateHostFirst.Host_First, title="Host First", description="The player who will make the first move", example="Random")
+
 @app.get("/games", response_model=List[GameOut])
 async def get_games(state: Union[List[GameState],None] = Query(default=[GameState.Running], min_length=1, max_length=3), name:Union[str,None] = Query(None)):
     with Session(engine) as session:
@@ -487,16 +498,39 @@ async def enter_game(game_id: int, password:Union[str,None] = Body(None), user_i
         except IntegrityError:
             session.rollback()
             raise HTTPException(status_code=500, detail="Database error")
-        
+
 @app.post("/create_game", status_code=201, response_model=int)
-async def create_game(name:Union[str,None]=Body(None), password:Union[str,None] = Body(None), user_id: int = Depends(user_id_from_token)):
+async def create_game(gameCreate : GameCreate = Body(...), user_id: int = Depends(user_id_from_token)):
+    
+    name = gameCreate.name
+    if name is not None and len(name) == 0:
+        name = "New Game"
+    
+    password = gameCreate.password
+    if password is not None and len(password) == 0:
+        password = None
+    else :
+        password = bcrypt.hash(password)
+    
+    player1_id = None
+    player2_id = None
+    if gameCreate.host_first == GameCreateHostFirst.Host_First:
+        player1_id = user_id
+    elif gameCreate.host_first == GameCreateHostFirst.Host_Last:
+        player2_id = user_id
+    else:
+        if random.choice([True,False]):
+            player1_id = user_id
+        else:
+            player2_id = user_id
+
     with Session(engine) as session:
         game = Game(
             state=GameState.Running,
             name=name if name is not None and len(name)>0 else "New Game",
             started_at=datetime.now(),
-            player1_id=user_id,
-            player2_id=None,
+            player1_id=player1_id,
+            player2_id=player2_id,
             password_hash=bcrypt.hash(password) if password is not None and len(password)>0 else None
         )
         session.add(game)
@@ -507,3 +541,39 @@ async def create_game(name:Union[str,None]=Body(None), password:Union[str,None] 
             session.rollback()
             raise HTTPException(status_code=500, detail="Database error")
         return game.id
+    
+@app.post("/leave_game/{game_id}", status_code=200)
+async def leave_game(game_id: int, user_id: int = Depends(user_id_from_token)):
+    with Session(engine) as session:
+        game = session.get(Game, game_id)
+        if game is None:
+            raise HTTPException(status_code=404, detail="Game not found")
+        elif game.state != GameState.Running:
+            raise HTTPException(status_code=400, detail="Game Already Ended")
+        elif game.player1_id == user_id:
+            game.player1_id = None
+        elif game.player2_id == user_id:
+            game.player2_id = None
+        else:
+            raise HTTPException(status_code=400, detail="User not in game")
+        session.add(game)
+        try:
+            session.commit()
+            session.refresh(game)
+        except IntegrityError:
+            session.rollback()
+            raise HTTPException(status_code=500, detail="Database error")
+        
+@app.post("/observe_game/{game_id}", status_code=200)
+async def observe_game(game_id: int, user_id: int = Depends(user_id_from_token)):
+    with Session(engine) as session:
+        game = session.get(Game, game_id)
+        if game is None:
+            raise HTTPException(status_code=404, detail="Game not found")
+        elif game.state != GameState.Running:
+            raise HTTPException(status_code=400, detail="Game Already Ended")
+        elif game.player1_id != user_id and game.player2_id != user_id:
+            raise HTTPException(status_code=400, detail="User not in game")
+        else:
+            pass
+
