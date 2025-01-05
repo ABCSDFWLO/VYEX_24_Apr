@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_8ynu1"]
 [ext_resource type="Texture2D" uid="uid://bhx6fkweufgcq" path="res://assets/sprites/cursor.png" id="2_66jnn"]
-[ext_resource type="Sky" uid="uid://cx8fwr2krfmjy" path="res://sky/procsky.tres" id="10_nxy2b"]
+[ext_resource type="Sky" uid="uid://cx8fwr2krfmjy" path="res://assets/sky/procsky.tres" id="10_nxy2b"]
 [ext_resource type="Script" path="res://scripts/cursor.gd" id="11_imup5"]
 [ext_resource type="Script" path="res://scripts/pann.gd" id="12_hd345"]
 [ext_resource type="Texture2D" uid="uid://xme1hrydjkrs" path="res://assets/sprites/cursor_out.png" id="12_iii3n"]

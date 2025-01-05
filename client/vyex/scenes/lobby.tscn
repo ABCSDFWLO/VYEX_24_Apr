@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://lh7dfbb2ctdj"]
+[gd_scene load_steps=6 format=3 uid="uid://lh7dfbb2ctdj"]
 
 [ext_resource type="Script" path="res://scripts/lobby_manager.gd" id="1_rx0ub"]
 [ext_resource type="Texture2D" uid="uid://c3xr8fplwegd2" path="res://assets/sprites/logo.png" id="2_fvmej"]
 [ext_resource type="Texture2D" uid="uid://bxfeshubktxqe" path="res://assets/sprites/logo_blur.png" id="2_pu4ud"]
 [ext_resource type="Script" path="res://scripts/lobby_grid_container.gd" id="3_x1d5u"]
+[ext_resource type="ButtonGroup" uid="uid://dbuc3qgf0vacc" path="res://assets/button_groups/lobby_create_host_order_button_group.tres" id="5_pywo4"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -196,6 +197,25 @@ text = "Password"
 [node name="PasswordLineEdit" type="LineEdit" parent="CreatePanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CreatePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HostFirstCheckBox" type="CheckBox" parent="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_pressed = true
+button_group = ExtResource("5_pywo4")
+text = "red"
+
+[node name="HostLastCheckBox" type="CheckBox" parent="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("5_pywo4")
+text = "blue"
+
+[node name="RandomCheckBox" type="CheckBox" parent="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("5_pywo4")
+text = "random"
 
 [node name="CancelButton" type="Button" parent="CreatePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
