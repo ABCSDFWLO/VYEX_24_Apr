@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Annotated, List, Tuple, Union
+from typing import List
 from uuid import uuid4, UUID
 from fastapi import Body, Depends, FastAPI, HTTPException, Header, Path, Query
 from pydantic import BaseModel, EmailStr, Field
@@ -390,7 +390,7 @@ class GameOut(BaseModel):
     name : str
     started_at : datetime
     ended_at : datetime | None
-    player1 : UserOut
+    player1 : UserOut | None
     player2 : UserOut | None
     has_password : bool
 
@@ -405,7 +405,7 @@ class GameCreate(BaseModel):
     host_first : GameCreateHostFirst = Field(GameCreateHostFirst.Host_First, title="Host First", description="The player who will make the first move", example="Random")
 
 @app.get("/games", response_model=List[GameOut])
-async def get_games(state: Union[List[GameState],None] = Query(default=[GameState.Running], min_length=1, max_length=3), name:Union[str,None] = Query(None)):
+async def get_games(state: List[GameState]|None = Query(default=[GameState.Running], min_length=1, max_length=3), name:str|None = Query(None)):
     with Session(engine) as session:
         if name is None:
             games = session.exec(
@@ -423,7 +423,7 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
                         name=game.player1.name,
                         email=game.player1.email,
                         registered_at=game.player1.registered_at
-                    ),
+                    ) if game.player1_id is not None else None,
                     player2=UserOut(
                         id=game.player2.id,
                         name=game.player2.name,
@@ -458,7 +458,7 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
                         name=game.player1.name,
                         email=game.player1.email,
                         registered_at=game.player1.registered_at
-                        ),
+                        ) if game.player1_id is not None else None,
                     player2=UserOut(
                         id=game.player2.id,
                         name=game.player2.name,
@@ -471,14 +471,20 @@ async def get_games(state: Union[List[GameState],None] = Query(default=[GameStat
             return result
 
 @app.post("/enter_game/{game_id}", status_code=200)
-async def enter_game(game_id: int, password:Union[str,None] = Body(None), user_id: int = Depends(user_id_from_token)):
+async def enter_game(game_id: int, password:str|None = Body(None), user_id: int = Depends(user_id_from_token)):
     with Session(engine) as session:
         game = session.get(Game, game_id)
         if game is None:
             raise HTTPException(status_code=404, detail="Game not found")
         elif game.state != GameState.Running:
             raise HTTPException(status_code=400, detail="Game Already Ended")
+        elif game.player1_id == user_id or game.player2_id == user_id:
+            pass
         elif game.player1_id == None:
+            if game.password_hash is not None and (password is None or len(password) == 0):
+                raise HTTPException(status_code=400, detail="Password Required")
+            elif game.password_hash is not None and not bcrypt.verify(password, game.password_hash):
+                raise HTTPException(status_code=400, detail="Invalid Password")
             game.player1_id = user_id
         elif game.player2_id == None:
             if game.password_hash is not None and (password is None or len(password) == 0):
@@ -486,8 +492,6 @@ async def enter_game(game_id: int, password:Union[str,None] = Body(None), user_i
             elif game.password_hash is not None and not bcrypt.verify(password, game.password_hash):
                 raise HTTPException(status_code=400, detail="Invalid Password")
             game.player2_id = user_id
-        elif game.player1_id == user_id or game.player2_id == user_id:
-            pass
         else:
             raise HTTPException(status_code=400, detail="Game Full")
         
@@ -503,11 +507,11 @@ async def enter_game(game_id: int, password:Union[str,None] = Body(None), user_i
 async def create_game(gameCreate : GameCreate = Body(...), user_id: int = Depends(user_id_from_token)):
     
     name = gameCreate.name
-    if name is not None and len(name) == 0:
+    if name is None or name is not None and len(name) == 0:
         name = "New Game"
     
     password = gameCreate.password
-    if password is not None and len(password) == 0:
+    if password is not None or len(password) == 0:
         password = None
     else :
         password = bcrypt.hash(password)

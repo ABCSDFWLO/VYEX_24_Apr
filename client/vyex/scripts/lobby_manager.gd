@@ -12,6 +12,7 @@ signal enter_game()
 @onready var create_panel : PanelContainer = $CreatePanel
 @onready var create_name_lineedit : LineEdit = $CreatePanel/MarginContainer/VBoxContainer/NameLineEdit
 @onready var create_password_lineedit : LineEdit = $CreatePanel/MarginContainer/VBoxContainer/PasswordLineEdit
+@onready var create_host_first_buttongroup : ButtonGroup = $CreatePanel/MarginContainer/VBoxContainer/HBoxContainer/RandomCheckBox.button_group
 @onready var room_grid_container : GridContainer = $VBoxContainer/PanelContainer/ScrollContainer/GridContainer
 @onready var join_panel : PanelContainer = $JoinPanel
 @onready var join_button : Button = $JoinPanel/MarginContainer/VBoxContainer/JoinButton
@@ -29,7 +30,7 @@ func render()->void:
 		var id : int = game["id"]
 		var name : String = game["name"]
 		var locked : bool = game["has_password"]
-		var player1 : String = game["player1"]["name"]
+		var player1 : String = game["player1"]["name"] if not game["player1"] == null else ""
 		var player2 : String = game["player2"]["name"] if not game["player2"] == null else ""
 		room_grid_container.add_row(id,name,locked,player1,player2)
 
@@ -79,7 +80,10 @@ func _on_cancel_button_pressed() -> void:
 
 func _on_create_panel_create_button_pressed() -> void:
 	var url = "http://"+Constants.HOST+Constants.PORT_WITH_COLON+Constants.CREATE_GAME_URL
-	var body = JSON.new().stringify({"name":create_name_lineedit.text,"password":create_password_lineedit.text})
+	var name = create_name_lineedit.text
+	var password = create_password_lineedit.text
+	var host_first = create_host_first_buttongroup.get_pressed_button().get_index()
+	var body = JSON.new().stringify({"name":name,"password":password,"host_first":host_first})
 	var header = token_manager.get_token_header()
 	var error = create_http_request.request(url,header,HTTPClient.METHOD_POST,body)
 	if error != OK:
