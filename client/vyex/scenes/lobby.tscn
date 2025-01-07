@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://lh7dfbb2ctdj"]
+[gd_scene load_steps=7 format=3 uid="uid://lh7dfbb2ctdj"]
 
 [ext_resource type="Script" path="res://scripts/lobby_manager.gd" id="1_rx0ub"]
 [ext_resource type="Texture2D" uid="uid://c3xr8fplwegd2" path="res://assets/sprites/logo.png" id="2_fvmej"]
 [ext_resource type="Texture2D" uid="uid://bxfeshubktxqe" path="res://assets/sprites/logo_blur.png" id="2_pu4ud"]
 [ext_resource type="Script" path="res://scripts/lobby_grid_container.gd" id="3_x1d5u"]
 [ext_resource type="ButtonGroup" uid="uid://dbuc3qgf0vacc" path="res://assets/button_groups/lobby_create_host_order_button_group.tres" id="5_pywo4"]
+[ext_resource type="Script" path="res://scripts/map_shape_container.gd" id="6_8maqe"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -158,7 +159,6 @@ custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
 [node name="CreatePanel" type="PanelContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -189,6 +189,7 @@ text = "Name"
 [node name="NameLineEdit" type="LineEdit" parent="CreatePanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+focus_next = NodePath("../PasswordLineEdit")
 
 [node name="PasswordLabel" type="Label" parent="CreatePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -197,35 +198,85 @@ text = "Password"
 [node name="PasswordLineEdit" type="LineEdit" parent="CreatePanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+focus_next = NodePath("../HBoxContainer/HostFirstCheckBox")
+focus_previous = NodePath("../NameLineEdit")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CreatePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="HostFirstCheckBox" type="CheckBox" parent="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+focus_next = NodePath("../HostLastCheckBox")
+focus_previous = NodePath("../../PasswordLineEdit")
 button_pressed = true
 button_group = ExtResource("5_pywo4")
 text = "red"
 
 [node name="HostLastCheckBox" type="CheckBox" parent="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+focus_next = NodePath("../RandomCheckBox")
+focus_previous = NodePath("../HostFirstCheckBox")
 button_group = ExtResource("5_pywo4")
 text = "blue"
 
 [node name="RandomCheckBox" type="CheckBox" parent="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+focus_next = NodePath("../../MapShapeContainer/HBoxContainer2/MapWidthSpinBox")
+focus_previous = NodePath("../HostLastCheckBox")
 button_group = ExtResource("5_pywo4")
 text = "random"
 
-[node name="CancelButton" type="Button" parent="CreatePanel/MarginContainer/VBoxContainer"]
+[node name="MapShapeContainer" type="VBoxContainer" parent="CreatePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+script = ExtResource("6_8maqe")
+
+[node name="MapShapeGridContainer" type="GridContainer" parent="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer"]
+layout_mode = 2
+columns = 7
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer"]
+layout_mode = 2
+
+[node name="MapWidthSpinBox" type="SpinBox" parent="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_next = NodePath("../MapHeightSpinBox")
+focus_previous = NodePath("../../../HBoxContainer/RandomCheckBox")
+value = 7.0
+
+[node name="MapHeightSpinBox" type="SpinBox" parent="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_next = NodePath("../MapSizeResetButton")
+focus_previous = NodePath("../MapWidthSpinBox")
+value = 7.0
+
+[node name="MapSizeResetButton" type="Button" parent="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_next = NodePath("../../../HBoxContainer3/CancelButton")
+focus_previous = NodePath("../MapHeightSpinBox")
+text = "reset"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CreatePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_next = NodePath("../CreateButton")
+focus_previous = NodePath("../../MapShapeContainer/HBoxContainer2/MapSizeResetButton")
 text = "cancel"
 
-[node name="CreateButton" type="Button" parent="CreatePanel/MarginContainer/VBoxContainer"]
+[node name="CreateButton" type="Button" parent="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
+size_flags_horizontal = 3
+focus_next = NodePath("../../NameLineEdit")
+focus_previous = NodePath("../CancelButton")
 text = "create"
 
-[node name="HTTPRequest" type="HTTPRequest" parent="CreatePanel/MarginContainer/VBoxContainer/CreateButton"]
+[node name="HTTPRequest" type="HTTPRequest" parent="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer3/CreateButton"]
 
 [node name="JoinPanel" type="PanelContainer" parent="."]
 visible = false
@@ -273,8 +324,11 @@ text = "join"
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]
 [connection signal="request_completed" from="VBoxContainer/HBoxContainer/RefreshButton/HTTPRequest" to="." method="_on_http_request_request_completed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
-[connection signal="pressed" from="CreatePanel/MarginContainer/VBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
-[connection signal="pressed" from="CreatePanel/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_panel_create_button_pressed"]
-[connection signal="request_completed" from="CreatePanel/MarginContainer/VBoxContainer/CreateButton/HTTPRequest" to="." method="_on_create_http_request_request_completed"]
+[connection signal="value_changed" from="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer/HBoxContainer2/MapWidthSpinBox" to="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer" method="_on_map_width_spin_box_value_changed"]
+[connection signal="value_changed" from="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer/HBoxContainer2/MapHeightSpinBox" to="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer" method="_on_map_height_spin_box_value_changed"]
+[connection signal="pressed" from="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer/HBoxContainer2/MapSizeResetButton" to="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer" method="_on_map_size_reset_button_pressed"]
+[connection signal="pressed" from="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer3/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer3/CreateButton" to="." method="_on_create_panel_create_button_pressed"]
+[connection signal="request_completed" from="CreatePanel/MarginContainer/VBoxContainer/HBoxContainer3/CreateButton/HTTPRequest" to="." method="_on_create_http_request_request_completed"]
 [connection signal="pressed" from="JoinPanel/MarginContainer/VBoxContainer/CancelButton" to="." method="_on_join_panel_cancel_button_pressed"]
 [connection signal="request_completed" from="JoinPanel/MarginContainer/VBoxContainer/JoinButton/HTTPRequest" to="." method="_on_join_http_request_request_completed"]

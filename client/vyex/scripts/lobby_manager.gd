@@ -7,7 +7,7 @@ signal enter_game()
 
 @onready var search_http_request : HTTPRequest = $VBoxContainer/HBoxContainer/SearchButton/HTTPRequest
 @onready var refresh_http_request : HTTPRequest = $VBoxContainer/HBoxContainer/RefreshButton/HTTPRequest
-@onready var create_http_request : HTTPRequest = $CreatePanel/MarginContainer/VBoxContainer/CreateButton/HTTPRequest
+@onready var create_http_request : HTTPRequest = $CreatePanel/MarginContainer/VBoxContainer/HBoxContainer3/CreateButton/HTTPRequest
 @onready var search_lineedit : LineEdit = $VBoxContainer/HBoxContainer/SearchLineEdit
 @onready var create_panel : PanelContainer = $CreatePanel
 @onready var create_name_lineedit : LineEdit = $CreatePanel/MarginContainer/VBoxContainer/NameLineEdit
