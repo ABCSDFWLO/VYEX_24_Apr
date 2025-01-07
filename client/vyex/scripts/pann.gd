@@ -2,12 +2,6 @@ extends Node3D
 
 signal cursor_origin_ready(pos:Vector3)
 
-enum Maal {
-	XAHT_WHITE=16, VUSU_WHITE=32, EWNG_WHITE=48, YZAV_WHITE=64,
-	XAHT_BLACK=80, VUSU_BLACK=96, EWNG_BLACK=112, YZAV_BLACK=128,
-	NONE=0,
-}
-
 @export var state_pann : Array[PackedByteArray] = [
 	[65, 1, 33, 1, 1, 0, 0],
 	[1, 49, 1, 1, 1, 1, 0],
@@ -19,25 +13,25 @@ enum Maal {
 ]
 @onready var kann_resource := preload("res://scenes/kann.tscn")
 @onready var maal_resource := {
-	Maal.XAHT_WHITE : preload("res://scenes/maal/xhat_white.tscn"),
-	Maal.VUSU_WHITE : preload("res://scenes/maal/vusu_white.tscn"),
-	Maal.EWNG_WHITE : preload("res://scenes/maal/ewng_white.tscn"),
-	Maal.YZAV_WHITE : preload("res://scenes/maal/yzav_white.tscn"),
-	Maal.XAHT_BLACK : preload("res://scenes/maal/xhat_black.tscn"),
-	Maal.VUSU_BLACK : preload("res://scenes/maal/vusu_black.tscn"),
-	Maal.EWNG_BLACK : preload("res://scenes/maal/ewng_black.tscn"),
-	Maal.YZAV_BLACK : preload("res://scenes/maal/yzav_black.tscn"),
+	Constants.Maal.XAHT_WHITE : preload("res://scenes/maal/xhat_white.tscn"),
+	Constants.Maal.VUSU_WHITE : preload("res://scenes/maal/vusu_white.tscn"),
+	Constants.Maal.EWNG_WHITE : preload("res://scenes/maal/ewng_white.tscn"),
+	Constants.Maal.YZAV_WHITE : preload("res://scenes/maal/yzav_white.tscn"),
+	Constants.Maal.XAHT_BLACK : preload("res://scenes/maal/xhat_black.tscn"),
+	Constants.Maal.VUSU_BLACK : preload("res://scenes/maal/vusu_black.tscn"),
+	Constants.Maal.EWNG_BLACK : preload("res://scenes/maal/ewng_black.tscn"),
+	Constants.Maal.YZAV_BLACK : preload("res://scenes/maal/yzav_black.tscn"),
 }
 
 const MAAL_COUNT_MAX := {
-	Maal.XAHT_WHITE : 1,
-	Maal.VUSU_WHITE : 2,
-	Maal.EWNG_WHITE : 1,
-	Maal.YZAV_WHITE : 1,
-	Maal.XAHT_BLACK : 1,
-	Maal.VUSU_BLACK : 2,
-	Maal.EWNG_BLACK : 1,
-	Maal.YZAV_BLACK : 1,
+	Constants.Maal.XAHT_WHITE : 1,
+	Constants.Maal.VUSU_WHITE : 2,
+	Constants.Maal.EWNG_WHITE : 1,
+	Constants.Maal.YZAV_WHITE : 1,
+	Constants.Maal.XAHT_BLACK : 1,
+	Constants.Maal.VUSU_BLACK : 2,
+	Constants.Maal.EWNG_BLACK : 1,
+	Constants.Maal.YZAV_BLACK : 1,
 }
 var ref_pos_map := {}
 
@@ -49,14 +43,14 @@ func _render_map() -> void:
 	var x_size := state_pann.size()
 	var y_size := 0
 	var maal_count := {
-		Maal.XAHT_WHITE : 0,
-		Maal.VUSU_WHITE : 0,
-		Maal.EWNG_WHITE : 0,
-		Maal.YZAV_WHITE : 0,
-		Maal.XAHT_BLACK : 0,
-		Maal.VUSU_BLACK : 0,
-		Maal.EWNG_BLACK : 0,
-		Maal.YZAV_BLACK : 0,
+		Constants.Maal.XAHT_WHITE : 0,
+		Constants.Maal.VUSU_WHITE : 0,
+		Constants.Maal.EWNG_WHITE : 0,
+		Constants.Maal.YZAV_WHITE : 0,
+		Constants.Maal.XAHT_BLACK : 0,
+		Constants.Maal.VUSU_BLACK : 0,
+		Constants.Maal.EWNG_BLACK : 0,
+		Constants.Maal.YZAV_BLACK : 0,
 	}
 	for i in x_size:
 		var row = state_pann[i]
@@ -81,7 +75,7 @@ func _render_map() -> void:
 						kann_temp.position = Vector3(x,y,z)
 						ref_pos_map[kann_temp]=Vector3i(i,k,j)
 						self.add_child(kann_temp)
-					var maal : Maal = col - col%16 as Maal
+					var maal : Constants.Maal = col - col%16 as Constants.Maal
 					if maal and maal_count[maal] < MAAL_COUNT_MAX[maal]:
 						maal_count[maal]+=1
 						var maal_temp : StaticBody3D = maal_resource[maal].instantiate()
