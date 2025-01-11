@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dbe2dvuq3i2wk"]
 
-[ext_resource type="PackedScene" uid="uid://bknc6mnl2b0k2" path="res://assets/3d_models/piece1_5.blend" id="1_60e6g"]
-[ext_resource type="PackedScene" uid="uid://01xoue1vs7wb" path="res://assets/3d_models/piece1_7.blend" id="2_yq26d"]
+[ext_resource type="PackedScene" uid="uid://bknc6mnl2b0k2" path="res://assets/3d_models/piece1_5.blend" id="1_fesqh"]
+[ext_resource type="PackedScene" uid="uid://01xoue1vs7wb" path="res://assets/3d_models/piece1_7.blend" id="2_jmji3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jgdsq"]
 size = Vector3(2, 1, 2)
@@ -9,11 +9,11 @@ size = Vector3(2, 1, 2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_5q1ew"]
 size = Vector3(0.75, 2, 0.75)
 
-[node name="EwngWhite" type="StaticBody3D"]
+[node name="EwngBlue" type="StaticBody3D"]
 
-[node name="piece1_5" parent="." instance=ExtResource("1_60e6g")]
+[node name="piece1_5" parent="." instance=ExtResource("1_fesqh")]
 
-[node name="piece1_7" parent="." instance=ExtResource("2_yq26d")]
+[node name="piece1_7" parent="." instance=ExtResource("2_jmji3")]
 visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

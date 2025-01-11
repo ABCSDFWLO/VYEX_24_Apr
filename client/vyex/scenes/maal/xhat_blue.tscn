@@ -7,7 +7,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_iky5s"]
 size = Vector3(2, 1.12494, 2)
 
-[node name="XhatWhite" type="StaticBody3D"]
+[node name="XhatBlue" type="StaticBody3D"]
 
 [node name="piece5_1" parent="." instance=ExtResource("1_agq5d")]
 

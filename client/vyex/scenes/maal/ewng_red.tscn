@@ -10,7 +10,7 @@ size = Vector3(2, 1, 2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_tdbwe"]
 size = Vector3(0.75, 2, 0.75)
 
-[node name="EwngBlack" type="StaticBody3D"]
+[node name="EwngRed" type="StaticBody3D"]
 
 [node name="piece1_4" parent="." instance=ExtResource("1_mcpcw")]
 

@@ -13,25 +13,25 @@ signal cursor_origin_ready(pos:Vector3)
 ]
 @onready var kann_resource := preload("res://scenes/kann.tscn")
 @onready var maal_resource := {
-	Constants.Maal.XAHT_WHITE : preload("res://scenes/maal/xhat_white.tscn"),
-	Constants.Maal.VUSU_WHITE : preload("res://scenes/maal/vusu_white.tscn"),
-	Constants.Maal.EWNG_WHITE : preload("res://scenes/maal/ewng_white.tscn"),
-	Constants.Maal.YZAV_WHITE : preload("res://scenes/maal/yzav_white.tscn"),
-	Constants.Maal.XAHT_BLACK : preload("res://scenes/maal/xhat_black.tscn"),
-	Constants.Maal.VUSU_BLACK : preload("res://scenes/maal/vusu_black.tscn"),
-	Constants.Maal.EWNG_BLACK : preload("res://scenes/maal/ewng_black.tscn"),
-	Constants.Maal.YZAV_BLACK : preload("res://scenes/maal/yzav_black.tscn"),
+	Constants.Maal.XAHT_BLUE : preload("res://scenes/maal/xhat_blue.tscn"),
+	Constants.Maal.VUSU_BLUE : preload("res://scenes/maal/vusu_blue.tscn"),
+	Constants.Maal.EWNG_BLUE : preload("res://scenes/maal/ewng_blue.tscn"),
+	Constants.Maal.YZAV_BLUE : preload("res://scenes/maal/yzav_blue.tscn"),
+	Constants.Maal.XAHT_RED : preload("res://scenes/maal/xhat_red.tscn"),
+	Constants.Maal.VUSU_RED : preload("res://scenes/maal/vusu_red.tscn"),
+	Constants.Maal.EWNG_RED : preload("res://scenes/maal/ewng_red.tscn"),
+	Constants.Maal.YZAV_RED : preload("res://scenes/maal/yzav_red.tscn"),
 }
 
 const MAAL_COUNT_MAX := {
-	Constants.Maal.XAHT_WHITE : 1,
-	Constants.Maal.VUSU_WHITE : 2,
-	Constants.Maal.EWNG_WHITE : 1,
-	Constants.Maal.YZAV_WHITE : 1,
-	Constants.Maal.XAHT_BLACK : 1,
-	Constants.Maal.VUSU_BLACK : 2,
-	Constants.Maal.EWNG_BLACK : 1,
-	Constants.Maal.YZAV_BLACK : 1,
+	Constants.Maal.XAHT_BLUE : 1,
+	Constants.Maal.VUSU_BLUE : 2,
+	Constants.Maal.EWNG_BLUE : 1,
+	Constants.Maal.YZAV_BLUE : 1,
+	Constants.Maal.XAHT_RED : 1,
+	Constants.Maal.VUSU_RED : 2,
+	Constants.Maal.EWNG_RED : 1,
+	Constants.Maal.YZAV_RED : 1,
 }
 var ref_pos_map := {}
 
@@ -43,14 +43,14 @@ func _render_map() -> void:
 	var x_size := state_pann.size()
 	var y_size := 0
 	var maal_count := {
-		Constants.Maal.XAHT_WHITE : 0,
-		Constants.Maal.VUSU_WHITE : 0,
-		Constants.Maal.EWNG_WHITE : 0,
-		Constants.Maal.YZAV_WHITE : 0,
-		Constants.Maal.XAHT_BLACK : 0,
-		Constants.Maal.VUSU_BLACK : 0,
-		Constants.Maal.EWNG_BLACK : 0,
-		Constants.Maal.YZAV_BLACK : 0,
+		Constants.Maal.XAHT_BLUE : 0,
+		Constants.Maal.VUSU_BLUE : 0,
+		Constants.Maal.EWNG_BLUE : 0,
+		Constants.Maal.YZAV_BLUE : 0,
+		Constants.Maal.XAHT_RED : 0,
+		Constants.Maal.VUSU_RED : 0,
+		Constants.Maal.EWNG_RED : 0,
+		Constants.Maal.YZAV_RED : 0,
 	}
 	for i in x_size:
 		var row = state_pann[i]

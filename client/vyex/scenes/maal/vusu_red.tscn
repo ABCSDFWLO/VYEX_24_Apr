@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://0e5ykdk5labr"]
+
+[ext_resource type="PackedScene" uid="uid://cxmtiebpg7mw2" path="res://assets/3d_models/piece2_4.blend" id="1_vt4do"]
+[ext_resource type="PackedScene" uid="uid://cm4u4h4dc7eg3" path="res://assets/3d_models/piece2_6.blend" id="2_wexls"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mkmir"]
+size = Vector3(2, 1.25, 2)
+
+[node name="VusuRed" type="StaticBody3D"]
+
+[node name="piece2_4" parent="." instance=ExtResource("1_vt4do")]
+
+[node name="piece2_6" parent="." instance=ExtResource("2_wexls")]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
+shape = SubResource("BoxShape3D_mkmir")
