@@ -4,14 +4,14 @@ from uuid import uuid4, UUID
 from fastapi import Body, Depends, FastAPI, HTTPException, Header, Path, Query
 from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
-from sqlmodel import Session, and_, col, or_, select, Relationship
+from sqlmodel import Session, and_, col, or_, select
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import bcrypt
 import random
 import string
 import asyncio
 
-from db import engine, create_db_and_tables, User, Game, Action, GameState, ActionType
+from db import engine, User, Game, Action, GameState, ActionType
 from token_manager import TokenManager, user_id_from_token
 from verification_mail import send_verification_mail
 
@@ -531,11 +531,11 @@ async def create_game(gameCreate : GameCreate = Body(...), user_id: int = Depend
     with Session(engine) as session:
         game = Game(
             state=GameState.Running,
-            name=name if name is not None and len(name)>0 else "New Game",
+            name=name,
             started_at=datetime.now(),
             player1_id=player1_id,
             player2_id=player2_id,
-            password_hash=bcrypt.hash(password) if password is not None and len(password)>0 else None
+            password_hash=bcrypt.hash(password) if password is not None else None
         )
         session.add(game)
         try:
