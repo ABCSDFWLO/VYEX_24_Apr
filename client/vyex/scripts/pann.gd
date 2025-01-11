@@ -23,16 +23,6 @@ signal cursor_origin_ready(pos:Vector3)
 	Constants.Maal.YZAV_RED : preload("res://scenes/maal/yzav_red.tscn"),
 }
 
-const MAAL_COUNT_MAX := {
-	Constants.Maal.XAHT_BLUE : 1,
-	Constants.Maal.VUSU_BLUE : 2,
-	Constants.Maal.EWNG_BLUE : 1,
-	Constants.Maal.YZAV_BLUE : 1,
-	Constants.Maal.XAHT_RED : 1,
-	Constants.Maal.VUSU_RED : 2,
-	Constants.Maal.EWNG_RED : 1,
-	Constants.Maal.YZAV_RED : 1,
-}
 var ref_pos_map := {}
 
 func _ready() -> void:
@@ -42,16 +32,6 @@ func _ready() -> void:
 func _render_map() -> void:
 	var x_size := state_pann.size()
 	var y_size := 0
-	var maal_count := {
-		Constants.Maal.XAHT_BLUE : 0,
-		Constants.Maal.VUSU_BLUE : 0,
-		Constants.Maal.EWNG_BLUE : 0,
-		Constants.Maal.YZAV_BLUE : 0,
-		Constants.Maal.XAHT_RED : 0,
-		Constants.Maal.VUSU_RED : 0,
-		Constants.Maal.EWNG_RED : 0,
-		Constants.Maal.YZAV_RED : 0,
-	}
 	for i in x_size:
 		var row = state_pann[i]
 		if row == null or row.is_empty():
@@ -76,8 +56,7 @@ func _render_map() -> void:
 						ref_pos_map[kann_temp]=Vector3i(i,k,j)
 						self.add_child(kann_temp)
 					var maal : Constants.Maal = col - col%16 as Constants.Maal
-					if maal and maal_count[maal] < MAAL_COUNT_MAX[maal]:
-						maal_count[maal]+=1
+					if maal != Constants.Maal.NONE:
 						var maal_temp : StaticBody3D = maal_resource[maal].instantiate()
 						var x = i*(Constants.KANN_WIDTH + Constants.KANN_MARGIN)
 						var y = (h - 0.5)*Constants.KANN_HEIGHT + (h + 1)*Constants.KANN_MARGIN
