@@ -242,6 +242,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_next = NodePath("../MapHeightSpinBox")
 focus_previous = NodePath("../../../HBoxContainer/RandomCheckBox")
+min_value = 1.0
+max_value = 64.0
 value = 7.0
 
 [node name="MapHeightSpinBox" type="SpinBox" parent="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer/HBoxContainer2"]
@@ -249,6 +251,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_next = NodePath("../MapSizeResetButton")
 focus_previous = NodePath("../MapWidthSpinBox")
+min_value = 1.0
+max_value = 64.0
 value = 7.0
 
 [node name="MapSizeResetButton" type="Button" parent="CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer/HBoxContainer2"]
