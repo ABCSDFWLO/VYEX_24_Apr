@@ -1,6 +1,6 @@
 extends Control
 
-signal enter_game()
+signal enter_game(board : Array[PackedByteArray])
 
 @onready var token_manager : Node = get_node("/root/Main/TokenManager")
 @onready var scene_manager : Node = get_node("/root/Main/SceneManager")
@@ -13,6 +13,7 @@ signal enter_game()
 @onready var create_name_lineedit : LineEdit = $CreatePanel/MarginContainer/VBoxContainer/NameLineEdit
 @onready var create_password_lineedit : LineEdit = $CreatePanel/MarginContainer/VBoxContainer/PasswordLineEdit
 @onready var create_host_first_buttongroup : ButtonGroup = $CreatePanel/MarginContainer/VBoxContainer/HBoxContainer/RandomCheckBox.button_group
+@onready var create_map_shape_container : GridContainer = $CreatePanel/MarginContainer/VBoxContainer/MapShapeContainer/MapShapeGridContainer
 @onready var room_grid_container : GridContainer = $VBoxContainer/PanelContainer/ScrollContainer/GridContainer
 @onready var join_panel : PanelContainer = $JoinPanel
 @onready var join_button : Button = $JoinPanel/MarginContainer/VBoxContainer/JoinButton
@@ -20,6 +21,8 @@ signal enter_game()
 @onready var join_http_request : HTTPRequest = $JoinPanel/MarginContainer/VBoxContainer/JoinButton/HTTPRequest
 
 var rooms : Array
+
+var board : Array[PackedByteArray]
 
 func _ready() -> void:
 	enter_game.connect(scene_manager._on_lobby_enter_game)
@@ -83,7 +86,21 @@ func _on_create_panel_create_button_pressed() -> void:
 	var name = create_name_lineedit.text
 	var password = create_password_lineedit.text
 	var host_first = create_host_first_buttongroup.get_pressed_button().get_index()
-	var body = JSON.new().stringify({"name":name,"password":password,"host_first":host_first})
+	var map_json : Array[Array]
+	var map_packed : Array[PackedByteArray]
+	var map_children := create_map_shape_container.get_children()
+	var map_columns := create_map_shape_container.columns
+	var map_row := []
+	for i in map_children.size():
+		var child : OptionButton = map_children[i]
+		var value : int = child.get_selected_id()*16+1
+		map_row.append(value)
+		if i % map_columns + 1 == map_columns:
+			map_json.append(map_row)
+			map_packed.append(PackedByteArray(map_row))
+			map_row=[]
+	board = map_packed
+	var body = JSON.new().stringify({"name":name,"password":password,"host_first":host_first,"board":map_json})
 	var header = token_manager.get_token_header()
 	var error = create_http_request.request(url,header,HTTPClient.METHOD_POST,body)
 	if error != OK:
@@ -92,7 +109,7 @@ func _on_create_panel_create_button_pressed() -> void:
 func _on_create_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	_http_response_preprocess(result, response_code, headers, body,
 	func(response):
-		enter_game.emit(),
+		enter_game.emit(board),
 	func(msg):pass
 	)
 

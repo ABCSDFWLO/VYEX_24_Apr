@@ -403,6 +403,7 @@ class GameCreate(BaseModel):
     name : str | None = Field(None, title="Game Name", description="The name of the game", example="New Game")
     password : str | None = Field(None, title="Game Password", description="The password of the game", example="password")
     host_first : GameCreateHostFirst = Field(GameCreateHostFirst.Host_First, title="Host First", description="The player who will make the first move", example="Random")
+    board : List[List[int]] | None = Field([], title="Game Board", description="The board of the game")
 
 @app.get("/games", response_model=List[GameOut])
 async def get_games(state: List[GameState]|None = Query(default=[GameState.Running], min_length=1, max_length=3), name:str|None = Query(None)):
