@@ -77,11 +77,14 @@ class Action(SQLModel, table=True):
     index: int
     timestamp: datetime
     type: ActionType
-    data: str
+    maal_coord_x: int | None
+    maal_coord_y: int | None
+    action_coord_x: int | None
+    action_coord_y: int | None
 
     game: Game = Relationship(back_populates="actions")
     player: User = Relationship(back_populates="actions")
-    
+
 sqlite_file_name = "database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 engine = create_engine(sqlite_url, echo=True)
