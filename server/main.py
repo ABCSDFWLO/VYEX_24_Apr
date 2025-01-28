@@ -11,7 +11,7 @@ import random
 import string
 import asyncio
 
-from db import engine, User, Game, Action, GameState, ActionType
+from db import InitialGameSetting, engine, User, Game, Action, GameState, ActionType
 from token_manager import TokenManager, user_id_from_token
 from verification_mail import send_verification_mail
 
@@ -530,6 +530,7 @@ async def create_game(gameCreate : GameCreate = Body(...), user_id: int = Depend
             state=GameState.Running,
             name=name,
             started_at=datetime.now(),
+            initial_setting_id=1, # TODO : Change to actual initial setting
             player1_id=player1_id,
             player2_id=player2_id,
             password_hash=bcrypt.hash(password) if password is not None else None
@@ -578,3 +579,16 @@ async def observe_game(game_id: int, user_id: int = Depends(user_id_from_token))
         else:
             pass
 
+@app.post("/create_initial_game_setting", status_code=201)
+async def create_initial_game_setting(user_id: int = Depends(user_id_from_token)):
+    with Session(engine) as session:
+        initial_game_setting = InitialGameSetting(
+            created_by_id=user_id
+        )
+        session.add(initial_game_setting)
+        try:
+            session.commit()
+            session.refresh(initial_game_setting)
+        except IntegrityError:
+            session.rollback()
+            raise HTTPException(status_code=500, detail="Database error")
