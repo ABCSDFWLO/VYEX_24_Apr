@@ -62,8 +62,7 @@ def generate_verification_code(length:int)->str:
     charset = string.ascii_lowercase + string.digits
     return ''.join(random.choices(charset, k=length))
 
-@app.get(
-    "/users",
+@app.get("/users",
     response_model=List[UserOut],
     responses = {
         200: {
@@ -106,8 +105,7 @@ async def get_users():
             ) for user in users
         ]
 
-@app.get(
-    "/user/{user_name}",
+@app.get("/user/{user_name}",
     response_model=UserOut,
     responses = {
         200: {
@@ -161,8 +159,7 @@ async def expire_verification(uuid:UUID, delay:int=600):
     await asyncio.sleep(delay)
     del unverified_users[uuid]
 
-@app.post(
-    "/register", 
+@app.post("/register", 
     status_code=200,
     response_model=UUID,
     responses={
@@ -222,8 +219,7 @@ async def create_user(user_create: UserCreate = Body(..., title="User Creation",
         send_verification_mail(unverified_users[uuid][1],user_create.email)
         return uuid
         
-@app.post(
-    "/verify/{uuid}",
+@app.post("/verify/{uuid}",
     status_code=201,
     response_model=int,
     responses={
