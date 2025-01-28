@@ -33,6 +33,7 @@ class User(SQLModel, table=True):
     password_hash: str
     registered_at: datetime
 
+    initial_game_settings: list["InitialGameSetting"] = Relationship(back_populates="created_by")
     games_as_player1: list["Game"] = Relationship(back_populates="player1", sa_relationship=relationship("Game", foreign_keys="[Game.player1_id]"))
     games_as_player2: list["Game"] = Relationship(back_populates="player2", sa_relationship=relationship("Game", foreign_keys="[Game.player2_id]"))
     actions: list["Action"] = Relationship(back_populates="player")
@@ -40,6 +41,8 @@ class InitialGameSetting(SQLModel, table=True):
     __tablename__ = "initial_game_setting"
 
     id: int = Field(primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.now)
+    created_by_id: int = Field(foreign_key="user.id")
     pann_size_x: int = Field(default=7, ge=2, le=64)
     pann_size_y: int = Field(default=7, ge=2, le=64)
     pann_code: bytes = Field(default=default_pann_code)
@@ -50,10 +53,14 @@ class InitialGameSetting(SQLModel, table=True):
     LSB[4~7] : maal (0b0000 : No Maal, 0b0001 : XAHT_BLUE, 0b0010 : VUSU_BLUE, 0b0011 : EWNG_BLUE, 0b0100 : YZAV_BLUE, 0b0101 : XAHT_RED, 0b0110 : VUSU_RED, 0b0111 : EWNG_RED, 0b1000 : YZAV_RED)
     ex) 0b00000000 : empty cell, 0b01010011 : XAHT_RED on the 3-height wall
     """
+    chuwm_order_reverse: bool = Field(default=False)
+    chuwm_p1: bytes = Field(default=b'\x04\x06')
+    chuwm_p2: bytes = Field(default=b'\x08')
     action_point_max: int = Field(default=3, ge=1, le=32)
     action_point_advantage_for_p1: int = Field(default=0, ge=-32, le=32)
     action_point_advantage_for_p2: int = Field(default=1, ge=-32, le=32)
-    
+
+    created_by: User = Relationship(back_populates="initial_game_settings")
     games: list["Game"] = Relationship(back_populates="initial_setting")
 class Game(SQLModel, table=True):
     id: int = Field(primary_key=True)
