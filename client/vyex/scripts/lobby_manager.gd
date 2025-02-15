@@ -86,21 +86,7 @@ func _on_create_panel_create_button_pressed() -> void:
 	var name = create_name_lineedit.text
 	var password = create_password_lineedit.text
 	var host_first = create_host_first_buttongroup.get_pressed_button().get_index()
-	var map_json : Array[Array]
-	var map_packed : Array[PackedByteArray]
-	var map_children := create_map_shape_container.get_children()
-	var map_columns := create_map_shape_container.columns
-	var map_row := []
-	for i in map_children.size():
-		var child : OptionButton = map_children[i]
-		var value : int = child.get_selected_id()*16+1
-		map_row.append(value)
-		if i % map_columns + 1 == map_columns:
-			map_json.append(map_row)
-			map_packed.append(PackedByteArray(map_row))
-			map_row=[]
-	board = map_packed
-	var body = JSON.new().stringify({"name":name,"password":password,"host_first":host_first,"board":map_json})
+	var body = JSON.new().stringify({"name":name,"password":password,"host_first":host_first,"initial_map_setting_id":1}) # TODO : setting UI ref
 	var header = token_manager.get_token_header()
 	var error = create_http_request.request(url,header,HTTPClient.METHOD_POST,body)
 	if error != OK:
