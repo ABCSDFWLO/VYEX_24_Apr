@@ -49,8 +49,8 @@ class InitialGameSetting(SQLModel, table=True):
     """
     byteStream of the pann.
     Each byte represents a cell in the pann.
-    LSB[0~3] : wall (0~15 heights)
-    LSB[4~7] : maal (0b0000 : No Maal, 0b0001 : XAHT_BLUE, 0b0010 : VUSU_BLUE, 0b0011 : EWNG_BLUE, 0b0100 : YZAV_BLUE, 0b0101 : XAHT_RED, 0b0110 : VUSU_RED, 0b0111 : EWNG_RED, 0b1000 : YZAV_RED)
+    LSB[0-3] : wall (0-15 heights)
+    LSB[4-7] : maal (0b0000 : No Maal, 0b0001 : XAHT_BLUE, 0b0010 : VUSU_BLUE, 0b0011 : EWNG_BLUE, 0b0100 : YZAV_BLUE, 0b0101 : XAHT_RED, 0b0110 : VUSU_RED, 0b0111 : EWNG_RED, 0b1000 : YZAV_RED)
     ex) 0b00000000 : empty cell, 0b01010011 : XAHT_RED on the 3-height wall
     """
     chuwm_order_reverse: bool = Field(default=False)
