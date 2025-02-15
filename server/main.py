@@ -93,7 +93,7 @@ def generate_verification_code(length:int)->str:
         },
     }
     )
-async def get_users():
+def get_users():
     with Session(engine) as session:
         users = session.exec(select(User)).all()
         return [
@@ -143,7 +143,7 @@ async def get_users():
         }
     }
     )
-async def get_user(user_name: str):
+def get_user(user_name: str):
     with Session(engine) as session:
         result =  session.exec(select(User).where(User.name == user_name)).first()
         if result is None:
@@ -199,7 +199,7 @@ async def expire_verification(uuid:UUID, delay:int=600):
         }
     }
 )
-async def create_user(user_create: UserCreate = Body(..., title="User Creation", description="The user to be created")):
+def create_user(user_create: UserCreate = Body(..., title="User Creation", description="The user to be created")):
     with Session(engine) as session:
         email=session.get(User, user_create.email)
         if email is not None:
@@ -289,7 +289,7 @@ async def create_user(user_create: UserCreate = Body(..., title="User Creation",
         }
     }
     )
-async def verify_user(uuid: UUID=Path(...), verify_code: str = Body(..., min_length=6, max_length=6)):
+def verify_user(uuid: UUID=Path(...), verify_code: str = Body(..., min_length=6, max_length=6)):
     with Session(engine) as session:
         unverified_user_record = unverified_users.get(uuid) # Tuple, [0]: User, [1]: Verify Code
         if unverified_user_record is None:
@@ -357,7 +357,7 @@ async def verify_user(uuid: UUID=Path(...), verify_code: str = Body(..., min_len
             },
     }
     )
-async def login_user(user_login: UserLogin, token_manager:TokenManager =Depends()):
+def login_user(user_login: UserLogin, token_manager:TokenManager =Depends()):
     with Session(engine) as session:
         user = session.exec(select(User).where(User.email == user_login.email)).first()
         if user is None:
@@ -368,11 +368,11 @@ async def login_user(user_login: UserLogin, token_manager:TokenManager =Depends(
             return token_manager.generate_token(user.id)
         
 @app.post("/logout", status_code=200)
-async def logout_user(user_id: int = Depends(user_id_from_token), token_manager:TokenManager=Depends()):
+def logout_user(user_id: int = Depends(user_id_from_token), token_manager:TokenManager=Depends()):
     token_manager.block_token(user_id)
 
 @app.post("/token", status_code=200)
-async def refresh_token(token: List[str], token_manager:TokenManager=Depends()):
+def refresh_token(token: List[str], token_manager:TokenManager=Depends()):
     user_id = token_manager.verify_token(token)
     with Session(engine) as session:
         user = session.get(User, user_id)
@@ -399,10 +399,31 @@ class GameCreate(BaseModel):
     name : str | None = Field(None, title="Game Name", description="The name of the game", example="New Game")
     password : str | None = Field(None, title="Game Password", description="The password of the game", example="password")
     host_first : GameCreateHostFirst = Field(GameCreateHostFirst.Host_First, title="Host First", description="The player who will make the first move", example="Random")
-    board : List[List[int]] | None = Field([], title="Game Board", description="The board of the game")
+    initial_setting_id : int | None = Field(1, title="Initial Game Setting", description="The initial setting of the game", example=InitialGameSetting())
+
+class PannState(BaseModel):
+    pann : list[list[int]]
+    size_x : int
+    size_y : int
+    
+    def __init__(self, pann: list[list[int]]):
+        self.pann = pann
+        self.size_x = len(pann)
+        self.size_y = len(pann[0])
+    
+    def getBytes(self):
+        result = []
+        for row in self.pann:
+            for cell in row:
+                result.append(cell)
+        return bytes(result)
+
+class GameManager():
+    def __init__(self):
+        self.games={}
 
 @app.get("/games", response_model=List[GameOut])
-async def get_games(state: List[GameState]|None = Query(default=[GameState.Running], min_length=1, max_length=3), name:str|None = Query(None)):
+def get_games(state: List[GameState]|None = Query(default=[GameState.Running], min_length=1, max_length=3), name:str|None = Query(None)):
     with Session(engine) as session:
         if name is None:
             games = session.exec(
@@ -468,7 +489,7 @@ async def get_games(state: List[GameState]|None = Query(default=[GameState.Runni
             return result
 
 @app.post("/enter_game/{game_id}", status_code=200)
-async def enter_game(game_id: int, password:str|None = Body(None), user_id: int = Depends(user_id_from_token)):
+def enter_game(game_id: int, password:str|None = Body(None), user_id: int = Depends(user_id_from_token)):
     with Session(engine) as session:
         game = session.get(Game, game_id)
         if game is None:
@@ -501,7 +522,7 @@ async def enter_game(game_id: int, password:str|None = Body(None), user_id: int 
             raise HTTPException(status_code=500, detail="Database error")
 
 @app.post("/create_game", status_code=201, response_model=int)
-async def create_game(gameCreate : GameCreate = Body(...), user_id: int = Depends(user_id_from_token)):
+def create_game(gameCreate : GameCreate = Body(...), user_id: int = Depends(user_id_from_token)):
     
     name = gameCreate.name
     if name is None or name is not None and len(name) == 0:
@@ -545,7 +566,7 @@ async def create_game(gameCreate : GameCreate = Body(...), user_id: int = Depend
         return game.id
     
 @app.post("/leave_game/{game_id}", status_code=200)
-async def leave_game(game_id: int, user_id: int = Depends(user_id_from_token)):
+def leave_game(game_id: int, user_id: int = Depends(user_id_from_token)):
     with Session(engine) as session:
         game = session.get(Game, game_id)
         if game is None:
@@ -567,7 +588,7 @@ async def leave_game(game_id: int, user_id: int = Depends(user_id_from_token)):
             raise HTTPException(status_code=500, detail="Database error")
         
 @app.post("/observe_game/{game_id}", status_code=200)
-async def observe_game(game_id: int, user_id: int = Depends(user_id_from_token)):
+def observe_game(game_id: int, user_id: int = Depends(user_id_from_token)):
     with Session(engine) as session:
         game = session.get(Game, game_id)
         if game is None:
@@ -579,8 +600,8 @@ async def observe_game(game_id: int, user_id: int = Depends(user_id_from_token))
         else:
             pass
 
-@app.post("/create_initial_game_setting", status_code=201)
-async def create_initial_game_setting(user_id: int = Depends(user_id_from_token)):
+@app.post("/create_initial_game_setting", status_code=201) # TODO : need to add more parameters
+def create_initial_game_setting(user_id: int = Depends(user_id_from_token)):
     with Session(engine) as session:
         initial_game_setting = InitialGameSetting(
             created_by_id=user_id
