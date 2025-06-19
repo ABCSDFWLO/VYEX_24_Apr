@@ -1,13 +1,15 @@
 package main
 
-func main() {
-	// This is the entry point for the server application.
-	// You can initialize your server, set up routes, and start listening for requests here.
-	// For example:
-	// router := setupRouter()
-	// log.Fatal(http.ListenAndServe(":8080", router))
+import (
+	"vyex_server/internal"
+	"vyex_server/internal/logger"
 
-	// Placeholder for server initialization code
-	println("Server is starting...")
-	// Add your server logic here
+	"go.uber.org/zap"
+)
+
+func main() {
+	logger.InitLogger(internal.LogFileName, 10, 5, 30, true)
+	defer logger.CloseLogger()
+
+	logger.L().Info("🚀 server started", zap.String("version", internal.AppVersion))
 }
